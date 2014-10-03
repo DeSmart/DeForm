@@ -1,0 +1,4 @@
+suites:
+    deform:
+        namespace: DeForm
+        psr4_prefix: DeForm
