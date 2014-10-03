@@ -47,8 +47,8 @@ interface NodeInterface
     /**
      * Append child to node
      *
-     * @param \DeForm\Node\NodeInterface $node
+     * @param mixed $node
      */
-    public function appendChild(NodeInterface $node);
+    public function appendChild($node);
 
 }
