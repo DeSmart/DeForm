@@ -16,11 +16,4 @@ interface DocumentInterface {
    */
   public function toHtml();
   
-  /**
-   * Return the loaded DOMDocument.
-   * 
-   * @return \DOMDocument
-   */
-  public function getDocument();
-  
 }

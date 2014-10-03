@@ -46,4 +46,15 @@ class HtmlDocument implements DocumentInterface {
     return $this->document;
   }
 
+  public function xpath($selector) {
+    $xpath = new \DOMXPath($this->document);
+    $list = $xpath->query($selector);
+    $nodes = [];
+    
+    foreach($list as $item) {
+      $nodes[] = $item;
+    }
+    
+    return $nodes;
+  }
 }
