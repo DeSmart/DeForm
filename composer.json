@@ -1,13 +1,13 @@
 {
-  "require-dev": {
-    "phpspec/phpspec": "dev-master"
-  },
-  "config": {
-    "bin-dir": "bin"
-  },
-  "autoload": {
-    "psr-4": {
-      "DeForm\\": "src/"
+    "require-dev": {
+        "phpspec/phpspec": "dev-master"
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "autoload": {
+        "psr-4": {
+            "DeForm\\": "src/"
+        }
     }
-  }
 }

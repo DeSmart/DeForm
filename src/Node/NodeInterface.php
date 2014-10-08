@@ -6,7 +6,7 @@ interface NodeInterface
     /**
      * Return node type based on it's name and type.
      *
-     * This will be used to generate class name
+     * This will be used to generate class name.
      *
      * @example input_radio
      * @return string
@@ -14,7 +14,7 @@ interface NodeInterface
     public function getElementType();
 
     /**
-     * Get node's attribute value
+     * Get node's attribute value.
      *
      * @param string $name
      * @return mixed
@@ -22,32 +22,35 @@ interface NodeInterface
     public function getAttribute($name);
 
     /**
-     * Set node's attribute value
+     * Set node's attribute value.
      *
      * @param string $name
      * @param mixed $value
+     * @return void
      */
     public function setAttribute($name, $value);
 
     /**
-     * Check if node has set an attribute
+     * Check if node has set an attribute.
      *
-     * @param string name
+     * @param string $name
      * @return boolean
      */
     public function hasAttribute($name);
 
     /**
-     * Remove node's attribute
+     * Remove node's attribute.
      *
      * @param string $name
+     * @return boolean
      */
     public function removeAttribute($name);
 
     /**
-     * Append child to node
+     * Append child to node.
      *
      * @param mixed $node
+     * @return void
      */
     public function appendChild($node);
 
