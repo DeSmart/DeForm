@@ -16,7 +16,8 @@ class HtmlDocument implements DocumentInterface
      */
     public function load($html)
     {
-        $this->document = (new \DOMDocument)->loadHTML($html);
+        $this->document = new \DOMDocument;
+        $this->document->loadHTML($html);
     }
 
     /**
