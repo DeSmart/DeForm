@@ -1,3 +1,7 @@
 /nbproject
+/.idea
+
 /vendor
 /bin
+
+composer.lock
