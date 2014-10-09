@@ -1,8 +1,8 @@
 <?php namespace DeForm\Parser;
 
-interface ParserInterface 
+interface ParserInterface
 {
-    
+
     /**
      * Parse HTML to Nodes
      *
