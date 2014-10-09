@@ -7,7 +7,7 @@ interface ElementInterface
      * Set value in a form element.
      *
      * @param string $value
-     * @return $this
+     * @return self
      */
     public function setValue($value);
 
