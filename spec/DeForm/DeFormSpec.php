@@ -6,12 +6,15 @@ use PhpSpec\ObjectBehavior;
 
 class DeFormSpec extends ObjectBehavior
 {
-    function let($request)
+    function let($formNode, $request)
     {
         $request->beADoubleOf('\DeForm\Request\RequestInterface');
-        $request->__deform_id = 'foo';
+        $request->get(\DeForm\DeForm::DEFORM_ID)->willReturn('foo');
         
-        $this->beConstructedWith($request);
+        $formNode->beADoubleOf('\DeForm\Node\NodeInterface');
+        $formNode->getAttribute('name')->willReturn('foo');
+        
+        $this->beConstructedWith($formNode, $request);
     }
 
     function it_is_initializable()
@@ -21,8 +24,6 @@ class DeFormSpec extends ObjectBehavior
     
     function it_should_check_if_the_form_was_submitted()
     {
-//        var_dump($this->request);
-//        die;
         $this->isSubmitted()->shouldReturn(true);
     }
 
