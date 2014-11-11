@@ -1,5 +1,8 @@
 <?php namespace DeForm;
 
+use DeForm\Node\NodeInterface;
+use DeForm\Request\RequestInterface;
+
 class DeForm
 {
     
@@ -15,7 +18,7 @@ class DeForm
     
     const DEFORM_ID = '__deform_id';
 
-    public function __construct(\DeForm\Node\NodeInterface $formNode, \DeForm\Request\RequestInterface $request)
+    public function __construct(NodeInterface $formNode, RequestInterface $request)
     {
         $this->formNode = $formNode;
         $this->request = $request;
