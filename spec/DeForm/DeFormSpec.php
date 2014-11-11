@@ -3,28 +3,53 @@
 namespace spec\DeForm;
 
 use PhpSpec\ObjectBehavior;
+use DeForm\Request\RequestInterface;
+use DeForm\Node\NodeInterface;
 
 class DeFormSpec extends ObjectBehavior
 {
-    function let($formNode, $request)
+    
+    /**
+     * @var \DeForm\Request\RequestInterface
+     */
+    protected $request;
+    
+    /**
+     * @var \DeForm\Node\NodeInterface
+     */
+    protected $formNode;
+    
+    function let(NodeInterface $formNode, RequestInterface $request)
     {
-        $request->beADoubleOf('\DeForm\Request\RequestInterface');
-        $request->get(\DeForm\DeForm::DEFORM_ID)->willReturn('foo');
-        
-        $formNode->beADoubleOf('\DeForm\Node\NodeInterface');
-        $formNode->getAttribute('name')->willReturn('foo');
-        
-        $this->beConstructedWith($formNode, $request);
+        $this->formNode = $formNode;
+        $this->request = $request;
     }
 
     function it_is_initializable()
     {
+        $this->beConstructedWith($this->formNode, $this->request);
+        
         $this->shouldHaveType('DeForm\DeForm');
     }
     
     function it_should_check_if_the_form_was_submitted()
     {
+        $this->request->get(\DeForm\DeForm::DEFORM_ID)->willReturn('foo');
+        
+        $this->formNode->getAttribute('name')->willReturn('foo');
+        
+        $this->beConstructedWith($this->formNode, $this->request);
         $this->isSubmitted()->shouldReturn(true);
+    }
+    
+    function it_should_check_if_the_form_was_not_submitted()
+    {
+        $this->request->get(\DeForm\DeForm::DEFORM_ID)->willReturn('bar');
+        
+        $this->formNode->getAttribute('name')->willReturn('foo');
+        
+        $this->beConstructedWith($this->formNode, $this->request);
+        $this->isSubmitted()->shouldReturn(false);
     }
 
 }
