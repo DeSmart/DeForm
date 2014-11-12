@@ -23,6 +23,10 @@ class DeFormSpec extends ObjectBehavior
     {
         $this->formNode = $formNode;
         $this->request = $request;
+        
+        $this->formNode->getAttribute('name')->willReturn('foo');
+        
+        $this->beConstructedWith($this->formNode, $this->request);
     }
 
     function it_is_initializable()
@@ -36,9 +40,6 @@ class DeFormSpec extends ObjectBehavior
     {
         $this->request->get(\DeForm\DeForm::DEFORM_ID)->willReturn('foo');
         
-        $this->formNode->getAttribute('name')->willReturn('foo');
-        
-        $this->beConstructedWith($this->formNode, $this->request);
         $this->isSubmitted()->shouldReturn(true);
     }
     
@@ -46,9 +47,6 @@ class DeFormSpec extends ObjectBehavior
     {
         $this->request->get(\DeForm\DeForm::DEFORM_ID)->willReturn('bar');
         
-        $this->formNode->getAttribute('name')->willReturn('foo');
-        
-        $this->beConstructedWith($this->formNode, $this->request);
         $this->isSubmitted()->shouldReturn(false);
     }
 
