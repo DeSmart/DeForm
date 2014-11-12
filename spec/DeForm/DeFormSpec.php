@@ -31,8 +31,6 @@ class DeFormSpec extends ObjectBehavior
 
     function it_is_initializable()
     {
-        $this->beConstructedWith($this->formNode, $this->request);
-        
         $this->shouldHaveType('DeForm\DeForm');
     }
     
