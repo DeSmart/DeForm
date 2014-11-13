@@ -1,7 +1,6 @@
 /nbproject
 /.idea
-
 /vendor
 /bin
-
+*.swp
 composer.lock
