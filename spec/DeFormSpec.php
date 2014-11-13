@@ -8,10 +8,11 @@ use DeForm\Node\NodeInterface;
 
 class DeFormSpec extends ObjectBehavior
 {
-    
+
     function let(NodeInterface $formNode, RequestInterface $request)
     {
         $formNode->getAttribute('name')->willReturn('foo');
+        
         $this->beConstructedWith($formNode, $request);
     }
 
@@ -19,16 +20,19 @@ class DeFormSpec extends ObjectBehavior
     {
         $this->shouldHaveType('DeForm\DeForm');
     }
-    
-    function it_should_check_if_the_form_was_submitted(NodeInterface $formNode, RequestInterface $request)
+
+    function it_should_check_if_the_form_was_submitted(RequestInterface $request)
     {
         $request->get(\DeForm\DeForm::DEFORM_ID)->willReturn('foo');
+        
         $this->isSubmitted()->shouldReturn(true);
     }
-    
-    function it_should_check_if_the_form_was_not_submitted(NodeInterface $formNode, RequestInterface $request)
+
+    function it_should_check_if_the_form_was_not_submitted(RequestInterface $request)
     {
         $request->get(\DeForm\DeForm::DEFORM_ID)->willReturn('bar');
+        
         $this->isSubmitted()->shouldReturn(false);
     }
+
 }
