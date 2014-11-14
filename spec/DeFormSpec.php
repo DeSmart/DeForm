@@ -58,9 +58,9 @@ class DeFormSpec extends ObjectBehavior
     {
         $element->getName()->willReturn('foo');
         
-        $this->setElement($element);
+        $this->addElement($element);
         
-        $this->shouldThrow('\LogicException')->during('setElement', array($element));
+        $this->shouldThrow('\LogicException')->during('addElement', array($element));
     }
     
     function it_should_throw_exception_while_getting_nonexisting_element()
@@ -68,28 +68,33 @@ class DeFormSpec extends ObjectBehavior
         $this->shouldThrow('\LogicException')->during('getElement', array('bar'));
     }
     
-    function it_should_set_element_values_with_values_from_request()
-    {
+    function it_should_set_element_values_with_values_from_request() {
         $requestData = array(
-            'field_1' => 'foo',
+            'field_1' => 'bar',
             'field_2' => 42,
         );
         
-        // Stub the form elements and register them in the form instance
-        foreach ($requestData as $fieldName => $value) {
+        for ($i = 0; $i < 4; $i++) {
+            $fieldName = 'field_'.$i;
+            
             $element = $this->getProphet()->prophesize('\DeForm\Element\ElementInterface');
-            
             $element->getName()->willReturn($fieldName);
-            $element->setValue($value)->shouldBeCalled();
-            $element->getValue()->willReturn($value);
             
-            $this->setElement($element);
-        }
-        
-        $this->setElementsValues($requestData);
-        
-        foreach ($requestData as $fieldName => $value) {
-            $this->getElement($fieldName)->getValue()->shouldReturn($value);
+            if (true === isset($requestData[$fieldName])) {
+                $element->getValue()->willReturn($requestData[$fieldName]);
+            }
+            else {
+                $element->getValue()->willReturn($fieldName);
+            }
+            
+            $this->addElement($element);
+            
+            if (true === isset($requestData[$fieldName])) {
+                $this->getElement($fieldName)->getValue()->shouldReturn($requestData[$fieldName]);
+            }
+            else {
+                $this->getElement($fieldName)->getValue()->shouldReturn($fieldName);
+            }
         }
     }
 

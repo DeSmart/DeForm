@@ -43,19 +43,12 @@ class DeForm
         return false;
     }
 
-    public function setElementsValues($data)
-    {
-        foreach ($data as $fieldName => $value) {
-            $this->getElement($fieldName)->setValue($value);
-        }
-    }
-
     /**
      * @todo Write desc.
      * 
      * @param \DeForm\Element\ElementInterface $element
      */
-    public function setElement($element)
+    public function addElement($element)
     {
         $name = $element->getName();
         
@@ -63,7 +56,13 @@ class DeForm
             throw new \LogicException(sprintf('Cannot set the element "%s" more than once (same name)', $name));
         }
         
-        $this->elements[$element->getName()] = $element;
+        $requestValue = $this->request->get($name);
+        
+        if (true === $this->isSubmitted() && false === empty($requestValue) && false === $element->isReadonly()) {
+            $element->setValue($requestValue);
+        }
+        
+        $this->elements[$name] = $element;
     }
 
     /**
