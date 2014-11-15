@@ -44,9 +44,10 @@ class DeForm
     }
 
     /**
-     * @todo Write desc.
+     * Registers a new form element.
      * 
      * @param \DeForm\Element\ElementInterface $element
+     * @return self
      */
     public function addElement($element)
     {
@@ -63,10 +64,12 @@ class DeForm
         }
         
         $this->elements[$name] = $element;
+        
+        return $this;
     }
 
     /**
-     * @todo Write desc.
+     * Returns a form element by its name.
      * 
      * @param string $name
      * @return \DeForm\Element\ElementInterface
