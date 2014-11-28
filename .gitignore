@@ -4,3 +4,4 @@
 /bin
 *.swp
 composer.lock
+/cache.properties
