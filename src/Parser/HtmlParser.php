@@ -19,4 +19,14 @@ class HtmlParser implements ParserInterface
         }
     }
 
+    public function getFormNode()
+    {
+        // TODO: Implement getFormNode() method.
+    }
+
+    public function getElementsNodes()
+    {
+        // TODO: Implement getElementsNodes() method.
+    }
+
 }
