@@ -33,12 +33,20 @@ class TextElementSpec extends ObjectBehavior
         $this->setValue('abc');
     }
 
-    function it_is_readonly_element(NodeInterface $node)
+    function it_is_readonly_element_by_disabled_attribute(NodeInterface $node)
     {
-        $node->hasAttribute('readonly')->shouldBeCalled()->willReturn(false);
+        $node->hasAttribute('readonly')->willReturn(false);
         $node->hasAttribute('disabled')->shouldBeCalled()->willReturn(true);
 
-        $this->isReadonly()->shouldReturn(true);
+        $this->shouldBeReadonly();
+    }
+
+    function it_is_readonly_element_by_readonly_attribute(NodeInterface $node)
+    {
+        $node->hasAttribute('disabled')->willReturn(false);
+        $node->hasAttribute('readonly')->shouldBeCalled()->willReturn(true);
+
+        $this->shouldBeReadonly();
     }
 
     function it_return_name_element(NodeInterface $node)
