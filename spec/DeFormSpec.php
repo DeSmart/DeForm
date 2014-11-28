@@ -50,7 +50,8 @@ class DeFormSpec extends ObjectBehavior
         ElementInterface $el1,
         ElementInterface $el2,
         ElementInterface $el3,
-        ElementInterface $el4
+        ElementInterface $el4,
+        ElementInterface $el5
     )
     {
         $request->get(\DeForm\DeForm::DEFORM_ID)->willReturn('foo');
@@ -58,6 +59,7 @@ class DeFormSpec extends ObjectBehavior
         $request->get('field_2')->willReturn(42);
         $request->get('field_3')->willReturn('wat');
         $request->get('field_4')->willReturn(null);
+        $request->get('field_5')->willReturn('');
 
         $el1->getName()->willReturn('field_1');
         $el1->isReadonly()->willReturn(false);
@@ -72,10 +74,15 @@ class DeFormSpec extends ObjectBehavior
 
         $el4->getName()->willReturn('field_4');
 
+        $el5->getName()->willReturn('field_5');
+        $el5->isReadonly()->willReturn(false);
+        $el5->setValue('')->shouldBeCalled();
+
         $this->addElement($el1);
         $this->addElement($el2);
         $this->addElement($el3);
         $this->addElement($el4);
+        $this->addElement($el5);
     }
 
 }

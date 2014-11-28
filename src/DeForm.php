@@ -8,17 +8,17 @@ class DeForm
 {
 
     /**
-     * @var RequestInterface
+     * @var \DeForm\Request\RequestInterface
      */
     protected $request;
 
     /**
-     * @var NodeInterface
+     * @var \DeForm\Node\NodeInterface
      */
     protected $formNode;
 
     /**
-     * @var ElementInterface[]
+     * @var \DeForm\Element\ElementInterface[]
      */
     protected $elements = [];
 
@@ -47,7 +47,7 @@ class DeForm
     /**
      * Registers a new form element.
      *
-     * @param ElementInterface $element
+     * @param \DeForm\Element\ElementInterface $element
      * @return self
      */
     public function addElement(ElementInterface $element)
@@ -73,7 +73,7 @@ class DeForm
      * Returns a form element by its name.
      *
      * @param string $name
-     * @return ElementInterface
+     * @return \DeForm\Element\ElementInterface
      * @throws \LogicException
      */
     public function getElement($name)
@@ -88,7 +88,7 @@ class DeForm
     /**
      * Returns true if the element's value should be set.
      *
-     * @param ElementInterface $element
+     * @param \DeForm\Element\ElementInterface $element
      * @param string $value
      * @return bool
      */
