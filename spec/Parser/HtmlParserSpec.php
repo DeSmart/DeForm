@@ -14,11 +14,23 @@ class HtmlParserSpec extends ObjectBehavior
         $this->shouldHaveType('DeForm\Parser\ParserInterface');
     }
 
-    function it_gets_form_node(){
+    function it_gets_form_node()
+    {
         $this->setHtml('<form method="post"><input type="text" name="foo"/></form>');
 
-        $this->getFormNode()->shouldBeTypeOf('DeForm\Node\HtmlNode');
+        $this->getFormNode()->shouldReturnAnInstanceOf('DeForm\Node\HtmlNode');
         $this->getFormNode()->getAttribute('method')->shouldReturn('post');
+    }
+
+    function it_gets_element_nodes()
+    {
+        $this->setHtml('<form method="post"><input type="text" name="foo"/><input type="checkbox" name="bar"/></form>');
+
+        $elements = $this->getElementsNodes();
+
+        $elements->shouldHaveCount(2);
+        $elements[0]->shouldBeAnInstanceOf('DeForm\Node\HtmlNode');
+        $elements[1]->shouldBeAnInstanceOf('DeForm\Node\HtmlNode');
     }
 
 }
