@@ -45,8 +45,7 @@ class HtmlParser implements ParserInterface
 
     protected function parse()
     {
-        if(true === empty($this->html))
-        {
+        if (true === empty($this->html)) {
             return;
         }
 
@@ -63,11 +62,11 @@ class HtmlParser implements ParserInterface
     {
         $list = $xpath->query("//form");
 
-        if(0 == $list->length) {
+        if (0 == $list->length) {
             throw new \InvalidArgumentException("Form element not found in passed HTML");
         }
 
-        if(1 < $list->length) {
+        if (1 < $list->length) {
             throw new \InvalidArgumentException("More than one form found in passed HTML");
         }
 
@@ -78,14 +77,14 @@ class HtmlParser implements ParserInterface
 
     protected function parseElementNodes(\DOMXpath $xpath)
     {
-        foreach($this->map as $query) {
+        foreach ($this->map as $query) {
             $list = $xpath->query($query);
 
-            if(0 == $list->length) {
+            if (0 == $list->length) {
                 continue;
             }
 
-            foreach($list as $node) {
+            foreach ($list as $node) {
                 $this->elementNodes[] = new HtmlNode($node);
             }
         }
