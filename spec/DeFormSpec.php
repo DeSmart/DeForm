@@ -10,24 +10,6 @@ use Prophecy\Prophet;
 
 class DeFormSpec extends ObjectBehavior
 {
-    
-    /**
-     * @var Prophet
-     */
-    private $prophet;
-    
-    /**
-     * @return Prophet
-     */
-    private function getProphet()
-    {
-        if (true === empty($this->prophet)) {
-            $this->prophet = new Prophet;
-        }
-        
-        return $this->prophet;
-    }
-
     function let(NodeInterface $formNode, RequestInterface $request)
     {
         $formNode->getAttribute('name')->willReturn('foo');
@@ -77,7 +59,7 @@ class DeFormSpec extends ObjectBehavior
         for ($i = 0; $i < 4; $i++) {
             $fieldName = 'field_'.$i;
             
-            $element = $this->getProphet()->prophesize('\DeForm\Element\ElementInterface');
+            $element = (new Prophet)->prophesize('\DeForm\Element\ElementInterface');
             $element->getName()->willReturn($fieldName);
             
             if (true === isset($requestData[$fieldName])) {
