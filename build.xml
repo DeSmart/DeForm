@@ -33,6 +33,10 @@
     <mkdir dir="${basedir}/build/logs"/>
     <mkdir dir="${basedir}/build/pdepend"/>
     <mkdir dir="${basedir}/build/api"/>
+
+    <exec executable="composer">
+      <arg value="install" />
+    </exec>
   </target>
 
   <target name="lint" description="Perform syntax check of sourcecode files">
