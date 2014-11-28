@@ -124,4 +124,26 @@ class DeForm
     {
         // @TODO implement
     }
+
+    /**
+     * Returns an array of form element's names combined with element's values.
+     *
+     * @return array
+     */
+    public function getData()
+    {
+        $data = [];
+
+        foreach ($this->elements as $element) {
+            $name = $element->getName();
+
+            if (static::DEFORM_ID === $name) {
+                continue;
+            }
+
+            $data[$name] = $element->getValue();
+        }
+
+        return $data;
+    }
 }

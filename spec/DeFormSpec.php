@@ -6,7 +6,7 @@ use PhpSpec\ObjectBehavior;
 use DeForm\Request\RequestInterface;
 use DeForm\Node\NodeInterface;
 use DeForm\Element\ElementInterface;
-use Prophecy\Prophet;
+use DeForm\DeForm;
 
 class DeFormSpec extends ObjectBehavior
 {
@@ -19,14 +19,14 @@ class DeFormSpec extends ObjectBehavior
 
     function it_should_check_if_the_form_was_submitted(RequestInterface $request)
     {
-        $request->get(\DeForm\DeForm::DEFORM_ID)->willReturn('foo');
+        $request->get(DeForm::DEFORM_ID)->willReturn('foo');
 
         $this->isSubmitted()->shouldReturn(true);
     }
 
     function it_should_check_if_the_form_was_not_submitted(RequestInterface $request)
     {
-        $request->get(\DeForm\DeForm::DEFORM_ID)->willReturn('bar');
+        $request->get(DeForm::DEFORM_ID)->willReturn('bar');
 
         $this->isSubmitted()->shouldReturn(false);
     }
@@ -83,6 +83,34 @@ class DeFormSpec extends ObjectBehavior
         $this->addElement($el3);
         $this->addElement($el4);
         $this->addElement($el5);
+    }
+
+    function it_should_return_element_values_excluding_deform_id(RequestInterface $request, ElementInterface $el1, ElementInterface $el2, ElementInterface $el3) {
+        $request->get(DeForm::DEFORM_ID)->willReturn('foo');
+        $request->get('field_1')->willReturn('new_value');
+        $request->get('field_2')->shouldBeCalled();
+
+        $el1->getName()->willReturn('field_1');
+        $el1->isReadonly()->willReturn(false);
+        $el1->setValue('new_value')->shouldBeCalled();
+        $el1->getValue()->willReturn('new_value');
+
+        $el2->getName()->willReturn('field_2');
+        $el2->isReadonly()->willReturn(false);
+        $el2->getValue()->willReturn('field_2_value');
+
+        $el3->getName()->willReturn(DeForm::DEFORM_ID);
+        $el3->isReadonly()->willReturn(true);
+        $el3->getValue()->willReturn('foo_bar');
+
+        $this->addElement($el1);
+        $this->addElement($el2);
+        $this->addElement($el3);
+
+        $this->getData()->shouldReturn(array(
+            'field_1' => 'new_value',
+            'field_2' => 'field_2_value',
+        ));
     }
 
 }
