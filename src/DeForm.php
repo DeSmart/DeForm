@@ -19,7 +19,7 @@ class DeForm
     /**
      * @var \DeForm\Element\ElementInterface[]
      */
-    protected $elements = array();
+    protected $elements = [];
     
     const DEFORM_ID = '__deform_id';
 
@@ -53,14 +53,14 @@ class DeForm
     {
         $name = $element->getName();
         
-        if (true === key_exists($name, $this->elements)) {
+        if (true === array_key_exists($name, $this->elements)) {
             throw new \LogicException(sprintf('Cannot set the element "%s" more than once (same name)', $name));
         }
         
-        $requestValue = $this->request->get($name);
+        $request_value = $this->request->get($name);
         
-        if (true === $this->isSubmitted() && false === empty($requestValue) && false === $element->isReadonly()) {
-            $element->setValue($requestValue);
+        if (true === $this->isSubmitted() && null !== $request_value && false === $element->isReadonly()) {
+            $element->setValue($request_value);
         }
         
         $this->elements[$name] = $element;
@@ -77,7 +77,7 @@ class DeForm
      */
     public function getElement($name)
     {
-        if (false === key_exists($name, $this->elements)) {
+        if (false === array_key_exists($name, $this->elements)) {
             throw new \LogicException(sprintf('Trying to get a non-existing element ("%s")', $name));
         }
         
