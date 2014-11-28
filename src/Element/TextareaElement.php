@@ -2,7 +2,7 @@
 
 namespace DeForm\Element;
 
-class TextElement extends AbstractElement implements ElementInterface
+class TextareaElement extends AbstractElement implements ElementInterface
 {
 
     /**
@@ -13,9 +13,7 @@ class TextElement extends AbstractElement implements ElementInterface
      */
     public function setValue($value)
     {
-        $this->node->setAttribute('value', $value);
-
-        return $this;
+        // TODO: Implement setValue() method.
     }
 
     /**
@@ -25,7 +23,8 @@ class TextElement extends AbstractElement implements ElementInterface
      */
     public function getValue()
     {
-        return $this->node->getAttribute('value');
+        // TODO: Implement getValue() method.
     }
+
 
 }
