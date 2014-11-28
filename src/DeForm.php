@@ -108,4 +108,20 @@ class DeForm
 
         return true;
     }
+
+    /**
+     * @return boolean
+     */
+    public function isValid()
+    {
+        // @TODO implement
+    }
+
+    /**
+     * Force form validation
+     */
+    public function validate()
+    {
+        // @TODO implement
+    }
 }

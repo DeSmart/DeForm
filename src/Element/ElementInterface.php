@@ -32,4 +32,24 @@ interface ElementInterface
      * @return string
      */
     public function getName();
+
+    /**
+     * Mark element as valid
+     */
+    public function setValid();
+
+    /**
+     * Mark element as invalid
+     *
+     * @param string $message
+     */
+    public function setInvalid($message);
+
+    /**
+     * Check if element is valid
+     *
+     * @return boolean
+     */
+    public function isValid();
+
 }
