@@ -19,9 +19,9 @@ class HtmlParserSpec extends ObjectBehavior
         $this->shouldThrow('\InvalidArgumentException')->during('parse', [$parser]);
     }
 
-    function it_finds_form_element(HtmlDocument $document)
-    {
-        // Todo: implement
-    }
+//    function it_finds_form_element(HtmlDocument $document)
+//    {
+//        // Todo: implement
+//    }
 
 }
