@@ -30,7 +30,9 @@ class HtmlParserSpec extends ObjectBehavior
 
         $elements->shouldHaveCount(2);
         $elements[0]->shouldBeAnInstanceOf('DeForm\Node\HtmlNode');
+        $elements[0]->getElementType()->shouldReturn('input_text');
         $elements[1]->shouldBeAnInstanceOf('DeForm\Node\HtmlNode');
+        $elements[1]->getElementType()->shouldReturn('input_checkbox');
     }
 
 }
