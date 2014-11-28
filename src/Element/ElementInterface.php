@@ -35,6 +35,8 @@ interface ElementInterface
 
     /**
      * Mark element as valid
+     *
+     * @return void
      */
     public function setValid();
 
@@ -42,6 +44,7 @@ interface ElementInterface
      * Mark element as invalid
      *
      * @param string $message
+     * @return void
      */
     public function setInvalid($message);
 
