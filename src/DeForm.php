@@ -62,7 +62,7 @@ class DeForm
 
         $this->elements[$name] = $element;
 
-        if (true === $this->shouldSetValue($element, $request_value)) {
+        if (true === $this->canSetElementValue($element, $request_value)) {
             $element->setValue($request_value);
         }
 
@@ -92,7 +92,7 @@ class DeForm
      * @param string $value
      * @return bool
      */
-    protected function shouldSetValue(ElementInterface $element, $value)
+    protected function canSetElementValue(ElementInterface $element, $value)
     {
         if (false === $this->isSubmitted()) {
             return false;
