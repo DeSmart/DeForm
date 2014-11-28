@@ -4,7 +4,7 @@ interface ElementInterface
 {
 
     /**
-     * Set value in a form element.
+     * Set the value of a form element.
      *
      * @param string $value
      * @return self
@@ -12,11 +12,24 @@ interface ElementInterface
     public function setValue($value);
 
     /**
-     * Check element if has an attribute "readonly" or "disabled".
-     * Readonly element won't be parsed by DeForm.
+     * Get the value of a form element.
+     * 
+     * @return string|int
+     */
+    public function getValue();
+    
+    /**
+     * Return true if the element has an attribute "readonly" or "disabled".
+     * If it does, it won't be parsed by DeForm.
      *
      * @return boolean
      */
     public function isReadonly();
-
+    
+    /**
+     * Return the name of a form element.
+     * 
+     * @return string
+     */
+    public function getName();
 }
