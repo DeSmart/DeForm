@@ -14,14 +14,11 @@ class HtmlParserSpec extends ObjectBehavior
         $this->shouldHaveType('DeForm\Parser\ParserInterface');
     }
 
-    function it_throws_exception_when_parse_get_non_html_document(\DeForm\Parser\ParserInterface $parser)
-    {
-        $this->shouldThrow('\InvalidArgumentException')->during('parse', [$parser]);
-    }
+    function it_gets_form_node(){
+        $this->setHtml('<form method="post"><input type="text" name="foo"/></form>');
 
-    function it_finds_form_element(HtmlDocument $document)
-    {
-        // Todo: implement
+        $this->getFormNode()->shouldBeTypeOf('DeForm\Node\HtmlNode');
+        $this->getFormNode()->getAttribute('method')->shouldReturn('post');
     }
 
 }

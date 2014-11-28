@@ -6,17 +6,22 @@ use DeForm\Parser\ParserInterface;
 class HtmlParser implements ParserInterface
 {
 
-    /**
-     * Parse HTML to Nodes.
-     *
-     * @param mixed $document
-     * @return \DeForm\Node\NodeInterface[]
-     */
-    public function parse($document)
+    private $html;
+
+    public function setHtml($html)
     {
-        if (false === $document instanceof HtmlDocument) {
-            throw new \InvalidArgumentException('This parser can use only HtmlDocument instance');
-        }
+        $this->html = $html;
+
+        return $this;
     }
 
+    public function getFormNode()
+    {
+        // TODO: write logic here
+    }
+
+    public function getElementsNodes()
+    {
+        // TODO: write logic here
+    }
 }
