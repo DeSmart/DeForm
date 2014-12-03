@@ -2,15 +2,16 @@
 
 namespace spec\DeForm\Element;
 
+use DeForm\Element\TextareaValueInterface;
 use DeForm\Node\NodeInterface;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
 class TextareaElementSpec extends ObjectBehavior
 {
-    function let(NodeInterface $node)
+    function let(NodeInterface $node, TextareaValueInterface $textValue)
     {
-        $this->beConstructedWith($node);
+        $this->beConstructedWith($node, $textValue);
     }
 
     function it_is_initializable()
@@ -19,7 +20,17 @@ class TextareaElementSpec extends ObjectBehavior
         $this->shouldImplement('DeForm\Element\ElementInterface');
     }
 
+    function it_return_element_value(TextareaValueInterface $textValue)
+    {
+        $textValue->getValue()->shouldBeCalled()->willReturn('abc');
+        $this->getValue()->shouldReturn('abc');
+    }
 
+    function it_should_set_element_value (TextareaValueInterface $textValue)
+    {
+        $textValue->setValue('foo')->shouldBeCalled();
+        $this->setValue('foo');
+    }
 
 
     function it_is_readonly_element_by_disabled_attribute(NodeInterface $node)

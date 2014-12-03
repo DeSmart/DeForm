@@ -2,8 +2,20 @@
 
 namespace DeForm\Element;
 
+use DeForm\Node\NodeInterface;
+
 class TextareaElement extends AbstractElement implements ElementInterface
 {
+    /**
+     * @var \DeForm\Element\TextareaValueInterface
+     */
+    protected $textValue;
+
+    public function __construct(NodeInterface $node, TextareaValueInterface $textValue)
+    {
+        $this->node = $node;
+        $this->textValue = $textValue;
+    }
 
     /**
      * Set the value of a form element.
@@ -13,7 +25,9 @@ class TextareaElement extends AbstractElement implements ElementInterface
      */
     public function setValue($value)
     {
-        // TODO: Implement setValue() method.
+        $this->textValue->setValue($value);
+
+        return $this;
     }
 
     /**
@@ -23,8 +37,7 @@ class TextareaElement extends AbstractElement implements ElementInterface
      */
     public function getValue()
     {
-        // TODO: Implement getValue() method.
+        return $this->textValue->getValue();
     }
-
 
 }

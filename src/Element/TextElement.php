@@ -2,8 +2,15 @@
 
 namespace DeForm\Element;
 
+use DeForm\Node\NodeInterface;
+
 class TextElement extends AbstractElement implements ElementInterface
 {
+
+    public function __construct(NodeInterface $node)
+    {
+        $this->node = $node;
+    }
 
     /**
      * Set the value of a form element.

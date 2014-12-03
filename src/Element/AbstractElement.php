@@ -2,8 +2,6 @@
 
 namespace DeForm\Element;
 
-use DeForm\Node\NodeInterface;
-
 abstract class AbstractElement
 {
 
@@ -11,11 +9,6 @@ abstract class AbstractElement
      * @var \DeForm\Node\NodeInterface
      */
     protected $node;
-
-    public function __construct(NodeInterface $node)
-    {
-        $this->node = $node;
-    }
 
     /**
      * Return true if the element has an attribute "readonly" or "disabled".
