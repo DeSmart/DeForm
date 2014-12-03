@@ -26,7 +26,7 @@ class TextareaValue implements TextareaValueInterface
     }
 
     /**
-     * Set value of Textarea.
+     * Set value in node from Textarea.
      *
      * @param $value
      * @return self

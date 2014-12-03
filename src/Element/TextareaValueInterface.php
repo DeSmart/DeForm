@@ -13,7 +13,7 @@ interface TextareaValueInterface
     public function getValue();
 
     /**
-     * Set value of Textarea.
+     * Set value in node from Textarea.
      *
      * @param $value
      * @return self
