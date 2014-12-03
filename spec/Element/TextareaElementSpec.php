@@ -26,12 +26,11 @@ class TextareaElementSpec extends ObjectBehavior
         $this->getValue()->shouldReturn('abc');
     }
 
-    function it_should_set_element_value (TextareaValueInterface $textValue)
+    function it_should_set_element_value(TextareaValueInterface $textValue)
     {
         $textValue->setValue('foo')->shouldBeCalled();
         $this->setValue('foo');
     }
-
 
     function it_is_readonly_element_by_disabled_attribute(NodeInterface $node)
     {
