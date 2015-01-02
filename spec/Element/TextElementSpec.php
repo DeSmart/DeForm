@@ -33,7 +33,7 @@ class TextElementSpec extends ObjectBehavior
         $this->setValue('abc');
     }
 
-    function it_is_readonly_element_by_disabled_attribute(NodeInterface $node)
+    function it_is_readonly_through_nodes_disabled_attribute(NodeInterface $node)
     {
         $node->hasAttribute('readonly')->willReturn(false);
         $node->hasAttribute('disabled')->shouldBeCalled()->willReturn(true);
@@ -41,7 +41,7 @@ class TextElementSpec extends ObjectBehavior
         $this->shouldBeReadonly();
     }
 
-    function it_is_readonly_element_by_readonly_attribute(NodeInterface $node)
+    function it_is_readonly_through_nodes_readonly_attribute(NodeInterface $node)
     {
         $node->hasAttribute('disabled')->willReturn(false);
         $node->hasAttribute('readonly')->shouldBeCalled()->willReturn(true);
