@@ -1,6 +1,4 @@
-<?php
-
-namespace DeForm\Element;
+<?php namespace DeForm\Element;
 
 abstract class AbstractElement
 {

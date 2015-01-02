@@ -1,6 +1,4 @@
-<?php
-
-namespace DeForm\Element;
+<?php namespace DeForm\Element;
 
 class TextareaValue implements TextareaValueInterface
 {
