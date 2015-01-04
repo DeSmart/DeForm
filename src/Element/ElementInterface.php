@@ -1,6 +1,6 @@
 <?php namespace DeForm\Element;
 
-interface ElementInterface 
+interface ElementInterface
 {
 
     /**
@@ -13,11 +13,11 @@ interface ElementInterface
 
     /**
      * Get the value of a form element.
-     * 
+     *
      * @return string|int
      */
     public function getValue();
-    
+
     /**
      * Return true if the element has an attribute "readonly" or "disabled".
      * If it does, it won't be parsed by DeForm.
@@ -25,10 +25,10 @@ interface ElementInterface
      * @return boolean
      */
     public function isReadonly();
-    
+
     /**
      * Return the name of a form element.
-     * 
+     *
      * @return string
      */
     public function getName();
