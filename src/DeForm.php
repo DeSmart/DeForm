@@ -3,6 +3,7 @@
 use DeForm\Node\NodeInterface;
 use DeForm\Request\RequestInterface;
 use DeForm\Element\ElementInterface;
+use DeForm\Element\Exceptions\ElementHasNoValueException;
 
 class DeForm
 {
@@ -141,7 +142,11 @@ class DeForm
                 continue;
             }
 
-            $data[$name] = $element->getValue();
+            try {
+                $data[$name] = $element->getValue();
+            } catch (ElementHasNoValueException $e) {
+                // If an element has no value we do nothing
+            }
         }
 
         return $data;

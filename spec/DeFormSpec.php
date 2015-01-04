@@ -85,10 +85,11 @@ class DeFormSpec extends ObjectBehavior
         $this->addElement($el5);
     }
 
-    function it_should_return_element_values_excluding_deform_id(RequestInterface $request, ElementInterface $el1, ElementInterface $el2, ElementInterface $el3) {
+    function it_should_return_element_values_excluding_deform_id(RequestInterface $request, ElementInterface $el1, ElementInterface $el2, ElementInterface $el3, ElementInterface $el4) {
         $request->get(DeForm::DEFORM_ID)->willReturn('foo');
         $request->get('field_1')->willReturn('new_value');
         $request->get('field_2')->shouldBeCalled();
+        $request->get('field_4')->shouldBeCalled();
 
         $el1->getName()->willReturn('field_1');
         $el1->isReadonly()->willReturn(false);
@@ -103,9 +104,14 @@ class DeFormSpec extends ObjectBehavior
         $el3->isReadonly()->willReturn(true);
         $el3->getValue()->willReturn('foo_bar');
 
+        $el4->getName()->willReturn('field_4');
+        $el4->isReadonly()->willReturn(false);
+        $el4->getValue()->willThrow('\DeForm\Element\Exceptions\ElementHasNoValueException');
+
         $this->addElement($el1);
         $this->addElement($el2);
         $this->addElement($el3);
+        $this->addElement($el4);
 
         $this->getData()->shouldReturn(array(
             'field_1' => 'new_value',
