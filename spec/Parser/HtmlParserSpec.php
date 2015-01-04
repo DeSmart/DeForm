@@ -22,6 +22,11 @@ class HtmlParserSpec extends ObjectBehavior
         $this->getFormNode()->getAttribute('method')->shouldReturn('post');
     }
 
+//    function it_finds_form_element(HtmlDocument $document)
+//    {
+//        // Todo: implement
+//    }
+
     function it_gets_element_nodes()
     {
         $this->setHtml('<form method="post"><input type="text" name="foo"/><input type="checkbox" name="bar"/></form>');
