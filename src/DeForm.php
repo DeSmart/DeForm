@@ -142,11 +142,7 @@ class DeForm
                 continue;
             }
 
-            try {
-                $data[$name] = $element->getValue();
-            } catch (ElementHasNoValueException $e) {
-                // If an element has no value we do nothing
-            }
+            $data[$name] = $element->getValue();
         }
 
         return $data;

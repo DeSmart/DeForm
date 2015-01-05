@@ -106,7 +106,7 @@ class DeFormSpec extends ObjectBehavior
 
         $el4->getName()->willReturn('field_4');
         $el4->isReadonly()->willReturn(false);
-        $el4->getValue()->willThrow('\DeForm\Element\Exceptions\ElementHasNoValueException');
+        $el4->getValue()->willReturn('');
 
         $this->addElement($el1);
         $this->addElement($el2);
@@ -116,6 +116,7 @@ class DeFormSpec extends ObjectBehavior
         $this->getData()->shouldReturn(array(
             'field_1' => 'new_value',
             'field_2' => 'field_2_value',
+            'field_4' => '',
         ));
     }
 
