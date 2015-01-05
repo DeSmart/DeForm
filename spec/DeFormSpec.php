@@ -113,11 +113,11 @@ class DeFormSpec extends ObjectBehavior
         $this->addElement($el3);
         $this->addElement($el4);
 
-        $this->getData()->shouldReturn(array(
+        $this->getData()->shouldReturn([
             'field_1' => 'new_value',
             'field_2' => 'field_2_value',
             'field_4' => '',
-        ));
+        ]);
     }
 
 }
