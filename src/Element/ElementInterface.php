@@ -1,4 +1,4 @@
-<?php namespace DeForm\Element;
+<?php namespace DeForm\Element\Interface;
 
 interface ElementInterface
 {
