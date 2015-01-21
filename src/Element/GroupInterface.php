@@ -12,4 +12,9 @@ interface GroupInterface extends ElementInterface
      */
     public function addElement(NodeInterface $element);
 
+    /**
+     * @return \DeForm\Node\NodeInterface[]
+     */
+    public function getElements();
+
 }

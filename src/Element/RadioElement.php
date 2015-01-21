@@ -12,7 +12,7 @@ class RadioElement implements GroupInterface
     /**
      * @var \DeForm\Node\NodeInterface[]
      */
-    protected $elements;
+    protected $elements = [];
 
     public function __construct($name)
     {
@@ -27,7 +27,17 @@ class RadioElement implements GroupInterface
      */
     public function setValue($value)
     {
-        // TODO: Implement setValue() method.
+        foreach ($this->elements as $item) {
+            if (true === $item->hasAttribute('checked')) {
+                $item->removeAttribute('checked');
+            }
+
+            if ($value === $item->getAttribute('value')) {
+                $item->setAttribute('checked', 'checked');
+            }
+        }
+
+        return $this;
     }
 
     /**
@@ -37,7 +47,13 @@ class RadioElement implements GroupInterface
      */
     public function getValue()
     {
-        // TODO: Implement getValue() method.
+        foreach ($this->elements as $item) {
+            if (true === $item->hasAttribute('checked')) {
+                return $item->getAttribute('value');
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -103,9 +119,20 @@ class RadioElement implements GroupInterface
             throw new \InvalidArgumentException('Group accepts only input[type="radio"] elements.');
         }
 
+        if ($this->name !== $element->getAttribute('name')) {
+            throw new \InvalidArgumentException('Attribute input[name] is invalid.');
+        }
+
         $this->elements[] = $element;
 
         return $this;
     }
 
+    /**
+     * @return \DeForm\Node\NodeInterface[]
+     */
+    public function getElements()
+    {
+        return $this->elements;
+    }
 }
