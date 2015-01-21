@@ -1,14 +1,12 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: pomek
- * Date: 21.01.15
- * Time: 22:29
- */
+<?php namespace DeForm\Element;
 
-namespace DeForm\Element;
+interface GroupInterface extends ElementInterface
+{
 
+    /**
+     * @param $element
+     * @return self
+     */
+    public function addElement($element);
 
-interface GroupInterface {
-
-} 
+}
