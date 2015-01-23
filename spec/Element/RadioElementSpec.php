@@ -2,7 +2,7 @@
 
 namespace spec\DeForm\Element;
 
-use DeForm\Node\NodeInterface;
+use DeForm\Node\NodeInterface as Node;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
@@ -30,7 +30,7 @@ class RadioElementSpec extends ObjectBehavior
         $this->getElements()->shouldBeArray();
     }
 
-    function it_append_valid_element_to_group(NodeInterface $el1)
+    function it_append_valid_element_to_group(Node $el1)
     {
         $el1->getElementType()->willReturn('input_radio');
         $el1->getAttribute('name')->willReturn('foo')->shouldBeCalled();
@@ -38,7 +38,7 @@ class RadioElementSpec extends ObjectBehavior
         $this->addElement($el1)->shouldHaveType('DeForm\Element\RadioElement');
     }
 
-    function it_throw_exception_through_add_invalid_elements_to_group(NodeInterface $el1, NodeInterface $el2)
+    function it_throw_exception_through_add_invalid_elements_to_group(Node $el1, Node $el2)
     {
         $el1->getElementType()->willReturn('input_text');
 
@@ -49,69 +49,60 @@ class RadioElementSpec extends ObjectBehavior
         $this->shouldThrow('\InvalidArgumentException')->during('addElement', [$el2]);
     }
 
-    function it_return_group_value_for_not_selected_elements(NodeInterface $el1, NodeInterface $el2, NodeInterface $el3)
+    function it_return_group_value_for_not_selected_elements(Node $el1, Node $el2, Node $el3)
     {
-        $this->setup_helper_elements($el1, $el2, $el3);
+        $this->prepare_node_element($el1, 'first');
+        $this->prepare_node_element($el2, 'second');
+        $this->prepare_node_element($el3, 'third');
+
+        $this->addElement($el1);
+        $this->addElement($el2);
+        $this->addElement($el3);
+
         $this->getValue()->shouldReturn(null);
     }
 
-    function it_return_group_value_for_selected_element(
-        NodeInterface $el1,
-        NodeInterface $el2,
-        NodeInterface $el3,
-        NodeInterface $el4)
+    function it_return_group_value_for_selected_element(Node $el1, Node $el2, Node $el3, Node $el4)
     {
-        $this->setup_helper_elements($el1, $el2, $el3);
+        $this->prepare_node_element($el1, 'first');
+        $this->prepare_node_element($el2, 'second');
+        $this->prepare_node_element($el3, 'third');
+        $this->prepare_node_element($el4, 'fourth', true);
 
-        $el4->getAttribute('name')->willReturn('foo')->shouldBeCalled();
-        $el4->getAttribute('value')->willReturn('fourth');
-        $el4->getElementType()->willReturn('input_radio');
-        $el4->hasAttribute('checked')->willReturn(true);
-
+        $this->addElement($el1);
+        $this->addElement($el2);
+        $this->addElement($el3);
         $this->addElement($el4);
+
         $this->getValue()->shouldReturn('fourth');
     }
 
-    function it_should_set_checked_attribute_based_on_element_value(
-        NodeInterface $el1,
-        NodeInterface $el2,
-        NodeInterface $el3,
-        NodeInterface $el4,
-        NodeInterface $el5)
+    function it_should_set_checked_attribute_based_on_element_value(Node $el1, Node $el2, Node $el3, Node $el4, Node $el5)
     {
-        $this->setup_helper_elements($el1, $el2, $el3);
+        $this->prepare_node_element($el1, 'first');
+        $this->prepare_node_element($el2, 'second');
+        $this->prepare_node_element($el3, 'third');
+        $this->prepare_node_element($el4, 'fourth');
+        $this->prepare_node_element($el5, 'fifth', true);
 
-        $el4->hasAttribute('checked')->willReturn(false);
-        $el4->getAttribute('name')->willReturn('foo')->shouldBeCalled();
-        $el4->getAttribute('value')->willReturn('fourth');
-        $el4->getElementType()->willReturn('input_radio');
+        $el5->removeAttribute('checked')->shouldBeCalled();
         $el4->setAttribute('checked', 'checked')->shouldBeCalled();
 
-        $el5->hasAttribute('checked')->willReturn(true);
-        $el5->getAttribute('name')->willReturn('foo')->shouldBeCalled();
-        $el5->getAttribute('value')->willReturn('fifth');
-        $el5->getElementType()->willReturn('input_radio');
-        $el5->removeAttribute('checked')->shouldBeCalled();
-
+        $this->addElement($el1);
+        $this->addElement($el2);
+        $this->addElement($el3);
         $this->addElement($el4);
         $this->addElement($el5);
 
         $this->setValue('fourth')->shouldHaveType('DeForm\Element\RadioElement');
     }
 
-    protected function setup_helper_elements(NodeInterface $el1, NodeInterface $el2, NodeInterface $el3)
+    protected function prepare_node_element(Node $item, $value, $isChecked = false)
     {
-        $el1->getAttribute('value')->willReturn('first');
-        $el2->getAttribute('value')->willReturn('second');
-        $el3->getAttribute('value')->willReturn('third');
-
-        foreach (func_get_args() as $item) {
-            $item->hasAttribute('checked')->willReturn(false);
-            $item->getAttribute('name')->willReturn('foo');
-            $item->getElementType()->willReturn('input_radio')->shouldBeCalled();
-
-            $this->addElement($item);
-        }
+        $item->getAttribute('name')->willReturn('foo')->shouldBeCalled();
+        $item->getAttribute('value')->willReturn($value);
+        $item->hasAttribute('checked')->willReturn($isChecked);
+        $item->getElementType()->willReturn('input_radio')->shouldBeCalled();
     }
 
 }
