@@ -55,9 +55,9 @@ class RadioElementSpec extends ObjectBehavior
         $this->prepare_node_element($el2, 'second');
         $this->prepare_node_element($el3, 'third');
 
-        $this->addElement($el1);
-        $this->addElement($el2);
-        $this->addElement($el3);
+        $this->addElement($el1)
+            ->addElement($el2)
+            ->addElement($el3);
 
         $this->getValue()->shouldReturn(null);
     }
@@ -69,10 +69,10 @@ class RadioElementSpec extends ObjectBehavior
         $this->prepare_node_element($el3, 'third');
         $this->prepare_node_element($el4, 'fourth', true);
 
-        $this->addElement($el1);
-        $this->addElement($el2);
-        $this->addElement($el3);
-        $this->addElement($el4);
+        $this->addElement($el1)
+            ->addElement($el2)
+            ->addElement($el3)
+            ->addElement($el4);
 
         $this->getValue()->shouldReturn('fourth');
     }
@@ -88,13 +88,108 @@ class RadioElementSpec extends ObjectBehavior
         $el5->removeAttribute('checked')->shouldBeCalled();
         $el4->setAttribute('checked', 'checked')->shouldBeCalled();
 
-        $this->addElement($el1);
-        $this->addElement($el2);
-        $this->addElement($el3);
-        $this->addElement($el4);
-        $this->addElement($el5);
+        $this->addElement($el1)
+            ->addElement($el2)
+            ->addElement($el3)
+            ->addElement($el4)
+            ->addElement($el5);
 
         $this->setValue('fourth')->shouldHaveType('DeForm\Element\RadioElement');
+    }
+
+    function it_is_readonly_through_disabled_attribute(Node $el1, Node $el2)
+    {
+        $this->prepare_node_element($el1, 'one');
+        $this->prepare_node_element($el2, 'two');
+
+        $el1->hasAttribute('disabled')->willReturn(false)->shouldBeCalled();
+        $el1->hasAttribute('readonly')->willReturn(false)->shouldBeCalled();
+        $el2->hasAttribute('disabled')->willReturn(true)->shouldBeCalled();
+
+        $this->addElement($el1)
+            ->addElement($el2);
+
+        $this->shouldBeReadonly();
+    }
+
+    function it_is_readonly_through_readonly_attribute(Node $el1, Node $el2)
+    {
+        $this->prepare_node_element($el1, 'one');
+        $this->prepare_node_element($el2, 'two');
+
+        $el1->hasAttribute('disabled')->willReturn(false)->shouldBeCalled();
+        $el1->hasAttribute('readonly')->willReturn(false)->shouldBeCalled();
+        $el2->hasAttribute('disabled')->willReturn(false)->shouldBeCalled();
+        $el2->hasAttribute('readonly')->willReturn(true)->shouldBeCalled();
+
+        $this->addElement($el1)
+            ->addElement($el2);
+
+        $this->shouldBeReadonly();
+    }
+
+    function it_is_valid_group_of_elements(Node $el1, Node $el2)
+    {
+        $this->prepare_node_element($el1, 'one');
+        $this->prepare_node_element($el2, 'two');
+
+        $el1->hasAttribute('data-invalid')->willReturn(false)->shouldBeCalled();
+        $el2->hasAttribute('data-invalid')->willReturn(false)->shouldBeCalled();
+
+        $this->addElement($el1)
+            ->addElement($el2);
+
+        $this->shouldBeValid();
+    }
+
+    function it_is_invalid_group_of_elements(Node $el1, Node $el2)
+    {
+        $this->prepare_node_element($el1, 'one');
+        $this->prepare_node_element($el2, 'two');
+
+        $el1->hasAttribute('data-invalid')->willReturn(false)->shouldBeCalled();
+        $el2->hasAttribute('data-invalid')->willReturn(true)->shouldBeCalled();
+
+        $this->addElement($el1)
+            ->addElement($el2);
+
+        $this->shouldNotBeValid();
+    }
+
+    function it_should_set_every_element_on_invalid(Node $el1, Node $el2, Node $el3)
+    {
+        $message = 'Invalid element.';
+
+        $this->prepare_node_element($el1, 'one');
+        $this->prepare_node_element($el2, 'two');
+        $this->prepare_node_element($el3, 'three');
+
+        foreach (func_get_args() as $node) {
+            $node->setAttribute('data-invalid', $message)->shouldBeCalled();
+        }
+
+        $this->addElement($el1)
+            ->addElement($el2)
+            ->addElement($el3);
+
+        $this->setInvalid($message);
+    }
+
+    function it_should_set_every_element_on_valid(Node $el1, Node $el2, Node $el3)
+    {
+        $this->prepare_node_element($el1, 'one');
+        $this->prepare_node_element($el2, 'two');
+        $this->prepare_node_element($el3, 'three');
+
+        foreach (func_get_args() as $node) {
+            $node->removeAttribute('data-invalid')->shouldBeCalled();
+        }
+
+        $this->addElement($el1)
+            ->addElement($el2)
+            ->addElement($el3);
+
+        $this->setValid();
     }
 
     protected function prepare_node_element(Node $item, $value, $isChecked = false)

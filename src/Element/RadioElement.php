@@ -64,7 +64,17 @@ class RadioElement implements GroupInterface
      */
     public function isReadonly()
     {
-        // TODO: Implement isReadonly() method.
+        foreach ($this->elements as $item) {
+            if (true === $item->hasAttribute('disabled')) {
+                return true;
+            }
+
+            if (true === $item->hasAttribute('readonly')) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -84,7 +94,9 @@ class RadioElement implements GroupInterface
      */
     public function setValid()
     {
-        // TODO: Implement setValid() method.
+        foreach ($this->elements as $item) {
+            $item->removeAttribute('data-invalid');
+        }
     }
 
     /**
@@ -95,7 +107,9 @@ class RadioElement implements GroupInterface
      */
     public function setInvalid($message)
     {
-        // TODO: Implement setInvalid() method.
+        foreach ($this->elements as $item) {
+            $item->setAttribute('data-invalid', $message);
+        }
     }
 
     /**
@@ -105,7 +119,13 @@ class RadioElement implements GroupInterface
      */
     public function isValid()
     {
-        // TODO: Implement isValid() method.
+        foreach ($this->elements as $item) {
+            if (true === $item->hasAttribute('data-invalid')) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
