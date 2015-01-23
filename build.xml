@@ -2,7 +2,7 @@
 <!--
   vim: tabstop=2 shiftwidth=2
 -->
-<project name="doximple" default="build">
+<project name="DeForm" default="build">
   <property name="src" value="src" />
   <target name="build"
           depends="prepare,lint,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd"/>
