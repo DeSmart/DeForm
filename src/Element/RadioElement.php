@@ -155,4 +155,22 @@ class RadioElement implements GroupInterface
     {
         return $this->elements;
     }
+
+    /**
+     * Return a single element of group based on value name.
+     *
+     * @param string $value
+     * @return \DeForm\Node\NodeInterface
+     * @throw \InvalidArgumentException
+     */
+    public function getElement($value)
+    {
+        foreach ($this->elements as $item) {
+            if ($value === $item->getAttribute('value')) {
+                return $item;
+            }
+        }
+
+        throw new \InvalidArgumentException(sprintf('Cannot find element with value %s', $value));
+    }
 }

@@ -192,6 +192,27 @@ class RadioElementSpec extends ObjectBehavior
         $this->setValid();
     }
 
+    function it_should_a_single_element_from_group(Node $el1, Node $el2)
+    {
+        $this->prepare_node_element($el1, 'one');
+        $this->prepare_node_element($el2, 'two', true);
+
+        $this->addElement($el1)
+            ->addElement($el2);
+
+        $first_el = $this->getElement('one');
+        $first_el->shouldImplement('DeForm\Node\NodeInterface');
+        $first_el->hasAttribute('checked')->shouldReturn(false);
+        $first_el->getAttribute('value')->shouldReturn('one');
+
+        $second_el = $this->getElement('two');
+        $second_el->shouldImplement('DeForm\Node\NodeInterface');
+        $second_el->hasAttribute('checked')->shouldReturn(true);
+        $second_el->getAttribute('value')->shouldReturn('two');
+
+        $this->shouldThrow('\InvalidArgumentException')->during('getElement', ['three']);
+    }
+
     protected function prepare_node_element(Node $item, $value, $isChecked = false)
     {
         $item->getAttribute('name')->willReturn('foo')->shouldBeCalled();
