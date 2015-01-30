@@ -2,223 +2,111 @@
 
 namespace spec\DeForm\Element;
 
-use DeForm\Node\NodeInterface as Node;
+use DeForm\Node\NodeInterface;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
 /** @mixin \DeForm\Element\RadioElement */
 class RadioElementSpec extends ObjectBehavior
 {
+
+    function let(NodeInterface $node)
+    {
+        $this->beConstructedWith($node);
+    }
+
     function it_is_initializable()
     {
         $this->shouldHaveType('DeForm\Element\RadioElement');
-        $this->shouldImplement('DeForm\Element\GroupInterface');
+        $this->shouldImplement('DeForm\Element\ElementInterface');
+        $this->shouldImplement('DeForm\Element\CheckedElementInterface');
     }
 
-    function let()
+    function it_return_element_value(NodeInterface $node)
     {
-        $this->beConstructedWith('foo');
+        $node->getAttribute('value')->shouldBeCalled()->willReturn('bar');
+
+        $this->getValue()->shouldReturn('bar');
     }
 
-    function it_return_name_element()
+    function it_should_set_element_value(NodeInterface $node)
     {
+        $node->setAttribute('value', 'abc')->shouldBeCalled();
+
+        $this->setValue('abc');
+    }
+
+    function it_is_readonly_through_nodes_disabled_attribute(NodeInterface $node)
+    {
+        $node->hasAttribute('readonly')->willReturn(false);
+        $node->hasAttribute('disabled')->shouldBeCalled()->willReturn(true);
+
+        $this->shouldBeReadonly();
+    }
+
+    function it_is_readonly_through_nodes_readonly_attribute(NodeInterface $node)
+    {
+        $node->hasAttribute('disabled')->willReturn(false);
+        $node->hasAttribute('readonly')->shouldBeCalled()->willReturn(true);
+
+        $this->shouldBeReadonly();
+    }
+
+    function it_return_name_element(NodeInterface $node)
+    {
+        $node->getAttribute('name')->shouldBeCalled()->willReturn('foo');
+
         $this->getName()->shouldReturn('foo');
     }
 
-    function it_return_elements_of_group()
+    function it_should_set_element_as_valid(NodeInterface $node)
     {
-        $this->getElements()->shouldBeArray();
-    }
-
-    function it_append_valid_element_to_group(Node $el1)
-    {
-        $el1->getElementType()->willReturn('input_radio');
-        $el1->getAttribute('name')->willReturn('foo')->shouldBeCalled();
-
-        $this->addElement($el1)->shouldHaveType('DeForm\Element\RadioElement');
-    }
-
-    function it_throw_exception_through_add_invalid_elements_to_group(Node $el1, Node $el2)
-    {
-        $el1->getElementType()->willReturn('input_text');
-
-        $el2->getElementType()->willReturn('input_radio');
-        $el2->getAttribute('name')->willReturn('bar')->shouldBeCalled();
-
-        $this->shouldThrow('\InvalidArgumentException')->during('addElement', [$el1]);
-        $this->shouldThrow('\InvalidArgumentException')->during('addElement', [$el2]);
-    }
-
-    function it_return_group_value_for_not_selected_elements(Node $el1, Node $el2, Node $el3)
-    {
-        $this->prepare_node_element($el1, 'first');
-        $this->prepare_node_element($el2, 'second');
-        $this->prepare_node_element($el3, 'third');
-
-        $this->addElement($el1)
-            ->addElement($el2)
-            ->addElement($el3);
-
-        $this->getValue()->shouldReturn(null);
-    }
-
-    function it_return_group_value_for_selected_element(Node $el1, Node $el2, Node $el3, Node $el4)
-    {
-        $this->prepare_node_element($el1, 'first');
-        $this->prepare_node_element($el2, 'second');
-        $this->prepare_node_element($el3, 'third');
-        $this->prepare_node_element($el4, 'fourth', true);
-
-        $this->addElement($el1)
-            ->addElement($el2)
-            ->addElement($el3)
-            ->addElement($el4);
-
-        $this->getValue()->shouldReturn('fourth');
-    }
-
-    function it_should_set_checked_attribute_based_on_element_value(Node $el1, Node $el2, Node $el3, Node $el4, Node $el5)
-    {
-        $this->prepare_node_element($el1, 'first');
-        $this->prepare_node_element($el2, 'second');
-        $this->prepare_node_element($el3, 'third');
-        $this->prepare_node_element($el4, 'fourth');
-        $this->prepare_node_element($el5, 'fifth', true);
-
-        $el5->removeAttribute('checked')->shouldBeCalled();
-        $el4->setAttribute('checked', 'checked')->shouldBeCalled();
-
-        $this->addElement($el1)
-            ->addElement($el2)
-            ->addElement($el3)
-            ->addElement($el4)
-            ->addElement($el5);
-
-        $this->setValue('fourth')->shouldHaveType('DeForm\Element\RadioElement');
-    }
-
-    function it_is_readonly_through_disabled_attribute(Node $el1, Node $el2)
-    {
-        $this->prepare_node_element($el1, 'one');
-        $this->prepare_node_element($el2, 'two');
-
-        $el1->hasAttribute('disabled')->willReturn(false)->shouldBeCalled();
-        $el1->hasAttribute('readonly')->willReturn(false)->shouldBeCalled();
-        $el2->hasAttribute('disabled')->willReturn(true)->shouldBeCalled();
-
-        $this->addElement($el1)
-            ->addElement($el2);
-
-        $this->shouldBeReadonly();
-    }
-
-    function it_is_readonly_through_readonly_attribute(Node $el1, Node $el2)
-    {
-        $this->prepare_node_element($el1, 'one');
-        $this->prepare_node_element($el2, 'two');
-
-        $el1->hasAttribute('disabled')->willReturn(false)->shouldBeCalled();
-        $el1->hasAttribute('readonly')->willReturn(false)->shouldBeCalled();
-        $el2->hasAttribute('disabled')->willReturn(false)->shouldBeCalled();
-        $el2->hasAttribute('readonly')->willReturn(true)->shouldBeCalled();
-
-        $this->addElement($el1)
-            ->addElement($el2);
-
-        $this->shouldBeReadonly();
-    }
-
-    function it_is_valid_group_of_elements(Node $el1, Node $el2)
-    {
-        $this->prepare_node_element($el1, 'one');
-        $this->prepare_node_element($el2, 'two');
-
-        $el1->hasAttribute('data-invalid')->willReturn(false)->shouldBeCalled();
-        $el2->hasAttribute('data-invalid')->willReturn(false)->shouldBeCalled();
-
-        $this->addElement($el1)
-            ->addElement($el2);
-
-        $this->shouldBeValid();
-    }
-
-    function it_is_invalid_group_of_elements(Node $el1, Node $el2)
-    {
-        $this->prepare_node_element($el1, 'one');
-        $this->prepare_node_element($el2, 'two');
-
-        $el1->hasAttribute('data-invalid')->willReturn(false)->shouldBeCalled();
-        $el2->hasAttribute('data-invalid')->willReturn(true)->shouldBeCalled();
-
-        $this->addElement($el1)
-            ->addElement($el2);
-
-        $this->shouldNotBeValid();
-    }
-
-    function it_should_set_every_element_on_invalid(Node $el1, Node $el2, Node $el3)
-    {
-        $message = 'Invalid element.';
-
-        $this->prepare_node_element($el1, 'one');
-        $this->prepare_node_element($el2, 'two');
-        $this->prepare_node_element($el3, 'three');
-
-        foreach (func_get_args() as $node) {
-            $node->setAttribute('data-invalid', $message)->shouldBeCalled();
-        }
-
-        $this->addElement($el1)
-            ->addElement($el2)
-            ->addElement($el3);
-
-        $this->setInvalid($message);
-    }
-
-    function it_should_set_every_element_on_valid(Node $el1, Node $el2, Node $el3)
-    {
-        $this->prepare_node_element($el1, 'one');
-        $this->prepare_node_element($el2, 'two');
-        $this->prepare_node_element($el3, 'three');
-
-        foreach (func_get_args() as $node) {
-            $node->removeAttribute('data-invalid')->shouldBeCalled();
-        }
-
-        $this->addElement($el1)
-            ->addElement($el2)
-            ->addElement($el3);
+        $node->removeAttribute('data-invalid')->shouldBeCalled();
 
         $this->setValid();
     }
 
-    function it_should_a_single_element_from_group(Node $el1, Node $el2)
+    function it_should_set_element_as_invalid(NodeInterface $node)
     {
-        $this->prepare_node_element($el1, 'one');
-        $this->prepare_node_element($el2, 'two', true);
+        $node->setAttribute('data-invalid', 'foo')->shouldBeCalled();
 
-        $this->addElement($el1)
-            ->addElement($el2);
-
-        $first_el = $this->getElement('one');
-        $first_el->shouldImplement('DeForm\Node\NodeInterface');
-        $first_el->hasAttribute('checked')->shouldReturn(false);
-        $first_el->getAttribute('value')->shouldReturn('one');
-
-        $second_el = $this->getElement('two');
-        $second_el->shouldImplement('DeForm\Node\NodeInterface');
-        $second_el->hasAttribute('checked')->shouldReturn(true);
-        $second_el->getAttribute('value')->shouldReturn('two');
-
-        $this->shouldThrow('\InvalidArgumentException')->during('getElement', ['three']);
+        $this->setInvalid('foo');
     }
 
-    protected function prepare_node_element(Node $item, $value, $isChecked = false)
+    function it_is_return_valid_element(NodeInterface $node)
     {
-        $item->getAttribute('name')->willReturn('foo')->shouldBeCalled();
-        $item->getAttribute('value')->willReturn($value);
-        $item->hasAttribute('checked')->willReturn($isChecked);
-        $item->getElementType()->willReturn('input_radio')->shouldBeCalled();
+        $node->hasAttribute('data-invalid')->shouldBeCalled()->willReturn(false);
+        $this->shouldBeValid();
+    }
+
+    function it_is_return_not_valid_element(NodeInterface $node)
+    {
+        $node->hasAttribute('data-invalid')->shouldBeCalled()->willReturn(true);
+        $this->shouldNotBeValid();
+    }
+
+    function it_is_checked_element(NodeInterface $node)
+    {
+        $node->hasAttribute('checked')->willReturn(true);
+        $this->shouldBeChecked();
+    }
+
+    function it_is_unchecked_element(NodeInterface $node)
+    {
+        $node->hasAttribute('checked')->willReturn(false);
+        $this->shouldNotBeChecked();
+    }
+
+    function it_should_mark_as_checked_element(NodeInterface $node) {
+        $node->setAttribute('checked', 'checked')->shouldBeCalled();
+
+        $this->markAsChecked()->shouldHaveType('DeForm\Element\RadioElement');
+    }
+
+    function it_should_mark_as_unchecked_element(NodeInterface $node) {
+        $node->removeAttribute('checked')->shouldBeCalled();
+
+        $this->markAsUnchecked()->shouldHaveType('DeForm\Element\RadioElement');
     }
 
 }
