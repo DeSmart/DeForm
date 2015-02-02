@@ -7,8 +7,8 @@ use DeForm\Element\TextElement;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
-/** @mixin \DeForm\Element\GroupElementRadio */
-class GroupElementRadioSpec extends ObjectBehavior
+/** @mixin \DeForm\Element\RadioGroupElement */
+class RadioGroupElementSpec extends ObjectBehavior
 {
     function it_is_initializable()
     {

@@ -1,6 +1,6 @@
 <?php namespace DeForm\Element;
 
-class GroupElementRadio implements GroupInterface {
+class RadioGroupElement implements GroupInterface {
 
     /**
      * @var string
