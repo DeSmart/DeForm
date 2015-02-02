@@ -1,7 +1,37 @@
 <?php namespace DeForm\Element;
 
-class RadioElement extends TextElement implements ElementInterface, CheckedElementInterface
+use DeForm\Node\NodeInterface;
+
+class RadioElement extends AbstractElement implements ElementInterface, CheckedElementInterface
 {
+
+    public function __construct(NodeInterface $node)
+    {
+        $this->node = $node;
+    }
+
+    /**
+     * Set the value of a form element.
+     *
+     * @param string $value
+     * @return self
+     */
+    public function setValue($value)
+    {
+        $this->node->setAttribute('value', $value);
+
+        return $this;
+    }
+
+    /**
+     * Get the value of a form element.
+     *
+     * @return string|int
+     */
+    public function getValue()
+    {
+        return $this->node->getAttribute('value');
+    }
 
     /**
      * If element has an attribute "checked" then return true.
