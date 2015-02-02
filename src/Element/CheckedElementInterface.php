@@ -16,13 +16,13 @@ interface CheckedElementInterface
      *
      * @return self
      */
-    public function markAsUnchecked();
+    public function setUnchecked();
 
     /**
      * Add an attribute "checked" to a element.
      *
      * @return self
      */
-    public function markAsChecked();
+    public function setChecked();
 
 }

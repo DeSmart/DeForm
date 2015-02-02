@@ -81,8 +81,8 @@ class RadioGroupElementSpec extends ObjectBehavior
         $this->prepare_node_element($el4, 'fourth');
         $this->prepare_node_element($el5, 'fifth', true);
 
-        $el5->markAsUnchecked()->shouldBeCalled();
-        $el4->markAsChecked()->shouldBeCalled();
+        $el5->setUnchecked()->shouldBeCalled();
+        $el4->setChecked()->shouldBeCalled();
 
         $this->addElement($el1)
             ->addElement($el2)

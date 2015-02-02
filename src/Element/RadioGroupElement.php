@@ -27,11 +27,11 @@ class RadioGroupElement implements GroupInterface {
     {
         foreach ($this->elements as $item) {
             if (true === $item->isChecked()) {
-                $item->markAsUnchecked();
+                $item->setUnchecked();
             }
 
             if ($value === $item->getValue()) {
-                $item->markAsChecked();
+                $item->setChecked();
             }
         }
 

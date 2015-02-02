@@ -18,7 +18,7 @@ class RadioElement extends TextElement implements ElementInterface, CheckedEleme
      *
      * @return self
      */
-    public function markAsUnchecked()
+    public function setUnchecked()
     {
         $this->node->removeAttribute('checked');
 
@@ -30,7 +30,7 @@ class RadioElement extends TextElement implements ElementInterface, CheckedEleme
      *
      * @return self
      */
-    public function markAsChecked()
+    public function setChecked()
     {
         $this->node->setAttribute('checked', 'checked');
 
