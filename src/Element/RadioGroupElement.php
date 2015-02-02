@@ -3,19 +3,9 @@
 class RadioGroupElement implements GroupInterface {
 
     /**
-     * @var string
-     */
-    protected $name;
-
-    /**
      * @var \DeForm\Element\RadioElement[]
      */
     protected $elements = [];
-
-    public function __construct($name)
-    {
-        $this->name = $name;
-    }
 
     /**
      * Set the value of a form element.
@@ -75,10 +65,15 @@ class RadioGroupElement implements GroupInterface {
      * Return the name of a form element.
      *
      * @return string
+     * @throw \UnexpectedValueException
      */
     public function getName()
     {
-        return $this->name;
+        if (0 === $this->countElements()) {
+            throw new \UnexpectedValueException('Radio Elements Group is empty.');
+        }
+
+        return $this->elements[0]->getName();
     }
 
     /**
@@ -135,10 +130,9 @@ class RadioGroupElement implements GroupInterface {
             throw new \InvalidArgumentException('Only instance of RadioElement object can be added.');
         }
 
-        if ($element->getName() !== $this->name) {
+        if ($this->countElements() > 0 && $element->getName() !== $this->getName()) {
             throw new \InvalidArgumentException('Attribute input[name] is invalid.');
         }
-
 
         $this->elements[] = $element;
         return $this;
@@ -152,6 +146,16 @@ class RadioGroupElement implements GroupInterface {
     public function getElements()
     {
         return $this->elements;
+    }
+
+    /**
+     * Return number of elements in group.
+     *
+     * @return int
+     */
+    public function countElements()
+    {
+        return count($this->elements);
     }
 
     /**

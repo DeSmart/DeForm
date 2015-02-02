@@ -21,9 +21,15 @@ class RadioGroupElementSpec extends ObjectBehavior
         $this->beConstructedWith('foo');
     }
 
-    function it_return_name_element()
+    function it_return_name_element(RadioEl $el1)
     {
+        $this->prepare_node_element($el1, 'first');
         $this->getName()->shouldReturn('foo');
+    }
+
+    function it_throw_exception_through_empty_group()
+    {
+        $this->shouldThrow('\UnexpectedValueException')->during('getName');
     }
 
     function it_return_elements_of_group()
@@ -179,19 +185,21 @@ class RadioGroupElementSpec extends ObjectBehavior
         $this->addElement($el1)
             ->addElement($el2);
 
-        $first_el = $this->getElement('one');
-        $first_el->shouldImplement('DeForm\Element\ElementInterface');
-        $first_el->shouldImplement('DeForm\Element\CheckedElementInterface');
-        $first_el->isChecked()->shouldReturn(false);
-        $first_el->getValue()->shouldReturn('one');
-
-        $second_el = $this->getElement('two');
-        $second_el->shouldImplement('DeForm\Element\ElementInterface');
-        $second_el->shouldImplement('DeForm\Element\CheckedElementInterface');
-        $second_el->isChecked()->shouldReturn(true);
-        $second_el->getValue()->shouldReturn('two');
+        $this->getElement('one')->shouldBeSame($el1);
+        $this->getElement('two')->shouldBeSame($el2);
 
         $this->shouldThrow('\InvalidArgumentException')->during('getElement', ['three']);
+    }
+
+    function it_should_return_number_of_elements_in_group(RadioEl $el1, RadioEl $el2)
+    {
+        $this->prepare_node_element($el1, 'first');
+        $this->prepare_node_element($el2, 'second');
+
+        $this->addElement($el1)
+            ->addElement($el2);
+
+        $this->countElements()->shouldReturn(2);
     }
 
     protected function prepare_node_element(RadioEl $item, $value, $isChecked = false)
