@@ -19,7 +19,6 @@ class RadioElementSpec extends ObjectBehavior
     {
         $this->shouldHaveType('DeForm\Element\RadioElement');
         $this->shouldImplement('DeForm\Element\ElementInterface');
-        $this->shouldImplement('DeForm\Element\CheckedElementInterface');
     }
 
     function it_return_element_value(NodeInterface $node)

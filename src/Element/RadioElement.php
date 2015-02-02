@@ -2,7 +2,7 @@
 
 use DeForm\Node\NodeInterface;
 
-class RadioElement extends AbstractElement implements ElementInterface, CheckedElementInterface
+class RadioElement extends AbstractElement implements ElementInterface
 {
 
     public function __construct(NodeInterface $node)
