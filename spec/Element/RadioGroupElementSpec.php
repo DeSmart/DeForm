@@ -12,46 +12,59 @@ class RadioGroupElementSpec extends ObjectBehavior
 {
     function it_is_initializable()
     {
-        $this->shouldHaveType('DeForm\Element\GroupElementRadio');
+        $this->shouldHaveType('DeForm\Element\RadioGroupElement');
         $this->shouldImplement('DeForm\Element\GroupInterface');
     }
 
-    function let()
-    {
-        $this->beConstructedWith('foo');
-    }
-
-    function it_return_name_element(RadioEl $el1)
+    function it_should_return_name_of_group_elements(RadioEl $el1)
     {
         $this->prepare_node_element($el1, 'first');
+        $this->addElement($el1);
+
         $this->getName()->shouldReturn('foo');
     }
 
-    function it_throw_exception_through_empty_group()
+    function it_throws_exception_when_get_name_group_and_group_has_not_elements()
     {
         $this->shouldThrow('\UnexpectedValueException')->during('getName');
     }
 
-    function it_return_elements_of_group()
+    function it_should_return_elements_of_group()
     {
         $this->getElements()->shouldBeArray();
     }
 
-    function it_append_valid_element_to_group(RadioEl $el1)
+    function it_should_append_valid_element_to_group(RadioEl $el)
     {
-        $el1->getName()->willReturn('foo')->shouldBeCalled();
-        $this->addElement($el1)->shouldHaveType('DeForm\Element\GroupElementRadio');
+        $el->getName()->willReturn('foo');
+
+        $this->countElements()->shouldReturn(0);
+        $this->addElement($el)->shouldHaveType('DeForm\Element\RadioGroupElement');
+        $this->countElements()->shouldReturn(1);
     }
 
-    function it_throw_exception_through_add_invalid_elements_to_group(TextElement $el1, RadioEl $el2)
+    function it_throws_exception_when_adding_non_radio_element(TextElement $el)
     {
+        $this->countElements()->shouldReturn(0);
+        $this->shouldThrow('\InvalidArgumentException')->during('addElement', [$el]);
+        $this->countElements()->shouldReturn(0);
+    }
+
+    function it_throws_exception_when_adding_radio_element_with_different_name(RadioEl $el1, RadioEl $el2)
+    {
+        $el1->getName()->willReturn('foo');
+
+        $this->countElements()->shouldReturn(0);
+        $this->addElement($el1);
+        $this->countElements()->shouldReturn(1);
+
         $el2->getName()->willReturn('bar')->shouldBeCalled();
 
-        $this->shouldThrow('\InvalidArgumentException')->during('addElement', [$el1]);
         $this->shouldThrow('\InvalidArgumentException')->during('addElement', [$el2]);
+        $this->countElements()->shouldReturn(1);
     }
 
-    function it_return_group_value_for_not_selected_elements(RadioEl $el1, RadioEl $el2, RadioEl $el3)
+    function it_should_return_value_of_group_with_not_selected_elements(RadioEl $el1, RadioEl $el2, RadioEl $el3)
     {
         $this->prepare_node_element($el1, 'first');
         $this->prepare_node_element($el2, 'second');
@@ -64,7 +77,7 @@ class RadioGroupElementSpec extends ObjectBehavior
         $this->getValue()->shouldReturn(null);
     }
 
-    function it_return_group_value_for_selected_element(RadioEl $el1, RadioEl $el2, RadioEl $el3, RadioEl $el4)
+    function it_should_return_value_of_group_with_selected_element(RadioEl $el1, RadioEl $el2, RadioEl $el3, RadioEl $el4)
     {
         $this->prepare_node_element($el1, 'first');
         $this->prepare_node_element($el2, 'second');
@@ -96,10 +109,10 @@ class RadioGroupElementSpec extends ObjectBehavior
             ->addElement($el4)
             ->addElement($el5);
 
-        $this->setValue('fourth')->shouldHaveType('DeForm\Element\GroupElementRadio');
+        $this->setValue('fourth')->shouldHaveType('DeForm\Element\RadioGroupElement');
     }
 
-    function it_is_readonly_through_disabled_attribute(RadioEl $el1, RadioEl $el2)
+    function it_should_be_readonly_group(RadioEl $el1, RadioEl $el2)
     {
         $this->prepare_node_element($el1, 'one');
         $this->prepare_node_element($el2, 'two');
@@ -113,7 +126,21 @@ class RadioGroupElementSpec extends ObjectBehavior
         $this->shouldBeReadonly();
     }
 
-    function it_is_valid_group_of_elements(RadioEl $el1, RadioEl $el2)
+    function it_should_not_be_readonly_group(RadioEl $el1, RadioEl $el2)
+    {
+        $this->prepare_node_element($el1, 'one');
+        $this->prepare_node_element($el2, 'two');
+
+        $el1->isReadonly()->willReturn(false)->shouldBeCalled();
+        $el2->isReadonly()->willReturn(false)->shouldBeCalled();
+
+        $this->addElement($el1)
+            ->addElement($el2);
+
+        $this->shouldNotBeReadonly();
+    }
+
+    function it_should_be_valid_group_elements(RadioEl $el1, RadioEl $el2)
     {
         $this->prepare_node_element($el1, 'one');
         $this->prepare_node_element($el2, 'two');
@@ -127,7 +154,7 @@ class RadioGroupElementSpec extends ObjectBehavior
         $this->shouldBeValid();
     }
 
-    function it_is_invalid_group_of_elements(RadioEl $el1, RadioEl $el2)
+    function it_should_be_invalid_group_elements(RadioEl $el1, RadioEl $el2)
     {
         $this->prepare_node_element($el1, 'one');
         $this->prepare_node_element($el2, 'two');
@@ -141,7 +168,7 @@ class RadioGroupElementSpec extends ObjectBehavior
         $this->shouldNotBeValid();
     }
 
-    function it_should_set_every_element_on_invalid(RadioEl $el1, RadioEl $el2, RadioEl $el3)
+    function it_should_set_each_element_of_group_as_invalid(RadioEl $el1, RadioEl $el2, RadioEl $el3)
     {
         $message = 'Invalid element.';
 
@@ -160,7 +187,7 @@ class RadioGroupElementSpec extends ObjectBehavior
         $this->setInvalid($message);
     }
 
-    function it_should_set_every_element_on_valid(RadioEl $el1, RadioEl $el2, RadioEl $el3)
+    function it_should_set_each_element_of_group_as_valid(RadioEl $el1, RadioEl $el2, RadioEl $el3)
     {
         $this->prepare_node_element($el1, 'one');
         $this->prepare_node_element($el2, 'two');
@@ -177,7 +204,7 @@ class RadioGroupElementSpec extends ObjectBehavior
         $this->setValid();
     }
 
-    function it_should_a_single_element_from_group(RadioEl $el1, RadioEl $el2)
+    function it_should_get_a_single_element_from_group_by_value(RadioEl $el1, RadioEl $el2)
     {
         $this->prepare_node_element($el1, 'one');
         $this->prepare_node_element($el2, 'two', true);
@@ -185,8 +212,8 @@ class RadioGroupElementSpec extends ObjectBehavior
         $this->addElement($el1)
             ->addElement($el2);
 
-        $this->getElement('one')->shouldBeSame($el1);
-        $this->getElement('two')->shouldBeSame($el2);
+        $this->getElement('one')->shouldBe($el1);
+        $this->getElement('two')->shouldBe($el2);
 
         $this->shouldThrow('\InvalidArgumentException')->during('getElement', ['three']);
     }
@@ -195,6 +222,8 @@ class RadioGroupElementSpec extends ObjectBehavior
     {
         $this->prepare_node_element($el1, 'first');
         $this->prepare_node_element($el2, 'second');
+
+        $this->countElements()->shouldReturn(0);
 
         $this->addElement($el1)
             ->addElement($el2);

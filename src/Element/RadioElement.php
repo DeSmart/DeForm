@@ -18,7 +18,11 @@ class RadioElement extends AbstractElement implements ElementInterface
      */
     public function setValue($value)
     {
-        $this->node->setAttribute('value', $value);
+        if ($value === $this->getValue()) {
+            $this->setChecked();
+        } else {
+            $this->setUnchecked();
+        }
 
         return $this;
     }

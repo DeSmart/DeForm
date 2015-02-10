@@ -21,21 +21,30 @@ class RadioElementSpec extends ObjectBehavior
         $this->shouldImplement('DeForm\Element\ElementInterface');
     }
 
-    function it_return_element_value(NodeInterface $node)
+    function it_should_return_element_value(NodeInterface $node)
     {
         $node->getAttribute('value')->shouldBeCalled()->willReturn('bar');
 
         $this->getValue()->shouldReturn('bar');
     }
 
-    function it_should_set_element_value(NodeInterface $node)
+    function it_should_set_as_checked_when_argument_of_set_value_method_is_the_same_as_element_value(NodeInterface $node)
     {
-        $node->setAttribute('value', 'abc')->shouldBeCalled();
+        $node->getAttribute('value')->willReturn('foo')->shouldBeCalled();
+        $node->setAttribute('checked', 'checked')->shouldBeCalled();
 
-        $this->setValue('abc');
+        $this->setValue('foo');
     }
 
-    function it_is_readonly_through_nodes_disabled_attribute(NodeInterface $node)
+    function it_not_should_set_as_checked_when_argument_of_set_value_method_is_not_the_same_as_element_value(NodeInterface $node)
+    {
+        $node->getAttribute('value')->willReturn('foo')->shouldBeCalled();
+        $node->removeAttribute('checked')->shouldBeCalled();
+
+        $this->setValue('bar');
+    }
+
+    function it_is_readonly_element_through_nodes_disabled_attribute(NodeInterface $node)
     {
         $node->hasAttribute('readonly')->willReturn(false);
         $node->hasAttribute('disabled')->shouldBeCalled()->willReturn(true);
@@ -43,7 +52,7 @@ class RadioElementSpec extends ObjectBehavior
         $this->shouldBeReadonly();
     }
 
-    function it_is_readonly_through_nodes_readonly_attribute(NodeInterface $node)
+    function it_is_readonly_element_through_nodes_readonly_attribute(NodeInterface $node)
     {
         $node->hasAttribute('disabled')->willReturn(false);
         $node->hasAttribute('readonly')->shouldBeCalled()->willReturn(true);
@@ -51,7 +60,7 @@ class RadioElementSpec extends ObjectBehavior
         $this->shouldBeReadonly();
     }
 
-    function it_return_name_element(NodeInterface $node)
+    function it_should_return_name_element(NodeInterface $node)
     {
         $node->getAttribute('name')->shouldBeCalled()->willReturn('foo');
 
@@ -72,25 +81,25 @@ class RadioElementSpec extends ObjectBehavior
         $this->setInvalid('foo');
     }
 
-    function it_is_return_valid_element(NodeInterface $node)
+    function it_should_be_valid_element(NodeInterface $node)
     {
         $node->hasAttribute('data-invalid')->shouldBeCalled()->willReturn(false);
         $this->shouldBeValid();
     }
 
-    function it_is_return_not_valid_element(NodeInterface $node)
+    function it_should_be_invalid_element(NodeInterface $node)
     {
         $node->hasAttribute('data-invalid')->shouldBeCalled()->willReturn(true);
         $this->shouldNotBeValid();
     }
 
-    function it_is_checked_element(NodeInterface $node)
+    function it_should_be_checked_element(NodeInterface $node)
     {
         $node->hasAttribute('checked')->willReturn(true);
         $this->shouldBeChecked();
     }
 
-    function it_is_unchecked_element(NodeInterface $node)
+    function it_should_not_be_checked_element(NodeInterface $node)
     {
         $node->hasAttribute('checked')->willReturn(false);
         $this->shouldNotBeChecked();
