@@ -24,8 +24,11 @@ class TextareaElement extends AbstractElement implements ElementInterface
      */
     public function setValue($value)
     {
-        $this->textValue->setValue($value);
+        if (false === is_string($value) && false === is_numeric($value)) {
+            throw new \InvalidArgumentException('Invalid type of $value. Should be string or numeric.');
+        }
 
+        $this->textValue->setValue($value);
         return $this;
     }
 
