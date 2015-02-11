@@ -38,7 +38,7 @@ abstract class AbstractElement
     }
 
     /**
-     * Mark element as valid
+     * Mark element as valid.
      *
      * @return void
      */
@@ -48,7 +48,7 @@ abstract class AbstractElement
     }
 
     /**
-     * Mark element as invalid
+     * Mark element as invalid.
      *
      * @param string $message
      * @return void
@@ -59,7 +59,7 @@ abstract class AbstractElement
     }
 
     /**
-     * Check if element is valid
+     * Check if element is valid.
      *
      * @return boolean
      */
