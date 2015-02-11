@@ -19,8 +19,11 @@ class TextElement extends AbstractElement implements ElementInterface
      */
     public function setValue($value)
     {
-        $this->node->setAttribute('value', $value);
+        if (false === is_string($value) && false === is_numeric($value)) {
+            throw new \InvalidArgumentException('Invalid type of $value. Should be string or numeric.');
+        }
 
+        $this->node->setAttribute('value', $value);
         return $this;
     }
 
