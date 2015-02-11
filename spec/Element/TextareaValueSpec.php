@@ -54,14 +54,14 @@ class TextareaValueSpec extends ObjectBehavior
         $this->getValue()->shouldReturn((string) $arg);
     }
 
-    function it_should_throws_exception_when_call_method_with_argument_of_type_array()
+    function it_should_throws_exception_when_method_set_value_is_calling_with_argument_of_type_array()
     {
         $this->shouldThrow('\InvalidArgumentException')->during('setValue', [
             ['some_array']
         ]);
     }
 
-    function it_should_throws_exception_when_call_method_with_argument_of_type_object()
+    function it_should_throws_exception_when_method_set_value_is_calling_with_argument_of_type_object()
     {
         $arg = new \StdClass;
         $arg->foo = 'bar';

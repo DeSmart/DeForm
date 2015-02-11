@@ -19,7 +19,11 @@ class RadioElement extends AbstractElement implements ElementInterface
      */
     public function setValue($value)
     {
-        if ($value === $this->getValue()) {
+        if (false === is_string($value) && false === is_numeric($value)) {
+            throw new \InvalidArgumentException('Invalid type of $value. Should be string or numeric.');
+        }
+
+        if ((string) $value === $this->getValue()) {
             $this->setChecked();
         } else {
             $this->setUnchecked();
