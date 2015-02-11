@@ -16,12 +16,16 @@ class RadioGroupElement implements GroupInterface {
      */
     public function setValue($value)
     {
+        if (false === is_string($value) && false === is_numeric($value)) {
+            throw new \InvalidArgumentException('Invalid type of $value. Should be string or numeric.');
+        }
+
         foreach ($this->elements as $item) {
             if (true === $item->isChecked()) {
                 $item->setUnchecked();
             }
 
-            if ($value === $item->getValue()) {
+            if ((string) $value === $item->getValue()) {
                 $item->setChecked();
             }
         }
