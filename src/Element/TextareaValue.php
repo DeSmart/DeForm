@@ -16,7 +16,7 @@ class TextareaValue implements TextareaValueInterface
     /**
      * Get value from Textarea nodes.
      *
-     * @return string|int
+     * @return mixed
      */
     public function getValue()
     {
@@ -27,7 +27,7 @@ class TextareaValue implements TextareaValueInterface
      * Set value in node from Textarea.
      *
      * @param $value
-     * @return self
+     * @return mixed
      */
     public function setValue($value)
     {

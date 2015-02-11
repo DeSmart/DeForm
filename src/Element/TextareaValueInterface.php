@@ -6,14 +6,14 @@ interface TextareaValueInterface
     /**
      * Get value from Textarea nodes.
      *
-     * @return string|int
+     * @return mixed
      */
     public function getValue();
 
     /**
      * Set value in node from Textarea.
      *
-     * @param $value
+     * @param mixed $value
      * @return self
      */
     public function setValue($value);

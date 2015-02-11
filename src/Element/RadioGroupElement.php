@@ -10,8 +10,9 @@ class RadioGroupElement implements GroupInterface {
     /**
      * Set the value of a form element.
      *
-     * @param string $value
+     * @param mixed $value
      * @return self
+     * @throws \InvalidArgumentException
      */
     public function setValue($value)
     {
@@ -31,7 +32,7 @@ class RadioGroupElement implements GroupInterface {
     /**
      * Get the value of a form element.
      *
-     * @return string|int
+     * @return mixed
      */
     public function getValue()
     {

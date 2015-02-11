@@ -13,8 +13,9 @@ class RadioElement extends AbstractElement implements ElementInterface
     /**
      * Set the value of a form element.
      *
-     * @param string $value
+     * @param mixed $value
      * @return self
+     * @throws \InvalidArgumentException
      */
     public function setValue($value)
     {
@@ -30,7 +31,7 @@ class RadioElement extends AbstractElement implements ElementInterface
     /**
      * Get the value of a form element.
      *
-     * @return string|int
+     * @return mixed
      */
     public function getValue()
     {
