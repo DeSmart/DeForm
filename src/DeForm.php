@@ -3,7 +3,6 @@
 use DeForm\Node\NodeInterface;
 use DeForm\Request\RequestInterface;
 use DeForm\Element\ElementInterface;
-use DeForm\Element\Exceptions\ElementHasNoValueException;
 
 class DeForm
 {
