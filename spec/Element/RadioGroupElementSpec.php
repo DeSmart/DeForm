@@ -43,7 +43,7 @@ class RadioGroupElementSpec extends ObjectBehavior
         $this->countElements()->shouldReturn(1);
     }
 
-    function it_throws_exception_when_adding_non_radio_element(TextElement $el)
+    function it_throws_exception_when_adding_not_radio_element(TextElement $el)
     {
         $this->countElements()->shouldReturn(0);
         $this->shouldThrow('\InvalidArgumentException')->during('addElement', [$el]);

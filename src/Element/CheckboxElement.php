@@ -2,7 +2,6 @@
 
 class CheckboxElement extends AbstractElement implements ElementInterface
 {
-
     use CheckedAttributeTrait;
 
     /**
@@ -14,7 +13,17 @@ class CheckboxElement extends AbstractElement implements ElementInterface
      */
     public function setValue($value)
     {
-        // TODO: Implement setValue() method.
+        if (false === is_string($value) && false === is_numeric($value)) {
+            throw new \InvalidArgumentException('Invalid type of $value. Should be string or numeric.');
+        }
+
+        if ((string) $value === $this->getValue()) {
+            $this->setChecked();
+        } else {
+            $this->setUnchecked();
+        }
+
+        return $this;
     }
 
     /**
@@ -24,7 +33,7 @@ class CheckboxElement extends AbstractElement implements ElementInterface
      */
     public function getValue()
     {
-        // TODO: Implement getValue() method.
+        return $this->node->getAttribute('value');
     }
 
 }
