@@ -1,8 +1,15 @@
 <?php namespace DeForm\Element;
 
+use DeForm\Node\NodeInterface;
+
 class CheckboxElement extends AbstractElement implements ElementInterface
 {
     use CheckedAttributeTrait;
+
+    public function __construct(NodeInterface $node)
+    {
+        $this->node = $node;
+    }
 
     /**
      * Set the value of a form element.
