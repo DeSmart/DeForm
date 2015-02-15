@@ -16,7 +16,7 @@ class TextareaValue implements TextareaValueInterface
     /**
      * Get value from Textarea nodes.
      *
-     * @return string|int
+     * @return string
      */
     public function getValue()
     {
@@ -26,13 +26,16 @@ class TextareaValue implements TextareaValueInterface
     /**
      * Set value in node from Textarea.
      *
-     * @param $value
-     * @return self
+     * @param string|int|float $value
+     * @return mixed
      */
     public function setValue($value)
     {
-        $this->text = new \DOMText($value);
+        if (false === is_string($value) && false === is_numeric($value)) {
+            throw new \InvalidArgumentException('Invalid type of $value. Should be string or numeric.');
+        }
 
+        $this->text = new \DOMText($value);
         return $this;
     }
 

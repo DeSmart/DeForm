@@ -6,8 +6,8 @@ use DeForm\Node\NodeInterface;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
-/** @mixin \DeForm\Element\RadioElement */
-class RadioElementSpec extends ObjectBehavior
+/** @mixin \DeForm\Element\CheckboxElement */
+class CheckboxElementSpec extends ObjectBehavior
 {
 
     function let(NodeInterface $node)
@@ -17,7 +17,7 @@ class RadioElementSpec extends ObjectBehavior
 
     function it_is_initializable()
     {
-        $this->shouldHaveType('DeForm\Element\RadioElement');
+        $this->shouldHaveType('DeForm\Element\CheckboxElement');
         $this->shouldImplement('DeForm\Element\ElementInterface');
     }
 
@@ -147,13 +147,12 @@ class RadioElementSpec extends ObjectBehavior
     function it_should_mark_as_checked_element(NodeInterface $node) {
         $node->setAttribute('checked', 'checked')->shouldBeCalled();
 
-        $this->setChecked()->shouldHaveType('DeForm\Element\RadioElement');
+        $this->setChecked()->shouldHaveType('DeForm\Element\CheckboxElement');
     }
 
     function it_should_mark_as_unchecked_element(NodeInterface $node) {
         $node->removeAttribute('checked')->shouldBeCalled();
 
-        $this->setUnchecked()->shouldHaveType('DeForm\Element\RadioElement');
+        $this->setUnchecked()->shouldHaveType('DeForm\Element\CheckboxElement');
     }
-
 }

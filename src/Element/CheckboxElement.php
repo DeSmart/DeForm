@@ -2,7 +2,7 @@
 
 use DeForm\Node\NodeInterface;
 
-class RadioElement extends AbstractElement implements ElementInterface
+class CheckboxElement extends AbstractElement implements ElementInterface
 {
     use CheckedAttributeTrait;
 
