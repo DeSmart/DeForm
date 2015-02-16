@@ -17,7 +17,7 @@ class RadioGroupElement extends AbstractGroup implements GroupInterface
         }
 
         foreach ($this->elements as $item) {
-            $new_value = ((string) $value === $item->getValue());
+            $new_value = ((string)$value === $item->getValue());
 
             $item->setValue($new_value);
         }

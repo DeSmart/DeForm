@@ -43,7 +43,7 @@ class TextareaValueSpec extends ObjectBehavior
         $arg = 123;
 
         $this->setValue($arg)->shouldHaveType('DeForm\Element\TextareaValue');
-        $this->getValue()->shouldReturn((string) $arg);
+        $this->getValue()->shouldReturn((string)$arg);
     }
 
     function it_should_change_value_of_element_based_on_an_argument_of_type_float()
@@ -51,7 +51,7 @@ class TextareaValueSpec extends ObjectBehavior
         $arg = 0.5;
 
         $this->setValue($arg)->shouldHaveType('DeForm\Element\TextareaValue');
-        $this->getValue()->shouldReturn((string) $arg);
+        $this->getValue()->shouldReturn((string)$arg);
     }
 
     function it_should_throws_exception_when_method_set_value_is_calling_with_argument_of_type_array()

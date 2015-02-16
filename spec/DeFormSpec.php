@@ -85,7 +85,8 @@ class DeFormSpec extends ObjectBehavior
         $this->addElement($el5);
     }
 
-    function it_should_return_element_values_excluding_deform_id(RequestInterface $request, ElementInterface $el1, ElementInterface $el2, ElementInterface $el3, ElementInterface $el4) {
+    function it_should_return_element_values_excluding_deform_id(RequestInterface $request, ElementInterface $el1, ElementInterface $el2, ElementInterface $el3, ElementInterface $el4)
+    {
         $request->get(DeForm::DEFORM_ID)->willReturn('foo');
         $request->get('field_1')->willReturn('new_value');
         $request->get('field_2')->shouldBeCalled();

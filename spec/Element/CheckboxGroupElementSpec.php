@@ -21,12 +21,12 @@ class CheckboxGroupElementSpec extends ObjectBehavior
         $this->prepare_node_element($el1, 'first', false);
         $this->addElement($el1);
 
-        $this->getName()->shouldReturn('foo[]');
+        $this->getName()->shouldReturn('foo');
     }
 
     function it_throws_exception_when_get_name_group_and_group_has_not_elements()
     {
-        $this->shouldThrow('\UnexpectedValueException')->during('getName');
+        $this->shouldThrow('\LogicException')->during('getName');
     }
 
     function it_should_return_elements_of_group()
@@ -36,41 +36,27 @@ class CheckboxGroupElementSpec extends ObjectBehavior
 
     function it_should_append_valid_element_to_group(CheckboxEl $el)
     {
-        $el->getName()->willReturn('foo[]');
+        $el->getName()->willReturn('foo');
 
         $this->countElements()->shouldReturn(0);
         $this->addElement($el)->shouldHaveType('DeForm\Element\CheckboxGroupElement');
         $this->countElements()->shouldReturn(1);
     }
 
-    function it_throws_exception_when_adding_not_checkbox_element(TextElement $el)
+    function it_throws_exception_when_adding_non_checkbox_element(TextElement $el)
     {
-        $this->countElements()->shouldReturn(0);
         $this->shouldThrow('\InvalidArgumentException')->during('addElement', [$el]);
-        $this->countElements()->shouldReturn(0);
     }
 
     function it_throws_exception_when_adding_checkbox_element_with_different_name(CheckboxEl $el1, CheckboxEl $el2)
     {
-        $el1->getName()->willReturn('foo[]');
+        $el1->getName()->willReturn('foo');
+        $el2->getName()->willReturn('bar')->shouldBeCalled();
 
         $this->countElements()->shouldReturn(0);
         $this->addElement($el1);
         $this->countElements()->shouldReturn(1);
-
-        $el2->getName()->willReturn('bar')->shouldBeCalled();
-
         $this->shouldThrow('\InvalidArgumentException')->during('addElement', [$el2]);
-        $this->countElements()->shouldReturn(1);
-    }
-
-    function it_throws_exception_when_adding_not_array_element(CheckboxEl $el)
-    {
-        $el->getName()->willReturn('foo')->shouldBeCalled();
-
-        $this->countElements()->shouldReturn(0);
-        $this->shouldThrow('\InvalidArgumentException')->during('addElement', [$el]);
-        $this->countElements()->shouldReturn(0);
     }
 
     function it_should_be_readonly_group(CheckboxEl $el1, CheckboxEl $el2)
@@ -175,8 +161,7 @@ class CheckboxGroupElementSpec extends ObjectBehavior
 
         $this->getElement('one')->shouldBe($el1);
         $this->getElement('two')->shouldBe($el2);
-
-        $this->shouldThrow('\InvalidArgumentException')->during('getElement', ['three']);
+        $this->getElement('three')->shouldBe(null);
     }
 
     function it_should_return_number_of_elements_in_group(CheckboxEl $el1, CheckboxEl $el2)
@@ -229,9 +214,9 @@ class CheckboxGroupElementSpec extends ObjectBehavior
             ->addElement($el2)
             ->addElement($el3);
 
-        $el1->setUnchecked()->shouldBeCalled();
-        $el2->setChecked()->shouldBeCalled();
-        $el3->setUnchecked()->shouldBeCalled();
+        $el1->setValue(false)->shouldBeCalled();
+        $el2->setValue(true)->shouldBeCalled();
+        $el3->setValue(false)->shouldBeCalled();
 
         $this->setValue('two')->shouldHaveType('DeForm\Element\CheckboxGroupElement');
     }
@@ -246,9 +231,9 @@ class CheckboxGroupElementSpec extends ObjectBehavior
             ->addElement($el2)
             ->addElement($el3);
 
-        $el1->setUnchecked()->shouldBeCalled();
-        $el2->setChecked()->shouldBeCalled();
-        $el3->setUnchecked()->shouldBeCalled();
+        $el1->setValue(false)->shouldBeCalled();
+        $el2->setValue(true)->shouldBeCalled();
+        $el3->setValue(false)->shouldBeCalled();
 
         $this->setValue(2)->shouldHaveType('DeForm\Element\CheckboxGroupElement');
     }
@@ -263,9 +248,9 @@ class CheckboxGroupElementSpec extends ObjectBehavior
             ->addElement($el2)
             ->addElement($el3);
 
-        $el1->setUnchecked()->shouldBeCalled();
-        $el2->setChecked()->shouldBeCalled();
-        $el3->setUnchecked()->shouldBeCalled();
+        $el1->setValue(false)->shouldBeCalled();
+        $el2->setValue(true)->shouldBeCalled();
+        $el3->setValue(false)->shouldBeCalled();
 
         $this->setValue(.2)->shouldHaveType('DeForm\Element\CheckboxGroupElement');
     }
@@ -282,10 +267,10 @@ class CheckboxGroupElementSpec extends ObjectBehavior
             ->addElement($el3)
             ->addElement($el4);
 
-        $el1->setUnchecked()->shouldBeCalled();
-        $el2->setChecked()->shouldBeCalled();
-        $el3->setUnchecked()->shouldBeCalled();
-        $el4->setChecked()->shouldBeCalled();
+        $el1->setValue(false)->shouldBeCalled();
+        $el2->setValue(true)->shouldBeCalled();
+        $el3->setValue(false)->shouldBeCalled();
+        $el4->setValue(true)->shouldBeCalled();
 
         $this->setValue(['two', 'four'])->shouldHaveType('DeForm\Element\CheckboxGroupElement');
     }
@@ -302,10 +287,10 @@ class CheckboxGroupElementSpec extends ObjectBehavior
             ->addElement($el3)
             ->addElement($el4);
 
-        $el1->setUnchecked()->shouldBeCalled();
-        $el2->setChecked()->shouldBeCalled();
-        $el3->setUnchecked()->shouldBeCalled();
-        $el4->setChecked()->shouldBeCalled();
+        $el1->setValue(false)->shouldBeCalled();
+        $el2->setValue(true)->shouldBeCalled();
+        $el3->setValue(false)->shouldBeCalled();
+        $el4->setValue(true)->shouldBeCalled();
 
         $this->setValue([2, 4])->shouldHaveType('DeForm\Element\CheckboxGroupElement');
     }
@@ -322,10 +307,10 @@ class CheckboxGroupElementSpec extends ObjectBehavior
             ->addElement($el3)
             ->addElement($el4);
 
-        $el1->setUnchecked()->shouldBeCalled();
-        $el2->setChecked()->shouldBeCalled();
-        $el3->setUnchecked()->shouldBeCalled();
-        $el4->setChecked()->shouldBeCalled();
+        $el1->setValue(false)->shouldBeCalled();
+        $el2->setValue(true)->shouldBeCalled();
+        $el3->setValue(false)->shouldBeCalled();
+        $el4->setValue(true)->shouldBeCalled();
 
         $this->setValue([0.2, 0.4])->shouldHaveType('DeForm\Element\CheckboxGroupElement');
     }
@@ -342,10 +327,10 @@ class CheckboxGroupElementSpec extends ObjectBehavior
             ->addElement($el3)
             ->addElement($el4);
 
-        $el1->setChecked()->shouldBeCalled();
-        $el2->setChecked()->shouldBeCalled();
-        $el3->setChecked()->shouldBeCalled();
-        $el4->setUnchecked()->shouldBeCalled();
+        $el1->setValue(true)->shouldBeCalled();
+        $el2->setValue(true)->shouldBeCalled();
+        $el3->setValue(true)->shouldBeCalled();
+        $el4->setValue(false)->shouldBeCalled();
 
         $this->setValue(['one', 2, 0.3])->shouldHaveType('DeForm\Element\CheckboxGroupElement');
     }
@@ -362,7 +347,7 @@ class CheckboxGroupElementSpec extends ObjectBehavior
 
     protected function prepare_node_element(CheckboxEl $item, $value, $isChecked = false)
     {
-        $item->getName()->willReturn('foo[]')->shouldBeCalled();
+        $item->getName()->willReturn('foo')->shouldBeCalled();
         $item->getValue()->willReturn($value);
         $item->isChecked()->willReturn($isChecked);
     }

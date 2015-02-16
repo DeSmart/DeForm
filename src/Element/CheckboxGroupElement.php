@@ -4,11 +4,6 @@ class CheckboxGroupElement extends AbstractGroup implements GroupInterface
 {
 
     /**
-     * @var \DeForm\Element\CheckboxElement[]
-     */
-    protected $elements = [];
-
-    /**
      * Set the value of a form element.
      *
      * @param mixed $value
@@ -22,15 +17,13 @@ class CheckboxGroupElement extends AbstractGroup implements GroupInterface
         }
 
         if (false === is_array($value)) {
-            $value = (array) $value;
+            $value = (array)$value;
         }
 
-        foreach ($this->elements as $element) {
-            if (true === in_array($element->getValue(), $value)) {
-                $element->setChecked();
-            } else {
-                $element->setUnchecked();
-            }
+        foreach ($this->elements as $item) {
+            $new_value = in_array($item->getValue(), $value);
+
+            $item->setValue($new_value);
         }
 
         return $this;
@@ -71,16 +64,29 @@ class CheckboxGroupElement extends AbstractGroup implements GroupInterface
 
         $name = $element->getName();
 
-        if ('[]' !== substr($name, -2)) {
-            throw new \InvalidArgumentException('Only array elements can be add to group.');
-        }
-
         if ($this->countElements() > 0 && $name !== $this->getName()) {
             throw new \InvalidArgumentException('Attribute input[name] is invalid.');
         }
 
         $this->elements[] = $element;
         return $this;
+    }
+
+    /**
+     * Return the name of a form element.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        $name = parent::getName();
+
+        if ('[]' !== substr($name, -2)) {
+            return $name;
+        }
+
+        $length = mb_strlen($name);
+        return substr($name, 0, $length - 2);
     }
 
 }

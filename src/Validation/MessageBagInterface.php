@@ -1,6 +1,6 @@
 <?php namespace DeForm\Validation;
 
-interface MessageBagInterface 
+interface MessageBagInterface
 {
 
     /**

@@ -103,13 +103,15 @@ class RadioElementSpec extends ObjectBehavior
         $this->shouldNotBeChecked();
     }
 
-    function it_should_mark_as_checked_element(NodeInterface $node) {
+    function it_should_mark_as_checked_element(NodeInterface $node)
+    {
         $node->setAttribute('checked', 'checked')->shouldBeCalled();
 
         $this->setChecked()->shouldBe($this);
     }
 
-    function it_should_mark_as_unchecked_element(NodeInterface $node) {
+    function it_should_mark_as_unchecked_element(NodeInterface $node)
+    {
         $node->removeAttribute('checked')->shouldBeCalled();
 
         $this->setUnchecked()->shouldBe($this);
