@@ -20,11 +20,11 @@ class CheckboxElement extends AbstractElement implements ElementInterface
      */
     public function setValue($value)
     {
-        if (false === is_string($value) && false === is_numeric($value)) {
-            throw new \InvalidArgumentException('Invalid type of $value. Should be string or numeric.');
+        if (false === is_bool($value)) {
+            throw new \InvalidArgumentException(sprintf('Param $value should be boolean, given %s', gettype($value)));
         }
 
-        if ((string) $value === $this->getValue()) {
+        if (true === $value) {
             $this->setChecked();
         } else {
             $this->setUnchecked();
@@ -40,7 +40,30 @@ class CheckboxElement extends AbstractElement implements ElementInterface
      */
     public function getValue()
     {
-        return $this->node->getAttribute('value');
+        $has_value = $this->node->hasAttribute('value');
+
+        if (true === $this->isChecked()) {
+            return (true === $has_value) ? $this->node->getAttribute('value') : true;
+        }
+
+        return (true === $has_value) ? null : false;
+    }
+
+    /**
+     * Return the name of a form element.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        $name = parent::getName();
+
+        if ('[]' !== substr($name, -2)) {
+            return $name;
+        }
+
+        $length = mb_strlen($name);
+        return substr($name, 0, $length - 2);
     }
 
 }

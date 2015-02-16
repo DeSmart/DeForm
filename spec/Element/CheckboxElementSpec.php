@@ -21,66 +21,56 @@ class CheckboxElementSpec extends ObjectBehavior
         $this->shouldImplement('DeForm\Element\ElementInterface');
     }
 
-    function it_should_return_element_value(NodeInterface $node)
+    function it_should_return_element_value_if_element_has_value_and_attribute_checked(NodeInterface $node)
     {
-        $node->getAttribute('value')->shouldBeCalled()->willReturn('bar');
+        $node->hasAttribute('value')->willReturn(true)->shouldBeCalled();
+        $node->hasAttribute('checked')->willReturn(true)->shouldBeCalled();
+        $node->getAttribute('value')->willReturn('bar')->shouldBeCalled();
 
         $this->getValue()->shouldReturn('bar');
     }
 
-    function it_should_mark_as_checked_element_based_on_an_valid_argument_of_type_string(NodeInterface $node)
+    function it_should_return_null_value_if_element_has_value_and_has_not_attribute_checked(NodeInterface $node)
     {
-        $arg = 'foo';
+        $node->hasAttribute('value')->willReturn(true)->shouldBeCalled();
+        $node->hasAttribute('checked')->willReturn(false)->shouldBeCalled();
 
-        $node->getAttribute('value')->willReturn($arg)->shouldBeCalled();
+        $this->getValue()->shouldReturn(null);
+    }
+
+    function it_should_return_true_value_if_element_has_not_value_and_has_attribute_checked(NodeInterface $node)
+    {
+        $node->hasAttribute('value')->willReturn(false)->shouldBeCalled();
+        $node->hasAttribute('checked')->willReturn(true)->shouldBeCalled();
+
+        $this->getValue()->shouldReturn(true);
+    }
+
+    function it_should_return_true_value_if_element_has_not_value_and_attribute_checked(NodeInterface $node)
+    {
+        $node->hasAttribute('value')->willReturn(false)->shouldBeCalled();
+        $node->hasAttribute('checked')->willReturn(false)->shouldBeCalled();
+
+        $this->getValue()->shouldReturn(false);
+    }
+
+    function it_should_mark_element_as_checked_based_on_true_argument(NodeInterface $node)
+    {
         $node->setAttribute('checked', 'checked')->shouldBeCalled();
 
-        $this->setValue($arg);
+        $this->setValue(true)->shouldBe($this);
     }
 
-    function it_should_mark_as_checked_element_based_on_an_valid_argument_of_type_integer(NodeInterface $node)
+    function it_should_throws_exception_when_set_value_method_is_calling_with_not_boolean_argument(NodeInterface $node)
     {
-        $arg = 123;
-
-        $node->getAttribute('value')->willReturn((string) $arg)->shouldBeCalled();
-        $node->setAttribute('checked', 'checked')->shouldBeCalled();
-
-        $this->setValue(123);
+        $this->shouldThrow('\InvalidArgumentException')->during('setValue', [1]);
     }
 
-    function it_should_mark_as_checked_element_based_on_an_valid_argument_of_type_float(NodeInterface $node)
+    function it_should_mark_element_as_unchecked_based_on_false_argument(NodeInterface $node)
     {
-        $arg = .5;
-
-        $node->getAttribute('value')->willReturn((string) $arg)->shouldBeCalled();
-        $node->setAttribute('checked', 'checked')->shouldBeCalled();
-
-        $this->setValue($arg);
-    }
-
-    function it_should_throws_exception_when_method_set_value_is_calling_with_argument_of_type_array()
-    {
-        $this->shouldThrow('\InvalidArgumentException')->during('setValue', [
-            ['some_array']
-        ]);
-    }
-
-    function it_should_throws_exception_when_method_set_value_is_calling_with_argument_of_type_object()
-    {
-        $arg = new \StdClass;
-        $arg->foo = 'bar';
-
-        $this->shouldThrow('\InvalidArgumentException')->during('setValue', [
-            $arg
-        ]);
-    }
-
-    function it_not_should_set_as_checked_when_argument_of_set_value_method_is_not_the_same_as_element_value(NodeInterface $node)
-    {
-        $node->getAttribute('value')->willReturn('foo')->shouldBeCalled();
         $node->removeAttribute('checked')->shouldBeCalled();
 
-        $this->setValue('bar');
+        $this->setValue(false)->shouldBe($this);
     }
 
     function it_is_readonly_element_through_nodes_disabled_attribute(NodeInterface $node)
@@ -144,13 +134,15 @@ class CheckboxElementSpec extends ObjectBehavior
         $this->shouldNotBeChecked();
     }
 
-    function it_should_mark_as_checked_element(NodeInterface $node) {
+    function it_should_mark_as_checked_element(NodeInterface $node)
+    {
         $node->setAttribute('checked', 'checked')->shouldBeCalled();
 
         $this->setChecked()->shouldHaveType('DeForm\Element\CheckboxElement');
     }
 
-    function it_should_mark_as_unchecked_element(NodeInterface $node) {
+    function it_should_mark_as_unchecked_element(NodeInterface $node)
+    {
         $node->removeAttribute('checked')->shouldBeCalled();
 
         $this->setUnchecked()->shouldHaveType('DeForm\Element\CheckboxElement');

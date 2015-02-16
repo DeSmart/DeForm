@@ -4,11 +4,6 @@ class RadioGroupElement extends AbstractGroup implements GroupInterface
 {
 
     /**
-     * @var \DeForm\Element\RadioElement[]
-     */
-    protected $elements = [];
-
-    /**
      * Set the value of a form element.
      *
      * @param mixed $value
@@ -22,13 +17,9 @@ class RadioGroupElement extends AbstractGroup implements GroupInterface
         }
 
         foreach ($this->elements as $item) {
-            if (true === $item->isChecked()) {
-                $item->setUnchecked();
-            }
+            $new_value = ((string)$value === $item->getValue());
 
-            if ((string)$value === $item->getValue()) {
-                $item->setChecked();
-            }
+            $item->setValue($new_value);
         }
 
         return $this;

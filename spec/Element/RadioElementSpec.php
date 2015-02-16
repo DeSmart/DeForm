@@ -28,59 +28,18 @@ class RadioElementSpec extends ObjectBehavior
         $this->getValue()->shouldReturn('bar');
     }
 
-    function it_should_mark_as_checked_element_based_on_an_valid_argument_of_type_string(NodeInterface $node)
+    function it_should_mark_element_as_checked_based_on_true_argument(NodeInterface $node)
     {
-        $arg = 'foo';
-
-        $node->getAttribute('value')->willReturn($arg)->shouldBeCalled();
         $node->setAttribute('checked', 'checked')->shouldBeCalled();
 
-        $this->setValue($arg);
+        $this->setValue(true)->shouldBe($this);
     }
 
-    function it_should_mark_as_checked_element_based_on_an_valid_argument_of_type_integer(NodeInterface $node)
+    function it_should_mark_element_as_unchecked_based_on_false_argument(NodeInterface $node)
     {
-        $arg = 123;
-
-        $node->getAttribute('value')->willReturn((string) $arg)->shouldBeCalled();
-        $node->setAttribute('checked', 'checked')->shouldBeCalled();
-
-        $this->setValue(123);
-    }
-
-    function it_should_mark_as_checked_element_based_on_an_valid_argument_of_type_float(NodeInterface $node)
-    {
-        $arg = .5;
-
-        $node->getAttribute('value')->willReturn((string) $arg)->shouldBeCalled();
-        $node->setAttribute('checked', 'checked')->shouldBeCalled();
-
-        $this->setValue($arg);
-    }
-
-    function it_should_throws_exception_when_method_set_value_is_calling_with_argument_of_type_array()
-    {
-        $this->shouldThrow('\InvalidArgumentException')->during('setValue', [
-            ['some_array']
-        ]);
-    }
-
-    function it_should_throws_exception_when_method_set_value_is_calling_with_argument_of_type_object()
-    {
-        $arg = new \StdClass;
-        $arg->foo = 'bar';
-
-        $this->shouldThrow('\InvalidArgumentException')->during('setValue', [
-            $arg
-        ]);
-    }
-
-    function it_not_should_set_as_checked_when_argument_of_set_value_method_is_not_the_same_as_element_value(NodeInterface $node)
-    {
-        $node->getAttribute('value')->willReturn('foo')->shouldBeCalled();
         $node->removeAttribute('checked')->shouldBeCalled();
 
-        $this->setValue('bar');
+        $this->setValue(false)->shouldBe($this);
     }
 
     function it_is_readonly_element_through_nodes_disabled_attribute(NodeInterface $node)
@@ -144,16 +103,18 @@ class RadioElementSpec extends ObjectBehavior
         $this->shouldNotBeChecked();
     }
 
-    function it_should_mark_as_checked_element(NodeInterface $node) {
+    function it_should_mark_as_checked_element(NodeInterface $node)
+    {
         $node->setAttribute('checked', 'checked')->shouldBeCalled();
 
-        $this->setChecked()->shouldHaveType('DeForm\Element\RadioElement');
+        $this->setChecked()->shouldBe($this);
     }
 
-    function it_should_mark_as_unchecked_element(NodeInterface $node) {
+    function it_should_mark_as_unchecked_element(NodeInterface $node)
+    {
         $node->removeAttribute('checked')->shouldBeCalled();
 
-        $this->setUnchecked()->shouldHaveType('DeForm\Element\RadioElement');
+        $this->setUnchecked()->shouldBe($this);
     }
 
 }
