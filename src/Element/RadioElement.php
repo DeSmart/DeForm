@@ -16,15 +16,10 @@ class RadioElement extends AbstractElement implements ElementInterface
      *
      * @param mixed $value
      * @return self
-     * @throws \InvalidArgumentException
      */
     public function setValue($value)
     {
-        if (false === is_string($value) && false === is_numeric($value)) {
-            throw new \InvalidArgumentException('Invalid type of $value. Should be string or numeric.');
-        }
-
-        if ((string) $value === $this->getValue()) {
+        if (true === $value) {
             $this->setChecked();
         } else {
             $this->setUnchecked();

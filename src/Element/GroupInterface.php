@@ -23,8 +23,7 @@ interface GroupInterface extends ElementInterface
      * Return a single element of group based on value name.
      *
      * @param string $value
-     * @return \DeForm\Element\ElementInterface
-     * @throw \InvalidArgumentException
+     * @return \DeForm\Element\ElementInterface|null
      */
     public function getElement($value);
 
