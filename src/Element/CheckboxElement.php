@@ -62,7 +62,7 @@ class CheckboxElement extends AbstractElement implements ElementInterface
             return $name;
         }
 
-        $length = mb_strlen($name);
+        $length = strlen($name);
         return substr($name, 0, $length - 2);
     }
 

@@ -21,11 +21,19 @@ class RadioElementSpec extends ObjectBehavior
         $this->shouldImplement('DeForm\Element\ElementInterface');
     }
 
-    function it_should_return_element_value(NodeInterface $node)
+    function it_should_return_element_value_based_on_checked_attribute(NodeInterface $node)
     {
+        $node->hasAttribute('checked')->shouldBeCalled()->willReturn(true);
         $node->getAttribute('value')->shouldBeCalled()->willReturn('bar');
 
         $this->getValue()->shouldReturn('bar');
+    }
+
+    function it_should_return_null_value_for_unchecked_element(NodeInterface $node)
+    {
+        $node->hasAttribute('checked')->shouldBeCalled()->willReturn(false);
+
+        $this->getValue()->shouldReturn(null);
     }
 
     function it_should_mark_element_as_checked_based_on_true_argument(NodeInterface $node)
