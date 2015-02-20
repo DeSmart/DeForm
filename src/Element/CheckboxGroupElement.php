@@ -85,7 +85,7 @@ class CheckboxGroupElement extends AbstractGroup implements GroupInterface
             return $name;
         }
 
-        $length = mb_strlen($name);
+        $length = strlen($name);
         return substr($name, 0, $length - 2);
     }
 
