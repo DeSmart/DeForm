@@ -18,7 +18,7 @@ interface ValidatorInterface
     public function isValid();
 
     /**
-     * Get validation messages 
+     * Get validation messages
      *
      * @param string $name
      * @return MessageBagInterface

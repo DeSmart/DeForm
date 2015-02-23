@@ -1,28 +1,25 @@
 <?php namespace DeForm\Element;
 
-class RadioGroupElement implements GroupInterface {
-
-    /**
-     * @var \DeForm\Element\RadioElement[]
-     */
-    protected $elements = [];
+class RadioGroupElement extends AbstractGroup implements GroupInterface
+{
 
     /**
      * Set the value of a form element.
      *
-     * @param string $value
+     * @param mixed $value
      * @return self
+     * @throws \InvalidArgumentException
      */
     public function setValue($value)
     {
-        foreach ($this->elements as $item) {
-            if (true === $item->isChecked()) {
-                $item->setUnchecked();
-            }
+        if (false === is_string($value) && false === is_numeric($value)) {
+            throw new \InvalidArgumentException('Invalid type of $value. Should be string or numeric.');
+        }
 
-            if ($value === $item->getValue()) {
-                $item->setChecked();
-            }
+        foreach ($this->elements as $item) {
+            $new_value = ((string)$value === $item->getValue());
+
+            $item->setValue($new_value);
         }
 
         return $this;
@@ -31,7 +28,7 @@ class RadioGroupElement implements GroupInterface {
     /**
      * Get the value of a form element.
      *
-     * @return string|int
+     * @return mixed
      */
     public function getValue()
     {
@@ -42,79 +39,6 @@ class RadioGroupElement implements GroupInterface {
         }
 
         return null;
-    }
-
-    /**
-     * Return true if the element has an attribute "readonly" or "disabled".
-     * If it does, it won't be parsed by DeForm.
-     *
-     * @return boolean
-     */
-    public function isReadonly()
-    {
-        foreach ($this->elements as $item) {
-            if (true === $item->isReadonly()) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Return the name of a form element.
-     *
-     * @return string
-     * @throw \UnexpectedValueException
-     */
-    public function getName()
-    {
-        if (0 === $this->countElements()) {
-            throw new \UnexpectedValueException('Radio Elements Group is empty.');
-        }
-
-        return $this->elements[0]->getName();
-    }
-
-    /**
-     * Mark element as valid.
-     *
-     * @return void
-     */
-    public function setValid()
-    {
-        foreach ($this->elements as $item) {
-            $item->setValid();
-        }
-    }
-
-    /**
-     * Mark element as invalid.
-     *
-     * @param string $message
-     * @return void
-     */
-    public function setInvalid($message)
-    {
-        foreach ($this->elements as $item) {
-            $item->setInvalid($message);
-        }
-    }
-
-    /**
-     * Check if element is valid.
-     *
-     * @return boolean
-     */
-    public function isValid()
-    {
-        foreach ($this->elements as $item) {
-            if (false === $item->isValid()) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     /**
@@ -136,44 +60,6 @@ class RadioGroupElement implements GroupInterface {
 
         $this->elements[] = $element;
         return $this;
-    }
-
-    /**
-     * Return all elements from group.
-     *
-     * @return \DeForm\Element\ElementInterface[]
-     */
-    public function getElements()
-    {
-        return $this->elements;
-    }
-
-    /**
-     * Return number of elements in group.
-     *
-     * @return int
-     */
-    public function countElements()
-    {
-        return count($this->elements);
-    }
-
-    /**
-     * Return a single element of group based on value name.
-     *
-     * @param string $value
-     * @return \DeForm\Element\ElementInterface
-     * @throw \InvalidArgumentException
-     */
-    public function getElement($value)
-    {
-        foreach ($this->elements as $item) {
-            if ($value === $item->getValue()) {
-                return $item;
-            }
-        }
-
-        throw new \InvalidArgumentException(sprintf('Cannot find element with value %s', $value));
     }
 
 }

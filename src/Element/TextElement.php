@@ -13,20 +13,24 @@ class TextElement extends AbstractElement implements ElementInterface
     /**
      * Set the value of a form element.
      *
-     * @param string $value
+     * @param mixed $value
      * @return self
+     * @throws \InvalidArgumentException
      */
     public function setValue($value)
     {
-        $this->node->setAttribute('value', $value);
+        if (false === is_string($value) && false === is_numeric($value)) {
+            throw new \InvalidArgumentException('Invalid type of $value. Should be string or numeric.');
+        }
 
+        $this->node->setAttribute('value', $value);
         return $this;
     }
 
     /**
      * Get the value of a form element.
      *
-     * @return string|int
+     * @return mixed
      */
     public function getValue()
     {

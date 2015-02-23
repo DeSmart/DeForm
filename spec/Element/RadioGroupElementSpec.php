@@ -26,7 +26,7 @@ class RadioGroupElementSpec extends ObjectBehavior
 
     function it_throws_exception_when_get_name_group_and_group_has_not_elements()
     {
-        $this->shouldThrow('\UnexpectedValueException')->during('getName');
+        $this->shouldThrow('\LogicException')->during('getName');
     }
 
     function it_should_return_elements_of_group()
@@ -47,21 +47,17 @@ class RadioGroupElementSpec extends ObjectBehavior
     {
         $this->countElements()->shouldReturn(0);
         $this->shouldThrow('\InvalidArgumentException')->during('addElement', [$el]);
-        $this->countElements()->shouldReturn(0);
     }
 
     function it_throws_exception_when_adding_radio_element_with_different_name(RadioEl $el1, RadioEl $el2)
     {
         $el1->getName()->willReturn('foo');
+        $el2->getName()->willReturn('bar')->shouldBeCalled();
 
         $this->countElements()->shouldReturn(0);
         $this->addElement($el1);
         $this->countElements()->shouldReturn(1);
-
-        $el2->getName()->willReturn('bar')->shouldBeCalled();
-
         $this->shouldThrow('\InvalidArgumentException')->during('addElement', [$el2]);
-        $this->countElements()->shouldReturn(1);
     }
 
     function it_should_return_value_of_group_with_not_selected_elements(RadioEl $el1, RadioEl $el2, RadioEl $el3)
@@ -92,24 +88,72 @@ class RadioGroupElementSpec extends ObjectBehavior
         $this->getValue()->shouldReturn('fourth');
     }
 
-    function it_should_set_checked_attribute_based_on_element_value(RadioEl $el1, RadioEl $el2, RadioEl $el3, RadioEl $el4, RadioEl $el5)
+    function it_should_set_checked_attribute_when_method_set_value_is_calling_with_argument_of_type_string(RadioEl $el1, RadioEl $el2, RadioEl $el3)
     {
         $this->prepare_node_element($el1, 'first');
         $this->prepare_node_element($el2, 'second');
-        $this->prepare_node_element($el3, 'third');
-        $this->prepare_node_element($el4, 'fourth');
-        $this->prepare_node_element($el5, 'fifth', true);
+        $this->prepare_node_element($el3, 'three', true);
 
-        $el5->setUnchecked()->shouldBeCalled();
-        $el4->setChecked()->shouldBeCalled();
+        $el1->setValue(false)->shouldBeCalled();
+        $el2->setValue(true)->shouldBeCalled();
+        $el3->setValue(false)->shouldBeCalled();
 
         $this->addElement($el1)
             ->addElement($el2)
-            ->addElement($el3)
-            ->addElement($el4)
-            ->addElement($el5);
+            ->addElement($el3);
 
-        $this->setValue('fourth')->shouldHaveType('DeForm\Element\RadioGroupElement');
+        $this->setValue('second')->shouldHaveType('DeForm\Element\RadioGroupElement');
+    }
+
+    function it_should_set_checked_attribute_when_method_set_value_is_calling_with_argument_of_type_integer(RadioEl $el1, RadioEl $el2, RadioEl $el3)
+    {
+        $this->prepare_node_element($el1, '1');
+        $this->prepare_node_element($el2, '2');
+        $this->prepare_node_element($el3, '3', true);
+
+        $el1->setValue(false)->shouldBeCalled();
+        $el2->setValue(true)->shouldBeCalled();
+        $el3->setValue(false)->shouldBeCalled();
+
+        $this->addElement($el1)
+            ->addElement($el2)
+            ->addElement($el3);
+
+        $this->setValue(2)->shouldHaveType('DeForm\Element\RadioGroupElement');
+    }
+
+    function it_should_set_checked_attribute_when_method_set_value_is_calling_with_argument_of_type_float(RadioEl $el1, RadioEl $el2, RadioEl $el3)
+    {
+        $this->prepare_node_element($el1, '0.1');
+        $this->prepare_node_element($el2, '0.2');
+        $this->prepare_node_element($el3, '0.3', true);
+
+        $el1->setValue(false)->shouldBeCalled();
+        $el2->setValue(true)->shouldBeCalled();
+        $el3->setValue(false)->shouldBeCalled();
+
+        $this->addElement($el1)
+            ->addElement($el2)
+            ->addElement($el3);
+
+        $this->setValue(.2)->shouldHaveType('DeForm\Element\RadioGroupElement');
+    }
+
+    function it_should_throws_exception_when_method_set_value_is_calling_with_argument_of_type_array()
+    {
+        $this->shouldThrow('\InvalidArgumentException')->during('setValue', [
+            ['some_array']
+        ]);
+    }
+
+    function it_should_throws_exception_when_method_set_value_is_calling_with_argument_of_type_object()
+    {
+        $arg = new \StdClass;
+        $arg->foo = 'bar';
+
+        $this->shouldThrow('\InvalidArgumentException')->during('setValue', [
+            $arg
+        ]);
     }
 
     function it_should_be_readonly_group(RadioEl $el1, RadioEl $el2)
@@ -214,8 +258,7 @@ class RadioGroupElementSpec extends ObjectBehavior
 
         $this->getElement('one')->shouldBe($el1);
         $this->getElement('two')->shouldBe($el2);
-
-        $this->shouldThrow('\InvalidArgumentException')->during('getElement', ['three']);
+        $this->getElement('three')->shouldBe(null);
     }
 
     function it_should_return_number_of_elements_in_group(RadioEl $el1, RadioEl $el2)

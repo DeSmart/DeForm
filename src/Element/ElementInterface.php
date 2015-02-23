@@ -6,15 +6,16 @@ interface ElementInterface
     /**
      * Set the value of a form element.
      *
-     * @param string $value
+     * @param mixed $value
      * @return self
+     * @throws \InvalidArgumentException
      */
     public function setValue($value);
 
     /**
      * Get the value of a form element.
      *
-     * @return string|int
+     * @return mixed
      */
     public function getValue();
 

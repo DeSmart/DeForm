@@ -4,5 +4,5 @@ interface RequestInterface
 {
 
     public function get($value);
-    
+
 }

@@ -6,8 +6,8 @@ use DeForm\Node\NodeInterface;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
-/** @mixin \DeForm\Element\RadioElement */
-class RadioElementSpec extends ObjectBehavior
+/** @mixin \DeForm\Element\CheckboxElement */
+class CheckboxElementSpec extends ObjectBehavior
 {
 
     function let(NodeInterface $node)
@@ -17,23 +17,41 @@ class RadioElementSpec extends ObjectBehavior
 
     function it_is_initializable()
     {
-        $this->shouldHaveType('DeForm\Element\RadioElement');
+        $this->shouldHaveType('DeForm\Element\CheckboxElement');
         $this->shouldImplement('DeForm\Element\ElementInterface');
     }
 
-    function it_should_return_element_value_based_on_checked_attribute(NodeInterface $node)
+    function it_should_return_element_value_if_element_has_value_and_attribute_checked(NodeInterface $node)
     {
-        $node->hasAttribute('checked')->shouldBeCalled()->willReturn(true);
-        $node->getAttribute('value')->shouldBeCalled()->willReturn('bar');
+        $node->hasAttribute('value')->willReturn(true)->shouldBeCalled();
+        $node->hasAttribute('checked')->willReturn(true)->shouldBeCalled();
+        $node->getAttribute('value')->willReturn('bar')->shouldBeCalled();
 
         $this->getValue()->shouldReturn('bar');
     }
 
-    function it_should_return_null_value_for_unchecked_element(NodeInterface $node)
+    function it_should_return_null_value_if_element_has_value_and_has_not_attribute_checked(NodeInterface $node)
     {
-        $node->hasAttribute('checked')->shouldBeCalled()->willReturn(false);
+        $node->hasAttribute('value')->willReturn(true)->shouldBeCalled();
+        $node->hasAttribute('checked')->willReturn(false)->shouldBeCalled();
 
         $this->getValue()->shouldReturn(null);
+    }
+
+    function it_should_return_true_value_if_element_has_not_value_and_has_attribute_checked(NodeInterface $node)
+    {
+        $node->hasAttribute('value')->willReturn(false)->shouldBeCalled();
+        $node->hasAttribute('checked')->willReturn(true)->shouldBeCalled();
+
+        $this->getValue()->shouldReturn(true);
+    }
+
+    function it_should_return_true_value_if_element_has_not_value_and_attribute_checked(NodeInterface $node)
+    {
+        $node->hasAttribute('value')->willReturn(false)->shouldBeCalled();
+        $node->hasAttribute('checked')->willReturn(false)->shouldBeCalled();
+
+        $this->getValue()->shouldReturn(false);
     }
 
     function it_should_mark_element_as_checked_based_on_true_argument(NodeInterface $node)
@@ -41,6 +59,11 @@ class RadioElementSpec extends ObjectBehavior
         $node->setAttribute('checked', 'checked')->shouldBeCalled();
 
         $this->setValue(true)->shouldBe($this);
+    }
+
+    function it_should_throws_exception_when_set_value_method_is_calling_with_not_boolean_argument(NodeInterface $node)
+    {
+        $this->shouldThrow('\InvalidArgumentException')->during('setValue', [1]);
     }
 
     function it_should_mark_element_as_unchecked_based_on_false_argument(NodeInterface $node)
@@ -115,14 +138,13 @@ class RadioElementSpec extends ObjectBehavior
     {
         $node->setAttribute('checked', 'checked')->shouldBeCalled();
 
-        $this->setChecked()->shouldBe($this);
+        $this->setChecked()->shouldHaveType('DeForm\Element\CheckboxElement');
     }
 
     function it_should_mark_as_unchecked_element(NodeInterface $node)
     {
         $node->removeAttribute('checked')->shouldBeCalled();
 
-        $this->setUnchecked()->shouldBe($this);
+        $this->setUnchecked()->shouldHaveType('DeForm\Element\CheckboxElement');
     }
-
 }
