@@ -7,9 +7,9 @@ use Prophecy\Argument;
 
 class HtmlNodeSpec extends ObjectBehavior
 {
-    function let(\DOMElement $element)
+    function let(\DOMElement $element, \DOMDocument $document)
     {
-        $this->beConstructedWith($element);
+        $this->beConstructedWith($element, $document);
     }
 
     function it_is_initializable()
@@ -35,7 +35,7 @@ class HtmlNodeSpec extends ObjectBehavior
         $element = $document->appendChild($document->createElement('input'));
         $element->setAttribute('type', 'password');
 
-        $this->beConstructedWith($element);
+        $this->beConstructedWith($element, $document);
         $this->getElementType()->shouldReturn('input_password');
     }
 
@@ -44,7 +44,7 @@ class HtmlNodeSpec extends ObjectBehavior
         $document = new \DOMDocument('1.0');
         $element = $document->appendChild($document->createElement('textarea'));
 
-        $this->beConstructedWith($element);
+        $this->beConstructedWith($element, $document);
         $this->getElementType()->shouldReturn('textarea');
     }
 
@@ -79,5 +79,13 @@ class HtmlNodeSpec extends ObjectBehavior
         $this->shouldThrow('\InvalidArgumentException')->during('appendChild', [$node]);
     }
 
+    function it_sets_text(\DOMElement $element, \DOMDocument $document, \DOMText $text)
+    {
+        $document->createTextNode('test')
+            ->willReturn($text);
+
+        $element->appendChild($text)->shouldBeCalled();
+        $this->setText('test');
+    }
 
 }

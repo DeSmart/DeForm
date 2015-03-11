@@ -8,9 +8,15 @@ class HtmlNode implements NodeInterface
      */
     protected $element;
 
-    public function __construct(\DOMElement $element)
+    /**
+     * @var \DOMDocument
+     */
+    protected $document;
+
+    public function __construct(\DOMElement $element, \DOMDocument $document)
     {
         $this->element = $element;
+        $this->document = $document;
     }
 
     /**
@@ -96,6 +102,12 @@ class HtmlNode implements NodeInterface
     public function getDomElement()
     {
         return $this->element;
+    }
+
+    public function setText($text)
+    {
+        $text_node = $this->document->createTextNode($text);
+        $this->element->appendChild($text_node);
     }
 
 }
