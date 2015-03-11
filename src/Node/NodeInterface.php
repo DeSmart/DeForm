@@ -54,4 +54,12 @@ interface NodeInterface
      */
     public function appendChild($node);
 
+    /**
+     * Sets text value of element
+     *
+     * @param string $text
+     * @return void
+     */
+    public function setText($text);
+
 }
