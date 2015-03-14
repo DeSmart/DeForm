@@ -20,21 +20,6 @@ class HtmlNode implements NodeInterface
     }
 
     /**
-     * Append child to node.
-     *
-     * @param mixed $node
-     * @return void
-     */
-    public function appendChild($node)
-    {
-        if (false === $node instanceof HtmlNode) {
-            throw new \InvalidArgumentException('Unsupported node type');
-        }
-
-        $this->element->appendChild($node->getDomElement());
-    }
-
-    /**
      * Get node's attribute value.
      *
      * @param string $name
@@ -104,10 +89,55 @@ class HtmlNode implements NodeInterface
         return $this->element;
     }
 
+    /**
+     * Sets text value of element.
+     *
+     * @param string $text
+     * @return void
+     */
     public function setText($text)
     {
         $text_node = $this->document->createTextNode($text);
         $this->element->appendChild($text_node);
     }
 
+    /**
+     * Append child to node.
+     *
+     * @param mixed $node
+     * @return void
+     */
+    public function appendChild($node)
+    {
+        if (false === $node instanceof HtmlNode) {
+            throw new \InvalidArgumentException('Unsupported node type');
+        }
+
+        $this->element->appendChild($node->getDomElement());
+    }
+
+    /**
+     * Get child nodes of element.
+     *
+     * @return \DOMNodeList
+     */
+    public function getChildNodes()
+    {
+        return $this->element->childNodes;
+    }
+
+    /**
+     * Remove child node from element.
+     *
+     * @param $node
+     * @return void
+     */
+    public function removeChildNode($node)
+    {
+        if (false === $node instanceof \DOMNode) {
+            throw new \InvalidArgumentException('Unsupported node type');
+        }
+
+        $this->element->removeChild($node);
+    }
 }
