@@ -2,16 +2,15 @@
 
 namespace spec\DeForm\Element;
 
-use DeForm\Element\TextareaValueInterface;
 use DeForm\Node\NodeInterface;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
 class TextareaElementSpec extends ObjectBehavior
 {
-    function let(NodeInterface $node, TextareaValueInterface $textValue)
+    function let(NodeInterface $node)
     {
-        $this->beConstructedWith($node, $textValue);
+        $this->beConstructedWith($node);
     }
 
     function it_is_initializable()
@@ -20,34 +19,51 @@ class TextareaElementSpec extends ObjectBehavior
         $this->shouldImplement('DeForm\Element\ElementInterface');
     }
 
-    function it_should_return_value_of_element(TextareaValueInterface $textValue)
+    function it_should_return_value_of_element(NodeInterface $node, \DOMNodeList $nodeList)
     {
-        $textValue->getValue()->shouldBeCalled()->willReturn('abc');
+        // todo: $nodeList->length powinno zwrócić 1, zwraca 0 i jest readonly.
+
+        $nodeList->item(1)->shouldBeCalled()->willReturn(new \DOMText('abc'));
+        $node->getChildNodes()->shouldBeCalled()->willReturn($nodeList);
+
         $this->getValue()->shouldReturn('abc');
     }
 
-    function it_should_change_value_of_element_based_on_an_argument_of_type_string(TextareaValueInterface $textValue)
+    function it_should_return_null_when_element_has_not_children(NodeInterface $node, \DOMNodeList $nodeList)
     {
-        $arg = 'abc';
+        $node->getChildNodes()->shouldBeCalled()->willReturn($nodeList);
 
-        $textValue->setValue($arg)->shouldBeCalled();
-        $this->setValue($arg);
+        $this->getValue()->shouldReturn(null);
     }
 
-    function it_should_change_value_of_element_based_on_an_argument_of_type_integer(TextareaValueInterface $textValue)
+    function it_should_change_value_of_element_based_on_an_argument_of_type_string(NodeInterface $node)
     {
-        $arg = 123;
+        $value = 'abc';
 
-        $textValue->setValue($arg)->shouldBeCalled();
-        $this->setValue($arg);
+        // todo: jak tutaj coś zmockować poniższy kod? :O
+        /**
+         foreach ($this->node->getChildNodes() as $node) {
+            $this->node->removeChildNode($node);
+         }
+         */
+        $node->setText($value)->shouldBeCalled();
+        $this->setValue($value);
     }
 
-    function it_should_change_value_of_element_based_on_an_argument_of_type_float(TextareaValueInterface $textValue)
+    function it_should_change_value_of_element_based_on_an_argument_of_type_integer(NodeInterface $node)
     {
-        $arg = 0.5;
+        $value = 123;
 
-        $textValue->setValue($arg)->shouldBeCalled();
-        $this->setValue($arg);
+        $node->setText($value)->shouldBeCalled();
+        $this->setValue($value);
+    }
+
+    function it_should_change_value_of_element_based_on_an_argument_of_type_float(NodeInterface $node)
+    {
+        $value = 0.5;
+
+        $node->setText($value)->shouldBeCalled();
+        $this->setValue($value);
     }
 
     function it_should_throws_exception_when_method_set_value_is_calling_with_argument_of_type_array()
