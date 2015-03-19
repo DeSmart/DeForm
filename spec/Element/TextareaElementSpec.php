@@ -19,33 +19,20 @@ class TextareaElementSpec extends ObjectBehavior
         $this->shouldImplement('DeForm\Element\ElementInterface');
     }
 
-    function it_should_return_value_of_element(NodeInterface $node, \DOMNodeList $nodeList)
+    function it_should_check_that_element_has_a_value(NodeInterface $node)
     {
-        // todo: $nodeList->length powinno zwrócić 1, zwraca 0 i jest readonly.
-
-        $nodeList->item(1)->shouldBeCalled()->willReturn(new \DOMText('abc'));
-        $node->getChildNodes()->shouldBeCalled()->willReturn($nodeList);
+        $nodeList = new MyNodeList;
+        $nodeList->items[] = new \DOMText('abc');
+        $node->getChildNodes()->willReturn($nodeList);
 
         $this->getValue()->shouldReturn('abc');
-    }
-
-    function it_should_return_null_when_element_has_not_children(NodeInterface $node, \DOMNodeList $nodeList)
-    {
-        $node->getChildNodes()->shouldBeCalled()->willReturn($nodeList);
-
-        $this->getValue()->shouldReturn(null);
     }
 
     function it_should_change_value_of_element_based_on_an_argument_of_type_string(NodeInterface $node)
     {
         $value = 'abc';
 
-        // todo: jak tutaj coś zmockować poniższy kod? :O
-        /**
-         foreach ($this->node->getChildNodes() as $node) {
-            $this->node->removeChildNode($node);
-         }
-         */
+        $node->getChildNodes()->willReturn(new \DOMNodeList);
         $node->setText($value)->shouldBeCalled();
         $this->setValue($value);
     }
@@ -54,6 +41,7 @@ class TextareaElementSpec extends ObjectBehavior
     {
         $value = 123;
 
+        $node->getChildNodes()->willReturn(new \DOMNodeList);
         $node->setText($value)->shouldBeCalled();
         $this->setValue($value);
     }
@@ -62,6 +50,7 @@ class TextareaElementSpec extends ObjectBehavior
     {
         $value = 0.5;
 
+        $node->getChildNodes()->willReturn(new \DOMNodeList);
         $node->setText($value)->shouldBeCalled();
         $this->setValue($value);
     }
@@ -130,5 +119,15 @@ class TextareaElementSpec extends ObjectBehavior
     {
         $node->hasAttribute('data-invalid')->shouldBeCalled()->willReturn(true);
         $this->shouldNotBeValid();
+    }
+}
+
+// Simple hack for readonly property \DOMNodeList::$length
+class MyNodeList  {
+    public $length = 1;
+    public $items = [];
+
+    public function item($index) {
+        return $this->items[$index];
     }
 }
