@@ -1,5 +1,6 @@
 <?php namespace DeForm\Factory;
 
+use DeForm\Element\CheckboxElement;
 use DeForm\Element\CheckboxGroupElement;
 use DeForm\Element\ElementInterface;
 use DeForm\Element\GroupInterface;
@@ -23,6 +24,11 @@ class ElementFactory
     protected $elements = [];
 
     /**
+     * @var \DeForm\Element\GroupInterface[]
+     */
+    protected $groups = [];
+
+    /**
      * Map node type to instance of element.
      *
      * @var array
@@ -39,14 +45,6 @@ class ElementFactory
         // 'select' => 'SelectElement', TODO: uncomment line
     ];
 
-    /**
-     * @var array
-     */
-    protected $groupElements = [
-        'DeForm\Element\RadioElement',
-        'DeForm\Element\CheckboxElement',
-    ];
-
     public function __construct(RequestInterface $request)
     {
         $this->request = $request;
@@ -59,10 +57,30 @@ class ElementFactory
     public function createFromNodes(array $nodes)
     {
         foreach ($nodes as $item) {
-            $this->parseNode($item);
+            $parsed_element = $this->parseNode($item);
+            $element_name = $parsed_element->getName();
+
+            if ($parsed_element instanceof GroupInterface) {
+                $this->groups[$element_name] = $parsed_element;
+                continue;
+            }
+
+            $this->elements[$element_name] = $parsed_element;
         }
 
-        return $this->elements;
+        // Remove groups with single element
+        $this->groups = array_filter($this->groups, function (GroupInterface $group) {
+            if ($group->countElements() > 1) {
+                return true;
+            }
+
+            $elements = $group->getElements();
+            $this->elements[$elements[0]->getName()] = $elements[0];
+
+            return false;
+        });
+
+        return array_merge($this->elements, $this->groups);
     }
 
     /**
@@ -70,46 +88,32 @@ class ElementFactory
      * If necessary method transforms single element to group element.
      *
      * @param NodeInterface $node
-     * @return void
+     * @return GroupInterface|ElementInterface
      */
     protected function parseNode(NodeInterface $node)
     {
         $element = $this->createElement($node);
 
-        // Element is not a group element
-        if (false === $this->shouldBeGroupElement($element)) {
-            $this->elements[$element->getName()] = $element;
-            return;
+        if (false === $this->isGropuElement($element)) {
+            return $element;
         }
 
-        // Find group based on element
-        $group_element = $this->findGroupByElement($element);
+        $group = $this->getGroupByName($element->getName());
 
-        // Group element exists
-        if (null !== $group_element) {
-            $group_element->addElement($element);
-            return;
+        if (null === $group) {
+            $group = $this->createGroup($element);
         }
 
-        // Group element does not exist OR found element is not prepared to be group
-        if (null === $group_element) {
-            $group_element = $this->createGroup($element);
-        } elseif (false === $this->isGroupElement($group_element)) {
-            $exist_element = $this->getElementByName($element);
-            $group_element->addElement($exist_element);
-        }
-
-        $group_element->addElement($element);
-        $this->elements[$element->getName()] = $group_element;
+        return $group->addElement($element);
     }
 
     /**
      * @param string $name
-     * @return ElementInterface|null
+     * @return GroupInterface|null
      */
-    protected function getElementByName($name)
+    protected function getGroupByName($name)
     {
-        return array_key_exists($name, $this->elements) ? $this->elements[$name] : null;
+        return array_key_exists($name, $this->groups) ? $this->groups[$name] : null;
     }
 
     /**
@@ -149,52 +153,19 @@ class ElementFactory
 
     /**
      * @param ElementInterface $element
-     * @return \DeForm\Element\GroupInterface|null
-     */
-    protected function findGroupByElement(ElementInterface $element)
-    {
-        if (false === array_key_exists($element->getName(), $this->elements)) {
-            return null;
-        }
-
-        $exist_element = $this->getElementByName($element->getName());
-
-        if (false === $this->isGroupElement($exist_element)) {
-            return null;
-        }
-
-        return $exist_element;
-    }
-
-    /**
-     * @param ElementInterface $element
      * @return bool
      */
-    protected function isGroupElement(ElementInterface $element)
+    protected function isGropuElement(ElementInterface $element)
     {
-        return $element instanceof GroupInterface;
-    }
-
-    /**
-     * Return true if element is instance of RadioElement.
-     * Can return true if element is instance of CheckboxElement and this name of element is in element keys.
-     *
-     * @param ElementInterface $element
-     * @return boolean
-     */
-    protected function shouldBeGroupElement(ElementInterface $element)
-    {
-        $element_class = get_class($element);
-
-        if (false === in_array($element_class, $this->groupElements)) {
-            return false;
-        }
-
-        if (true === $element instanceof RadioElement) {
+        if ($element instanceof RadioElement) {
             return true;
         }
 
-        return array_key_exists($element->getName(), $this->elements);
+        if ($element instanceof CheckboxElement) {
+            return true;
+        }
+
+        return false;
     }
 
 }

@@ -19,8 +19,10 @@ class ElementFactorySpec extends ObjectBehavior
         $this->beConstructedWith($request);
     }
 
+
     function it_should_parse_non_group_elements(Node $node1, Node $node2, Node $node3, Node $node4, Node $node5)
     {
+        // Todo: add select node
         $node1->getElementType()->shouldBeCalled()->willReturn('input_text');
         $node2->getElementType()->shouldBeCalled()->willReturn('input_password');
         $node3->getElementType()->shouldBeCalled()->willReturn('input_file');
@@ -66,7 +68,7 @@ class ElementFactorySpec extends ObjectBehavior
         ]);
     }
 
-    function it_should_parse_checkbox_elements(Node $node1, Node $node2, Node $node3)
+    function it_should_parse_non_groups_checkbox_elements(Node $node1, Node $node2, Node $node3)
     {
         foreach (func_get_args() as $node) {
             $node->getElementType()->shouldBeCalled()->willReturn('input_checkbox');
@@ -83,7 +85,7 @@ class ElementFactorySpec extends ObjectBehavior
         ]);
     }
 
-    function it_should_parse_checkbox_elements_groups(Node $node1, Node $node2, Node $node3, Node $node4, Node $node5)
+    function it_should_parse_groups_checkbox_elements(Node $node1, Node $node2, Node $node3, Node $node4, Node $node5)
     {
         foreach (func_get_args() as $node) {
             $node->getElementType()->shouldBeCalled()->willReturn('input_checkbox');
@@ -104,6 +106,32 @@ class ElementFactorySpec extends ObjectBehavior
                 'className' => 'DeForm\\Element\\CheckboxGroupElement',
                 'length' => 2,
             ],
+        ]);
+    }
+
+    function it_should_parse_mixed_checkbox_elements(Node $node1, Node $node2, Node $node3, Node $node4, Node $node5, Node $node6)
+    {
+        foreach (func_get_args() as $node) {
+            $node->getElementType()->shouldBeCalled()->willReturn('input_checkbox');
+        }
+
+        $node1->getAttribute('name')->willReturn('foo');
+        $node2->getAttribute('name')->willReturn('foo');
+        $node3->getAttribute('name')->willReturn('foo');
+        $node4->getAttribute('name')->willReturn('bar');
+        $node5->getAttribute('name')->willReturn('bar');
+        $node6->getAttribute('name')->willReturn('foobar');
+
+        $this->createFromNodes(func_get_args())->shouldReturnMixedNodes([
+            'foo' => [
+                'className' => 'DeForm\\Element\\CheckboxGroupElement',
+                'length' => 3,
+            ],
+            'bar' => [
+                'className' => 'DeForm\\Element\\CheckboxGroupElement',
+                'length' => 2,
+            ],
+            'foobar' => 'DeForm\\Element\\CheckboxElement',
         ]);
     }
 
