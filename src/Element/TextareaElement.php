@@ -38,13 +38,21 @@ class TextareaElement extends AbstractElement implements ElementInterface
      */
     public function getValue()
     {
-        $child_nodes = $this->node->getChildNodes();
-
-        if (0 === $child_nodes->length) {
+        if (0 === $this->countChildNodes()) {
             return null;
         }
 
-        return $child_nodes->item(1)->wholeText;
+        return $this->node->getChildNodes()->item(0)->nodeValue;
+    }
+
+    /**
+     * Return number of child nodes.
+     *
+     * @return int
+     */
+    public function countChildNodes()
+    {
+        return $this->node->getChildNodes()->length;
     }
 
 }
