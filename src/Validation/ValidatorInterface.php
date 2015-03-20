@@ -4,7 +4,7 @@ interface ValidatorInterface
 {
 
     /**
-     * Add validation
+     * Return true if the data passes the validation rules. Otherwise returns false.
      *
      * @param string $name
      * @param string $rules
@@ -18,7 +18,7 @@ interface ValidatorInterface
     public function validate();
 
     /**
-     * Get validation messages
+     * Get validation messages.
      *
      * @return MessageBagInterface
      */

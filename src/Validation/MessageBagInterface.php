@@ -4,11 +4,11 @@ interface MessageBagInterface
 {
 
     /**
-     * Return all messages for given element
+     * Return first message for given element.
      *
-     * @param string $name
+     * @param string|null $name
      * @return array
      */
-    public function get($name);
+    public function first($name);
 
 }
