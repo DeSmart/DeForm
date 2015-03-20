@@ -7,6 +7,8 @@ use DeForm\Element\ElementInterface;
 class DeForm
 {
 
+    const DEFORM_ID = '__deform_id';
+
     /**
      * @var \DeForm\Request\RequestInterface
      */
@@ -22,7 +24,10 @@ class DeForm
      */
     protected $elements = [];
 
-    const DEFORM_ID = '__deform_id';
+    /**
+     * @var bool|null
+     */
+    protected $isValidate = null;
 
     public function __construct(NodeInterface $formNode, RequestInterface $request)
     {
@@ -114,7 +119,27 @@ class DeForm
      */
     public function isValid()
     {
-        // @TODO implement
+        return $this->isValidate;
+    }
+
+    /**
+     * Set form as valid.
+     *
+     * @return void
+     */
+    public function setValid()
+    {
+        $this->isValidate = true;
+    }
+
+    /**
+     * Set form as invalid.
+     *
+     * @return void
+     */
+    public function setInvalid()
+    {
+        $this->isValidate = false;
     }
 
     /**

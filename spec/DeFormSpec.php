@@ -121,4 +121,20 @@ class DeFormSpec extends ObjectBehavior
         ]);
     }
 
+    function it_should_return_null_if_the_form_was_not_validated()
+    {
+        $this->isValid()->shouldBe(null);
+    }
+
+    function it_should_set_form_as_valid()
+    {
+        $this->setValid();
+        $this->shouldBeValid();
+    }
+
+    function it_should_set_form_as_invalid()
+    {
+        $this->setInvalid();
+        $this->shouldNotBeValid();
+    }
 }
