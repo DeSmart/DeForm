@@ -2,7 +2,7 @@
 
 use DeForm\Node\NodeInterface;
 
-class CheckboxElement extends AbstractElement implements ElementInterface
+class CheckboxElement extends AbstractElement
 {
     use CheckedAttributeTrait;
 

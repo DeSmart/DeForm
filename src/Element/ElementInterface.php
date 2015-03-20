@@ -56,4 +56,11 @@ interface ElementInterface
      */
     public function isValid();
 
+    /**
+     * Return the validation rules for element.
+     *
+     * @return string|null
+     */
+    public function getValidationRules();
+
 }

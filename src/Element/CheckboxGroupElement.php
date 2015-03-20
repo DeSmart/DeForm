@@ -1,6 +1,6 @@
 <?php namespace DeForm\Element;
 
-class CheckboxGroupElement extends AbstractGroup implements GroupInterface
+class CheckboxGroupElement extends AbstractGroup
 {
 
     /**

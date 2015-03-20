@@ -5,7 +5,7 @@ namespace DeForm\Element;
 use DeForm\Node\NodeInterface;
 use DeForm\Request\RequestInterface;
 
-class FileElement extends AbstractElement implements ElementInterface
+class FileElement extends AbstractElement
 {
     /**
      * @var \DeForm\Request\RequestInterface
