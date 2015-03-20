@@ -150,11 +150,34 @@ class DeForm
     }
 
     /**
-     * Force form validation
+     * Force form validation.
+     *
+     * @return void
      */
     public function validate()
     {
-        // @TODO implement
+        foreach ($this->elements as $element) {
+            $element->setValid();
+            $this->validator->addValidation($element->getName(), $element->getValidationRules(), $element->getValue());
+        }
+
+        $this->isValidate = $this->validator->validate();
+
+        if (true === $this->isValid()) {
+            return;
+        }
+
+        $messages = $this->validator->getMessages();
+
+        foreach ($this->elements as $element) {
+            $error = $messages->first($element->getName());
+
+            if (null === $error) {
+                continue;
+            }
+
+            $element->setInvalid($error);
+        }
     }
 
     /**
