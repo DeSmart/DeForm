@@ -15,12 +15,11 @@ interface ValidatorInterface
     /**
      * @return boolean
      */
-    public function isValid();
+    public function validate();
 
     /**
      * Get validation messages
      *
-     * @param string $name
      * @return MessageBagInterface
      */
     public function getMessages();

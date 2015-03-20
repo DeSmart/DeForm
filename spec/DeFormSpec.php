@@ -3,40 +3,40 @@
 namespace spec\DeForm;
 
 use PhpSpec\ObjectBehavior;
-use DeForm\Request\RequestInterface;
-use DeForm\Node\NodeInterface;
-use DeForm\Element\ElementInterface;
 use DeForm\DeForm;
+use DeForm\Element\ElementInterface as Element;
+use DeForm\Request\RequestInterface as Request;
+use DeForm\Node\NodeInterface as Node;
+use DeForm\Validation\ValidatorInterface;
 
 class DeFormSpec extends ObjectBehavior
 {
-    function let(NodeInterface $formNode, RequestInterface $request)
+    function let(Node $formNode, Request $request, ValidatorInterface $validator)
     {
         $formNode->getAttribute('name')->willReturn('foo');
 
-        $this->beConstructedWith($formNode, $request);
+        $this->beConstructedWith($formNode, $request, $validator);
     }
 
-    function it_should_check_if_the_form_was_submitted(RequestInterface $request)
+    function it_should_check_if_the_form_was_submitted(Request $request)
     {
         $request->get(DeForm::DEFORM_ID)->willReturn('foo');
 
         $this->isSubmitted()->shouldReturn(true);
     }
 
-    function it_should_check_if_the_form_was_not_submitted(RequestInterface $request)
+    function it_should_check_if_the_form_was_not_submitted(Request $request)
     {
         $request->get(DeForm::DEFORM_ID)->willReturn('bar');
 
         $this->isSubmitted()->shouldReturn(false);
     }
 
-    function it_should_throw_exception_while_setting_same_element_twice(ElementInterface $element)
+    function it_should_throw_exception_while_setting_same_element_twice(Element $element)
     {
         $element->getName()->willReturn('foo');
 
         $this->addElement($element);
-
         $this->shouldThrow('\LogicException')->during('addElement', array($element));
     }
 
@@ -45,16 +45,9 @@ class DeFormSpec extends ObjectBehavior
         $this->shouldThrow('\LogicException')->during('getElement', array('bar'));
     }
 
-    function it_should_set_element_values_with_values_from_request(
-        RequestInterface $request,
-        ElementInterface $el1,
-        ElementInterface $el2,
-        ElementInterface $el3,
-        ElementInterface $el4,
-        ElementInterface $el5
-    )
+    function it_should_set_element_values_with_values_from_request(Request $request, Element $el1, Element $el2, Element $el3, Element $el4, Element $el5)
     {
-        $request->get(\DeForm\DeForm::DEFORM_ID)->willReturn('foo');
+        $request->get(DeForm::DEFORM_ID)->willReturn('foo');
         $request->get('field_1')->willReturn('bar');
         $request->get('field_2')->willReturn(42);
         $request->get('field_3')->willReturn('wat');
@@ -85,7 +78,7 @@ class DeFormSpec extends ObjectBehavior
         $this->addElement($el5);
     }
 
-    function it_should_return_element_values_excluding_deform_id(RequestInterface $request, ElementInterface $el1, ElementInterface $el2, ElementInterface $el3, ElementInterface $el4)
+    function it_should_return_element_values_excluding_deform_id(Request $request, Element $el1, Element $el2, Element $el3, Element $el4)
     {
         $request->get(DeForm::DEFORM_ID)->willReturn('foo');
         $request->get('field_1')->willReturn('new_value');

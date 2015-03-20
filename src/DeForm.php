@@ -3,6 +3,7 @@
 use DeForm\Node\NodeInterface;
 use DeForm\Request\RequestInterface;
 use DeForm\Element\ElementInterface;
+use DeForm\Validation\ValidatorInterface;
 
 class DeForm
 {
@@ -10,14 +11,19 @@ class DeForm
     const DEFORM_ID = '__deform_id';
 
     /**
+     * @var \DeForm\Node\NodeInterface
+     */
+    protected $formNode;
+
+    /**
      * @var \DeForm\Request\RequestInterface
      */
     protected $request;
 
     /**
-     * @var \DeForm\Node\NodeInterface
+     * @var \DeForm\Validation\ValidatorInterface
      */
-    protected $formNode;
+    protected $validator;
 
     /**
      * @var \DeForm\Element\ElementInterface[]
@@ -29,10 +35,11 @@ class DeForm
      */
     protected $isValidate = null;
 
-    public function __construct(NodeInterface $formNode, RequestInterface $request)
+    public function __construct(NodeInterface $formNode, RequestInterface $request, ValidatorInterface $validator)
     {
         $this->formNode = $formNode;
         $this->request = $request;
+        $this->validator = $validator;
     }
 
     /**
