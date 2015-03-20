@@ -47,7 +47,7 @@ abstract class AbstractGroup implements GroupInterface
      */
     public function setValid()
     {
-        foreach ($this->elements as $item) {
+        foreach ($this->getElements() as $item) {
             $item->setValid();
         }
     }
@@ -60,7 +60,7 @@ abstract class AbstractGroup implements GroupInterface
      */
     public function setInvalid($message)
     {
-        foreach ($this->elements as $item) {
+        foreach ($this->getElements() as $item) {
             $item->setInvalid($message);
         }
     }
@@ -72,7 +72,7 @@ abstract class AbstractGroup implements GroupInterface
      */
     public function isValid()
     {
-        foreach ($this->elements as $item) {
+        foreach ($this->getElements() as $item) {
             if (false === $item->isValid()) {
                 return false;
             }
