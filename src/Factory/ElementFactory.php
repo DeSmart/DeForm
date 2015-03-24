@@ -94,7 +94,7 @@ class ElementFactory
     {
         $element = $this->createElement($node);
 
-        if (false === $this->isGropuElement($element)) {
+        if (false === $this->isGroupElement($element)) {
             return $element;
         }
 
@@ -155,7 +155,7 @@ class ElementFactory
      * @param ElementInterface $element
      * @return bool
      */
-    protected function isGropuElement(ElementInterface $element)
+    protected function isGroupElement(ElementInterface $element)
     {
         if ($element instanceof RadioElement) {
             return true;
