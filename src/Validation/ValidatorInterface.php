@@ -4,18 +4,10 @@ interface ValidatorInterface
 {
 
     /**
-     * Return true if the data passes the validation rules. Otherwise returns false.
-     *
-     * @param string $name
-     * @param string $rules
-     * @param mixed $value
-     */
-    public function addValidation($name, $rules, $value);
-
-    /**
+     * @param array $values
      * @return boolean
      */
-    public function validate();
+    public function validate(array $values);
 
     /**
      * Get validation messages.
