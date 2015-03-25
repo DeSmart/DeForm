@@ -19,11 +19,9 @@ class TextareaElementSpec extends ObjectBehavior
         $this->shouldImplement('DeForm\Element\ElementInterface');
     }
 
-    function it_should_check_that_element_has_a_value(NodeInterface $node)
+    function it_should_return_element_value(NodeInterface $node)
     {
-        $nodeList = new MyNodeList;
-        $nodeList->items[] = new \DOMText('abc');
-        $node->getChildNodes()->willReturn($nodeList);
+        $node->getText()->willReturn('abc');
 
         $this->getValue()->shouldReturn('abc');
     }
@@ -119,15 +117,5 @@ class TextareaElementSpec extends ObjectBehavior
     {
         $node->hasAttribute('data-invalid')->shouldBeCalled()->willReturn(true);
         $this->shouldNotBeValid();
-    }
-}
-
-// Simple hack for readonly property \DOMNodeList::$length
-class MyNodeList  {
-    public $length = 1;
-    public $items = [];
-
-    public function item($index) {
-        return $this->items[$index];
     }
 }

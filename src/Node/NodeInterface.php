@@ -77,4 +77,11 @@ interface NodeInterface
      */
     public function setText($text);
 
+    /**
+     * Get text value of element.
+     *
+     * @return string
+     */
+    public function getText();
+
 }

@@ -15,6 +15,7 @@ class HtmlNodeSpec extends ObjectBehavior
     function it_is_initializable()
     {
         $this->shouldHaveType('DeForm\Node\HtmlNode');
+        $this->shouldImplement('DeForm\Node\NodeInterface');
     }
 
     function it_returns_node_attribute(\DOMElement $element)
@@ -88,4 +89,19 @@ class HtmlNodeSpec extends ObjectBehavior
         $this->setText('test');
     }
 
+    function it_return_empty_string_if_textarea_is_empty(\DOMDocument $document)
+    {
+        $element = new \DOMElement('textarea');
+
+        $this->beConstructedWith($element, $document);
+        $this->getText()->shouldReturn('');
+    }
+
+    function it_return_text_value(\DOMDocument $document)
+    {
+        $element = new \DOMElement('textarea', 'foobar');
+
+        $this->beConstructedWith($element, $document);
+        $this->getText()->shouldReturn('foobar');
+    }
 }

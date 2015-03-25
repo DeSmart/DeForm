@@ -140,4 +140,28 @@ class HtmlNode implements NodeInterface
 
         $this->element->removeChild($node);
     }
+
+    /**
+     * Return number of child nodes.
+     *
+     * @return int
+     */
+    public function countChildNodes()
+    {
+        return $this->getChildNodes()->length;
+    }
+
+    /**
+     * Get text value of element.
+     *
+     * @return string
+     */
+    public function getText()
+    {
+        if (0 === $this->countChildNodes()) {
+            return '';
+        }
+
+        return $this->getChildNodes()->item(0)->textContent;
+    }
 }
