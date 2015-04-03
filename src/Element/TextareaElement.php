@@ -4,15 +4,10 @@ use DeForm\Node\NodeInterface;
 
 class TextareaElement extends AbstractElement implements ElementInterface
 {
-    /**
-     * @var \DeForm\Element\TextareaValueInterface
-     */
-    protected $textValue;
 
-    public function __construct(NodeInterface $node, TextareaValueInterface $textValue)
+    public function __construct(NodeInterface $node)
     {
         $this->node = $node;
-        $this->textValue = $textValue;
     }
 
     /**
@@ -28,7 +23,7 @@ class TextareaElement extends AbstractElement implements ElementInterface
             throw new \InvalidArgumentException('Invalid type of $value. Should be string or numeric.');
         }
 
-        $this->textValue->setValue($value);
+        $this->node->setText($value);
         return $this;
     }
 
@@ -39,7 +34,7 @@ class TextareaElement extends AbstractElement implements ElementInterface
      */
     public function getValue()
     {
-        return $this->textValue->getValue();
+        return $this->node->getText();
     }
 
 }

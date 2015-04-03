@@ -129,12 +129,6 @@ class ElementFactory
             return new $class_name($node, $this->request);
         }
 
-        // TODO: remove this, temporary for tests...
-        if ('textarea' === $element_type) {
-            $value = new TextareaValue(new \DOMText(''));
-            return new $class_name($node, $value);
-        }
-
         return new $class_name($node);
     }
 

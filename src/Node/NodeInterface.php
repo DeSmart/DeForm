@@ -54,4 +54,34 @@ interface NodeInterface
      */
     public function appendChild($node);
 
+    /**
+     * Get child nodes of element.
+     *
+     * @return \DOMNodeList
+     */
+    public function getChildNodes();
+
+    /**
+     * Remove child node from element.
+     *
+     * @param $node
+     * @return void
+     */
+    public function removeChildNode($node);
+
+    /**
+     * Sets text value of element.
+     *
+     * @param string $text
+     * @return void
+     */
+    public function setText($text);
+
+    /**
+     * Get text value of element.
+     *
+     * @return string
+     */
+    public function getText();
+
 }

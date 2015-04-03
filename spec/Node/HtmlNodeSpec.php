@@ -7,14 +7,15 @@ use Prophecy\Argument;
 
 class HtmlNodeSpec extends ObjectBehavior
 {
-    function let(\DOMElement $element)
+    function let(\DOMElement $element, \DOMDocument $document)
     {
-        $this->beConstructedWith($element);
+        $this->beConstructedWith($element, $document);
     }
 
     function it_is_initializable()
     {
         $this->shouldHaveType('DeForm\Node\HtmlNode');
+        $this->shouldImplement('DeForm\Node\NodeInterface');
     }
 
     function it_returns_node_attribute(\DOMElement $element)
@@ -35,7 +36,7 @@ class HtmlNodeSpec extends ObjectBehavior
         $element = $document->appendChild($document->createElement('input'));
         $element->setAttribute('type', 'password');
 
-        $this->beConstructedWith($element);
+        $this->beConstructedWith($element, $document);
         $this->getElementType()->shouldReturn('input_password');
     }
 
@@ -44,7 +45,7 @@ class HtmlNodeSpec extends ObjectBehavior
         $document = new \DOMDocument('1.0');
         $element = $document->appendChild($document->createElement('textarea'));
 
-        $this->beConstructedWith($element);
+        $this->beConstructedWith($element, $document);
         $this->getElementType()->shouldReturn('textarea');
     }
 
@@ -79,5 +80,43 @@ class HtmlNodeSpec extends ObjectBehavior
         $this->shouldThrow('\InvalidArgumentException')->during('appendChild', [$node]);
     }
 
+    function it_sets_text()
+    {
+        $document = new \DOMDocument('1.0', 'UTF-8');
+        $element = $document->createElement('textarea');
 
+        $this->beConstructedWith($element, $document);
+
+        $this->setText('test');
+        $this->getText()->shouldReturn('test');
+    }
+
+    function it_does_not_append_text()
+    {
+        $document = new \DOMDocument('1.0', 'UTF-8');
+        $element = $document->createElement('textarea');
+
+        $this->beConstructedWith($element, $document);
+
+        $this->setText('test');
+        $this->setText('test123');
+
+        $this->getText()->shouldReturn('test123');
+    }
+
+    function it_return_empty_string_if_textarea_is_empty(\DOMDocument $document)
+    {
+        $element = new \DOMElement('textarea');
+
+        $this->beConstructedWith($element, $document);
+        $this->getText()->shouldReturn('');
+    }
+
+    function it_return_text_value(\DOMDocument $document)
+    {
+        $element = new \DOMElement('textarea', 'foobar');
+
+        $this->beConstructedWith($element, $document);
+        $this->getText()->shouldReturn('foobar');
+    }
 }
