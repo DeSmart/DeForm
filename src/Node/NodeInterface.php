@@ -83,4 +83,22 @@ interface NodeInterface
      * @return string
      */
     public function getText();
+
+    /*
+     * Get child node by given attribute and value
+     *
+     * @param $attribute
+     * @param $value
+     * @return array
+     */
+    public function getChildElementByAttribute($attribute, $value);
+
+    /**
+     * Create new node element
+     *
+     * @param $name
+     * @param null $textValue
+     * @return \DeForm\Node\NodeInterface
+     */
+    public function createElement($name, $textValue = null);
 }

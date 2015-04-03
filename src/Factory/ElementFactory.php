@@ -42,7 +42,7 @@ class ElementFactory
         'input_hidden' => 'TextElement',
         'input_file' => 'FileElement',
         'textarea' => 'TextareaElement',
-        // 'select' => 'SelectElement', TODO: uncomment line
+        'select' => 'SelectElement',
     ];
 
     public function __construct(RequestInterface $request)

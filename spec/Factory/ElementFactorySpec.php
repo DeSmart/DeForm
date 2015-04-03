@@ -20,20 +20,21 @@ class ElementFactorySpec extends ObjectBehavior
     }
 
 
-    function it_should_parse_non_group_elements(Node $node1, Node $node2, Node $node3, Node $node4, Node $node5)
+    function it_should_parse_non_group_elements(Node $node1, Node $node2, Node $node3, Node $node4, Node $node5, Node $node6)
     {
-        // Todo: add select node
         $node1->getElementType()->shouldBeCalled()->willReturn('input_text');
         $node2->getElementType()->shouldBeCalled()->willReturn('input_password');
         $node3->getElementType()->shouldBeCalled()->willReturn('input_file');
         $node4->getElementType()->shouldBeCalled()->willReturn('input_hidden');
         $node5->getElementType()->shouldBeCalled()->willReturn('textarea');
+        $node6->getElementType()->shouldBeCalled()->willReturn('select');
 
         $node1->getAttribute('name')->willReturn('input1');
         $node2->getAttribute('name')->willReturn('input2');
         $node3->getAttribute('name')->willReturn('input3');
         $node4->getAttribute('name')->willReturn('input4');
         $node5->getAttribute('name')->willReturn('input5');
+        $node6->getAttribute('name')->willReturn('input6');
 
         $this->createFromNodes(func_get_args())->shouldReturnNodes([
             'input1' => 'DeForm\\Element\\TextElement',
@@ -41,6 +42,7 @@ class ElementFactorySpec extends ObjectBehavior
             'input3' => 'DeForm\\Element\\FileElement',
             'input4' => 'DeForm\\Element\\TextElement',
             'input5' => 'DeForm\\Element\\TextareaElement',
+            'input6' => 'DeForm\\Element\\SelectElement',
         ]);
     }
 
