@@ -30,6 +30,7 @@ class DeForm
      * @var bool|null
      */
     protected $valid = null;
+    
     /**
      * @var ValidationHelper
      */
