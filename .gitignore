@@ -1,0 +1,7 @@
+/nbproject
+/.idea
+/vendor
+/bin
+*.swp
+composer.lock
+/cache.properties

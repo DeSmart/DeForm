@@ -1,16 +1,19 @@
 <?php namespace DeForm\Parser;
 
-use DeForm\Document\DocumentInterface;
-
-interface ParserInterface 
+interface ParserInterface
 {
-    
-    /**
-     * Parse HTML to Nodes
-     *
-     * @param \DeForm\Document\DocumentInterface $document
-     * @return \DeForm\Node\NodeInterface[]
-     */
-    public function parse(DocumentInterface $document);
 
+    /**
+     * Returns main DOM node of the whole form
+     *
+     * @return \DeForm\Node\HtmlNode
+     */
+    public function getFormNode();
+
+    /**
+     * Returns array of form element nodes (inputs, buttons?)
+     *
+     * @return array
+     */
+    public function getElementsNodes();
 }
