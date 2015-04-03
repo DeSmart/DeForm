@@ -10,9 +10,9 @@ interface ValidatorInterface
     public function validate(array $values);
 
     /**
-     * Get validation messages.
+     * Return an array with validation messages.
      *
-     * @return MessageBagInterface
+     * @return array
      */
     public function getMessages();
 

@@ -3,6 +3,7 @@
 use DeForm\Node\NodeInterface;
 use DeForm\Request\RequestInterface;
 use DeForm\Element\ElementInterface;
+use DeForm\Validation\ValidatorFactoryInterface;
 use DeForm\Validation\ValidatorInterface;
 
 class DeForm
@@ -21,11 +22,6 @@ class DeForm
     protected $request;
 
     /**
-     * @var \DeForm\Validation\ValidatorInterface
-     */
-    protected $validator;
-
-    /**
      * @var \DeForm\Element\ElementInterface[]
      */
     protected $elements = [];
@@ -33,13 +29,17 @@ class DeForm
     /**
      * @var bool|null
      */
-    protected $isValidate = null;
+    protected $valid = null;
+    /**
+     * @var ValidationHelper
+     */
+    protected $validationHelper;
 
-    public function __construct(NodeInterface $formNode, RequestInterface $request, ValidatorInterface $validator)
+    public function __construct(NodeInterface $formNode, RequestInterface $request, ValidationHelper $validationHelper)
     {
         $this->formNode = $formNode;
         $this->request = $request;
-        $this->validator = $validator;
+        $this->validationHelper = $validationHelper;
     }
 
     /**
@@ -126,7 +126,15 @@ class DeForm
      */
     public function isValid()
     {
-        return $this->isValidate;
+        if (false === $this->isSubmitted()) {
+            return false;
+        }
+
+        if (null === $this->valid) {
+            $this->validate();
+        }
+
+        return $this->valid;
     }
 
     /**
@@ -136,7 +144,7 @@ class DeForm
      */
     public function setValid()
     {
-        $this->isValidate = true;
+        $this->valid = true;
     }
 
     /**
@@ -146,38 +154,26 @@ class DeForm
      */
     public function setInvalid()
     {
-        $this->isValidate = false;
+        $this->valid = false;
     }
 
     /**
      * Force form validation.
      *
-     * @return void
+     * @return bool
      */
     public function validate()
     {
-        foreach ($this->elements as $element) {
-            $element->setValid();
-            $this->validator->addValidation($element->getName(), $element->getValidationRules(), $element->getValue());
-        }
-
-        $this->isValidate = $this->validator->validate();
-
-        if (true === $this->isValid()) {
-            return;
-        }
-
-        $messages = $this->validator->getMessages();
+        $rules = [];
 
         foreach ($this->elements as $element) {
-            $error = $messages->first($element->getName());
-
-            if (null === $error) {
-                continue;
-            }
-
-            $element->setInvalid($error);
+            $rules[$element->getName()] = $element->getValidationRules();
         }
+
+        $this->valid = $this->validationHelper->validate($rules, $this->getData());
+        $this->validationHelper->updateValidationStatus($this->elements);
+
+        return $this->valid;
     }
 
     /**

@@ -2,22 +2,21 @@
 
 namespace spec\DeForm;
 
-use DeForm\Element\GroupInterface as Gr;
+use DeForm\Element\GroupInterface as Group;
+use DeForm\ValidationHelper;
 use PhpSpec\ObjectBehavior;
 use DeForm\DeForm;
-use DeForm\Element\ElementInterface as El;
+use DeForm\Element\ElementInterface as Element;
 use DeForm\Request\RequestInterface as Request;
 use DeForm\Node\NodeInterface as Node;
-use DeForm\Validation\ValidatorInterface as Validator;
-use DeForm\Validation\MessageBagInterface as MessageBag;
 
 class DeFormSpec extends ObjectBehavior
 {
-    function let(Node $formNode, Request $request, Validator $validator)
+    function let(Node $formNode, Request $request, ValidationHelper $validationHelper)
     {
         $formNode->getAttribute('name')->willReturn('foo');
 
-        $this->beConstructedWith($formNode, $request, $validator);
+        $this->beConstructedWith($formNode, $request, $validationHelper);
     }
 
     function it_should_check_if_the_form_was_submitted(Request $request)
@@ -34,7 +33,7 @@ class DeFormSpec extends ObjectBehavior
         $this->isSubmitted()->shouldReturn(false);
     }
 
-    function it_should_throw_exception_while_setting_same_element_twice(El $element)
+    function it_should_throw_exception_while_setting_same_element_twice(Element $element)
     {
         $element->getName()->willReturn('foo');
 
@@ -47,7 +46,7 @@ class DeFormSpec extends ObjectBehavior
         $this->shouldThrow('\LogicException')->during('getElement', array('bar'));
     }
 
-    function it_should_set_element_values_with_values_from_request(Request $request, El $el1, El $el2, El $el3, El $el4, El $el5)
+    function it_should_set_element_values_with_values_from_request(Request $request, Element $el1, Element $el2, Element $el3, Element $el4, Element $el5)
     {
         $request->get(DeForm::DEFORM_ID)->willReturn('foo');
         $request->get('field_1')->willReturn('bar');
@@ -80,7 +79,7 @@ class DeFormSpec extends ObjectBehavior
         $this->addElement($el5);
     }
 
-    function it_should_return_element_values_excluding_deform_id(Request $request, El $el1, El $el2, El $el3, El $el4)
+    function it_should_return_element_values_excluding_deform_id(Request $request, Element $el1, Element $el2, Element $el3, Element $el4)
     {
         $request->get(DeForm::DEFORM_ID)->willReturn('foo');
         $request->get('field_1')->willReturn('new_value');
@@ -116,74 +115,89 @@ class DeFormSpec extends ObjectBehavior
         ]);
     }
 
-    function it_should_return_null_if_the_form_was_not_validated()
+    function it_is_invalid_when_is_not_submitted()
     {
-        $this->isValid()->shouldBe(null);
+        $this->shouldNotBeValid();
     }
 
-    function it_should_set_form_as_valid()
+    function it_should_set_form_as_valid(Request $request)
     {
+        // Submitted form
+        $request->get(DeForm::DEFORM_ID)->willReturn('foo');
+
         $this->setValid();
         $this->shouldBeValid();
     }
 
-    function it_should_set_form_as_invalid()
+    function it_should_set_form_as_invalid(Request $request)
     {
+        // Submitted form
+        $request->get(DeForm::DEFORM_ID)->willReturn('foo');
+
         $this->setInvalid();
         $this->shouldNotBeValid();
     }
 
-    function it_should_validate_elements_and_return_success(Validator $validator, MessageBag $messages, El $el1, El $el2, Gr $el3)
+    function it_validates_data(Request $request, ValidationHelper $validationHelper, Element $el1)
     {
-        $this->prepare_element($el1, $validator, $messages, 'input', 'required', 'foo');
-        $this->prepare_element($el2, $validator, $messages, 'file', 'required', 'bar');
-        $this->prepare_element($el3, $validator, $messages, 'radio', 'required', 'foobar');
+        // Submitted form
+        $request->get(DeForm::DEFORM_ID)->willReturn('foo');
+        $request->get('foo')->willReturn('bar');
 
-        $validator->getMessages()->willReturn($messages);
-        $validator->validate()->willReturn(true);
+        $el1->isReadonly()->willReturn(true);
+        $el1->getName()->willReturn('foo');
+        $el1->getValue()->willReturn('bar');
+        $el1->getValidationRules()->willReturn('required');
 
-        $this->addElement($el1)
-            ->addElement($el2)
-            ->addElement($el3)
-            ->validate();
+        $this->addElement($el1);
+
+        $rules = [
+            'foo' => 'required',
+        ];
+
+        $values = [
+            'foo' => 'bar',
+        ];
+
+        $elements = [
+            'foo' => $el1,
+        ];
+
+        $validationHelper->validate($rules, $values)->willReturn(true);
+        $validationHelper->updateValidationStatus($elements)->shouldBeCalled();
 
         $this->shouldBeValid();
     }
 
-    function it_should_validate_elements_and_return_fail(Validator $validator, MessageBag $messages, El $el1, El $el2, Gr $el3)
+    function it_fails_validate_data(Request $request, ValidationHelper $validationHelper, Element $el1)
     {
-        $this->prepare_element($el1, $validator, $messages, 'input', 'required', 'foo', 'Some error #1');
-        $this->prepare_element($el2, $validator, $messages, 'file', 'required', 'bar');
-        $this->prepare_element($el3, $validator, $messages, 'radio', 'required', 'foobar', 'Some error #3');
+        // Submitted form
+        $request->get(DeForm::DEFORM_ID)->willReturn('foo');
+        $request->get('foo')->willReturn('bar');
 
-        $validator->getMessages()->willReturn($messages);
-        $validator->validate()->willReturn(false);
+        $el1->isReadonly()->willReturn(true);
+        $el1->getName()->willReturn('foo');
+        $el1->getValue()->willReturn('bar');
+        $el1->getValidationRules()->willReturn('required');
 
-        $this->addElement($el1)
-            ->addElement($el2)
-            ->addElement($el3)
-            ->validate();
+        $this->addElement($el1);
+
+        $rules = [
+            'foo' => 'required',
+        ];
+
+        $values = [
+            'foo' => 'bar',
+        ];
+
+        $elements = [
+            'foo' => $el1,
+        ];
+
+        $validationHelper->validate($rules, $values)->willReturn(false);
+        $validationHelper->updateValidationStatus($elements)->shouldBeCalled();
 
         $this->shouldNotBeValid();
-    }
-
-    protected function prepare_element(El $element, Validator $validator, MessageBag $messages, $name, $rules, $value, $message = null)
-    {
-        // Mark element as valid before validation start
-        $element->setValid()->shouldBeCalled();
-
-        // Properties of element
-        $element->getName()->willReturn($name);
-        $element->getValidationRules()->willReturn($rules);
-        $element->getValue()->willReturn($value);
-
-        if (null !== $message) {
-            $element->setInvalid($message)->shouldBeCalled();
-        }
-
-        // Properties of validator
-        $validator->addValidation($name, $rules, $value)->shouldBeCalled();
-        $messages->first($name)->willReturn($message);
     }
 
 }
