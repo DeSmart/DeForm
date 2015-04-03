@@ -61,5 +61,4 @@ class RadioGroupElement extends AbstractGroup
         $this->elements[] = $element;
         return $this;
     }
-
 }

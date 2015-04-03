@@ -135,5 +135,4 @@ abstract class AbstractGroup implements GroupInterface
             return $rules;
         }
     }
-
 }

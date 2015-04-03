@@ -77,5 +77,4 @@ abstract class AbstractElement implements ElementInterface
     {
         return $this->node->getAttribute('data-validate');
     }
-
-} 
+}

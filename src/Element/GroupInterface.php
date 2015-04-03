@@ -33,5 +33,4 @@ interface GroupInterface extends ElementInterface
      * @return int
      */
     public function countElements();
-
 }

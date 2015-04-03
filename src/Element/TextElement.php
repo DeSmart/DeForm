@@ -36,5 +36,4 @@ class TextElement extends AbstractElement
     {
         return $this->node->getAttribute('value');
     }
-
 }

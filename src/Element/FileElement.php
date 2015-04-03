@@ -39,5 +39,4 @@ class FileElement extends AbstractElement
     {
         return $this->request->file($this->getName());
     }
-
 }

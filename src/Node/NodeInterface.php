@@ -83,5 +83,4 @@ interface NodeInterface
      * @return string
      */
     public function getText();
-
 }

@@ -36,5 +36,4 @@ class TextareaElement extends AbstractElement
     {
         return $this->node->getText();
     }
-
 }

@@ -143,5 +143,4 @@ class HtmlParser implements ParserInterface
 
         return $elements;
     }
-
 }

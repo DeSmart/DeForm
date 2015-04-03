@@ -44,7 +44,6 @@ class ValidationHelper
     public function updateValidationStatus(array $elements)
     {
         foreach ($elements as $name => $element) {
-
             if (false === array_key_exists($name, $this->lastValidationMessages)) {
                 $element->setValid();
             } else {
@@ -53,5 +52,4 @@ class ValidationHelper
             }
         }
     }
-
 }

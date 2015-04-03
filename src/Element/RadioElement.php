@@ -41,5 +41,4 @@ class RadioElement extends AbstractElement
 
         return $this->node->getAttribute('value');
     }
-
 }

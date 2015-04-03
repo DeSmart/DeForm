@@ -65,5 +65,4 @@ class CheckboxElement extends AbstractElement
         $length = strlen($name);
         return substr($name, 0, $length - 2);
     }
-
 }

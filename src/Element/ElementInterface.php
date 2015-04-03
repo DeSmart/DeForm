@@ -62,5 +62,4 @@ interface ElementInterface
      * @return string|null
      */
     public function getValidationRules();
-
 }

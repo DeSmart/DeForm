@@ -16,5 +16,4 @@ interface ParserInterface
      * @return array
      */
     public function getElementsNodes();
-
 }

@@ -88,5 +88,4 @@ class CheckboxGroupElement extends AbstractGroup
         $length = strlen($name);
         return substr($name, 0, $length - 2);
     }
-
 }
