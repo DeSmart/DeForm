@@ -97,6 +97,10 @@ class HtmlNode implements NodeInterface
      */
     public function setText($text)
     {
+        foreach ($this->getChildNodes() as $node) {
+            $this->element->removeChild($node);
+        }
+
         $text_node = $this->document->createTextNode($text);
         $this->element->appendChild($text_node);
     }
