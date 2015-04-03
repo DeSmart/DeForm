@@ -1,6 +1,6 @@
 <?php namespace DeForm\Element;
 
-abstract class AbstractElement
+abstract class AbstractElement implements ElementInterface
 {
 
     /**
@@ -66,6 +66,16 @@ abstract class AbstractElement
     public function isValid()
     {
         return false === $this->node->hasAttribute('data-invalid');
+    }
+
+    /**
+     * Return the validation rules for element.
+     *
+     * @return string|null
+     */
+    public function getValidationRules()
+    {
+        return $this->node->getAttribute('data-validate');
     }
 
 } 

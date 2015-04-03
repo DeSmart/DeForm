@@ -1,6 +1,6 @@
 <?php namespace DeForm\Element;
 
-class RadioGroupElement extends AbstractGroup implements GroupInterface
+class RadioGroupElement extends AbstractGroup
 {
 
     /**

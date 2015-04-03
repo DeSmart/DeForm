@@ -4,24 +4,15 @@ interface ValidatorInterface
 {
 
     /**
-     * Add validation
-     *
-     * @param string $name
-     * @param string $rules
-     * @param mixed $value
-     */
-    public function addValidation($name, $rules, $value);
-
-    /**
+     * @param array $values
      * @return boolean
      */
-    public function isValid();
+    public function validate(array $values);
 
     /**
-     * Get validation messages
+     * Return an array with validation messages.
      *
-     * @param string $name
-     * @return MessageBagInterface
+     * @return array
      */
     public function getMessages();
 

@@ -2,7 +2,7 @@
 
 use DeForm\Node\NodeInterface;
 
-class TextareaElement extends AbstractElement implements ElementInterface
+class TextareaElement extends AbstractElement
 {
 
     public function __construct(NodeInterface $node)

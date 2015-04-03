@@ -1,6 +1,6 @@
 <?php namespace DeForm\Element;
 
-abstract class AbstractGroup
+abstract class AbstractGroup implements GroupInterface
 {
 
     /**
@@ -47,7 +47,7 @@ abstract class AbstractGroup
      */
     public function setValid()
     {
-        foreach ($this->elements as $item) {
+        foreach ($this->getElements() as $item) {
             $item->setValid();
         }
     }
@@ -60,7 +60,7 @@ abstract class AbstractGroup
      */
     public function setInvalid($message)
     {
-        foreach ($this->elements as $item) {
+        foreach ($this->getElements() as $item) {
             $item->setInvalid($message);
         }
     }
@@ -72,7 +72,7 @@ abstract class AbstractGroup
      */
     public function isValid()
     {
-        foreach ($this->elements as $item) {
+        foreach ($this->getElements() as $item) {
             if (false === $item->isValid()) {
                 return false;
             }
@@ -116,6 +116,24 @@ abstract class AbstractGroup
         }
 
         return null;
+    }
+
+    /**
+     * Return the validation rules for element.
+     *
+     * @return string|null
+     */
+    public function getValidationRules()
+    {
+        foreach ($this->elements as $element) {
+            $rules = $element->getValidationRules();
+
+            if (null === $rules) {
+                continue;
+            }
+
+            return $rules;
+        }
     }
 
 }
