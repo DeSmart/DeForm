@@ -89,7 +89,6 @@ interface NodeInterface
      *
      * @param $attribute
      * @param $value
-     *
      * @return array
      */
     public function getChildElementByAttribute($attribute, $value);

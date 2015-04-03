@@ -2,7 +2,7 @@
 
 use DeForm\Node\NodeInterface;
 
-class SelectElement extends AbstractElement implements ElementInterface
+class SelectElement extends AbstractElement
 {
 
     public function __construct(NodeInterface $node)
@@ -19,6 +19,10 @@ class SelectElement extends AbstractElement implements ElementInterface
      */
     public function setValue($value)
     {
+        if (false === $this->node->hasAttribute('multi') && true === is_array($value)) {
+            throw new \InvalidArgumentException('Invalid type of $value. Should not be an array for single select node.');
+        }
+
         if (false === is_array($value)) {
             $values[] = $value;
         } else {
@@ -51,7 +55,11 @@ class SelectElement extends AbstractElement implements ElementInterface
             $results[] = $node->getAttribute('value');
         }
 
-        return (1 == count($results)) ? $results[0] : $results;
+        if (true === $this->node->hasAttribute('multi')) {
+            return $results;
+        } else {
+            return $results[0];
+        }
     }
 
     public function addOption($name, $value = null)

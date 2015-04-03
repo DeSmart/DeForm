@@ -27,6 +27,7 @@ class SelectElementSpec extends ObjectBehavior
         $results = [];
         $results[] = $domElement;
 
+        $nodeInterface->hasAttribute('multi')->shouldBeCalled();
         $nodeInterface->getChildElementByAttribute($attribute, $value)->willReturn($results);
 
         $domElement->getAttribute('value')->willReturn(2);
@@ -45,6 +46,7 @@ class SelectElementSpec extends ObjectBehavior
         $results[] = $domElement;
         $results[] = $domElement2;
 
+        $nodeInterface->hasAttribute('multi')->willReturn(true);
         $nodeInterface->getChildElementByAttribute($attribute, $value)->willReturn($results);
 
         $domElement->getAttribute('value')->willReturn(2);
@@ -71,6 +73,7 @@ class SelectElementSpec extends ObjectBehavior
         $results = [];
         $results[] = $option_2;
 
+        $nodeInterface->hasAttribute('multi')->shouldBeCalled();
         $nodeInterface->getChildNodes()->willReturn($node->childNodes);
         $nodeInterface->getChildElementByAttribute('value', $value)->willReturn($results);
 
@@ -100,6 +103,7 @@ class SelectElementSpec extends ObjectBehavior
         $results[] = $option_2;
         $results[] = $option_3;
 
+        $nodeInterface->hasAttribute('multi')->shouldBeCalled();
         $nodeInterface->getChildNodes()->willReturn($node->childNodes);
         $nodeInterface->getChildElementByAttribute('value', $value)->willReturn($results);
 
@@ -142,5 +146,13 @@ class SelectElementSpec extends ObjectBehavior
         $optionElement3->setAttribute('value', 3)->shouldBeCalled();
 
         $this->addOption($data);
+    }
+
+    function it_throws_exception_when_try_to_set_multiple_values_on_single_select_element(NodeInterface $nodeInterface)
+    {
+        $value = [2, 3];
+
+        $nodeInterface->hasAttribute('multi')->willReturn(false);
+        $this->shouldThrow('\InvalidArgumentException')->during('setValue', [$value]);
     }
 }
