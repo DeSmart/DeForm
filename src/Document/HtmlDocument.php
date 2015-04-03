@@ -62,5 +62,4 @@ class HtmlDocument implements DocumentInterface
 
         return $nodes;
     }
-
 }

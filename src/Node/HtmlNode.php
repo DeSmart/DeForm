@@ -168,4 +168,34 @@ class HtmlNode implements NodeInterface
 
         return $this->getChildNodes()->item(0)->textContent;
     }
+
+    public function getChildElementByAttribute($attribute, $value)
+    {
+        $childNodes = $this->element->childNodes;
+
+        $children = [];
+
+        foreach ($childNodes as $child) {
+
+            if ($value == $child->getAttribute($attribute)) {
+                $children[] = $child;
+            }
+        }
+
+        return $children;
+    }
+
+    /**
+     * Create new node element
+     *
+     * @param $name
+     * @param null $textValue
+     * @return mixed
+     */
+    public function createElement($name, $textValue = null)
+    {
+        $node = $this->element->parentNode->createElement($name, $textValue);
+
+        return new static($node, $this->element->parentNode);
+    }
 }

@@ -17,5 +17,4 @@ interface DocumentInterface
      * @return string
      */
     public function toHtml();
-
 }

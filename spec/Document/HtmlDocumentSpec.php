@@ -39,7 +39,7 @@ class HtmlDocumentSpec extends ObjectBehavior
     function getMatchers()
     {
         return [
-            'returnNode' => function ($value, $tagName, $expectedAttrs) {
+            'returnNode' => function ($value, $tagName, $expectedAttrs = []) {
                 $node = $value[0];
 
                 if (false === $node instanceof \DOMElement) {
@@ -57,7 +57,7 @@ class HtmlDocumentSpec extends ObjectBehavior
                 }
 
                 return true;
-            }
+            },
         ];
     }
 

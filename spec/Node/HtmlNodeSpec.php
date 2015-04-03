@@ -2,6 +2,7 @@
 
 namespace spec\DeForm\Node;
 
+use DeForm\Node\NodeInterface;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
@@ -118,5 +119,81 @@ class HtmlNodeSpec extends ObjectBehavior
 
         $this->beConstructedWith($element, $document);
         $this->getText()->shouldReturn('foobar');
+    }
+
+    function it_should_return_child_element_by_its_attribute_and_value(\DOMDocument $domDocument)
+    {
+        $document = new \DOMDocument('1.0', 'utf-8');
+        $node = $document->createElement('select');
+        $option_1 = $document->createElement('option');
+        $option_1->setAttribute('value', '1');
+
+        $option_2 = $document->createElement('option');
+        $option_2->setAttribute('value', '2');
+
+        $node->appendChild($option_1);
+        $node->appendChild($option_2);
+
+        $results = [];
+        $results[] = $option_2;
+
+        $this->beConstructedWith($node, $domDocument);
+        $this->getChildElementByAttribute('value', '2')->shouldReturn($results);
+    }
+
+    function it_should_return_null_when_no_child_element_found_by_attribute_and_value(\DOMDocument $domDocument)
+    {
+        $document = new \DOMDocument('1.0', 'utf-8');
+        $node = $document->createElement('select');
+        $option_1 = $document->createElement('option');
+        $option_1->setAttribute('value', '1');
+
+        $option_2 = $document->createElement('option');
+        $option_2->setAttribute('value', '2');
+
+        $node->appendChild($option_1);
+        $node->appendChild($option_2);
+
+        $results = [];
+
+        $this->beConstructedWith($node, $domDocument);
+        $this->getChildElementByAttribute('value', '3')->shouldReturn($results);
+    }
+
+    function it_should_be_able_to_create_element()
+    {
+        $name = "option";
+        $text_value = "Option";
+
+        $document = new \DOMDocument('1.0', 'utf-8');
+        $element = $document->createElement('select');
+        $document->appendChild($element);
+
+        $this->beConstructedWith($element, $document);
+        $this->createElement($name, $text_value)->shouldReturnNode($name, $text_value);
+    }
+
+    function getMatchers()
+    {
+        return [
+            'returnNode' => function ($node, $tagName, $textValue) {
+
+                if (false === $node instanceof \DeForm\Node\HtmlNode) {
+                    return false;
+                }
+
+                $node = $node->getDomElement();
+
+                if ($node->tagName !== $tagName) {
+                    return false;
+                }
+
+                if ($node->childNodes->item(0)->textContent !== $textValue) {
+                    return false;
+                }
+
+                return true;
+            }
+        ];
     }
 }
