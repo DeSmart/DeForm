@@ -83,7 +83,7 @@ class HtmlParser implements ParserInterface
             throw new \InvalidArgumentException("More than one form found in passed HTML");
         }
 
-        return new HtmlNode($list->item(0));
+        return new HtmlNode($list->item(0), $this->getDocument());
     }
 
     /**
@@ -137,7 +137,7 @@ class HtmlParser implements ParserInterface
             }
 
             foreach ($list as $node) {
-                $elements[] = new HtmlNode($node);
+                $elements[] = new HtmlNode($node, $this->getDocument());
             }
         }
 

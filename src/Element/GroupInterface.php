@@ -27,4 +27,11 @@ interface GroupInterface extends ElementInterface
      */
     public function getElement($value);
 
+    /**
+     * Return number of elements in group.
+     *
+     * @return int
+     */
+    public function countElements();
+
 }
