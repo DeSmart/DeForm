@@ -23,10 +23,6 @@ class TextareaElement extends AbstractElement implements ElementInterface
             throw new \InvalidArgumentException('Invalid type of $value. Should be string or numeric.');
         }
 
-        foreach ($this->node->getChildNodes() as $node) {
-            $this->node->removeChildNode($node);
-        }
-
         $this->node->setText($value);
         return $this;
     }

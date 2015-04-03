@@ -30,7 +30,6 @@ class TextareaElementSpec extends ObjectBehavior
     {
         $value = 'abc';
 
-        $node->getChildNodes()->willReturn(new \DOMNodeList);
         $node->setText($value)->shouldBeCalled();
         $this->setValue($value);
     }
@@ -39,7 +38,6 @@ class TextareaElementSpec extends ObjectBehavior
     {
         $value = 123;
 
-        $node->getChildNodes()->willReturn(new \DOMNodeList);
         $node->setText($value)->shouldBeCalled();
         $this->setValue($value);
     }
@@ -48,7 +46,6 @@ class TextareaElementSpec extends ObjectBehavior
     {
         $value = 0.5;
 
-        $node->getChildNodes()->willReturn(new \DOMNodeList);
         $node->setText($value)->shouldBeCalled();
         $this->setValue($value);
     }
