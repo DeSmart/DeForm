@@ -6,7 +6,7 @@ interface ParserInterface
     /**
      * Returns main DOM node of the whole form
      *
-     * @return \DeForm\Node\HtmlNode
+     * @return \DeForm\Node\NodeInterface
      */
     public function getFormNode();
 
