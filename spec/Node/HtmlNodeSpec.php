@@ -67,9 +67,9 @@ class HtmlNodeSpec extends ObjectBehavior
         $this->getDomElement()->shouldEqual($element);
     }
 
-    function it_appends_html_node(\DOMElement $element, \DeForm\Node\HtmlNode $htmlNode)
+    function it_appends_html_node(\DOMElement $element, \DOMElement $node, \DeForm\Node\HtmlNode $htmlNode)
     {
-        $node = new \DOMElement('input');
+        $node->C14N()->willReturn('<input />');
         $element->appendChild($node)->shouldBeCalled();
         $htmlNode->getDomElement()->willReturn($node);
 
