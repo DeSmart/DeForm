@@ -1,5 +1,6 @@
 <?php namespace DeForm;
 
+use DeForm\Node\NodeInterface;
 use DeForm\Parser\ParserInterface;
 use DeForm\Factory\ElementFactory;
 use DeForm\ValidationHelper as Validator;
@@ -8,12 +9,24 @@ use DeForm\Request\RequestInterface as Request;
 class Factory
 {
 
+    /**
+     * @var \DeForm\Factory\ElementFactory
+     */
     protected $elementFactory;
 
+    /**
+     * @var \DeForm\Request\RequestInterface
+     */
     protected $request;
 
+    /**
+     * @var \DeForm\ValidationHelper
+     */
     protected $validator;
 
+    /**
+     * @var \DeForm\Parser\ParserInterface
+     */
     protected $parser;
 
     public function __construct(
@@ -28,6 +41,12 @@ class Factory
         $this->parser = $parser;
     }
 
+    /**
+     * Creates new DeForm object based on given HTML
+     *
+     * @param string $html
+     * @return \DeForm\DeForm
+     */
     public function make($html)
     {
         $this->parser->setHtml($html);
