@@ -1,12 +1,13 @@
-<?php namespace DeForm;
+<?php namespace DeForm\Factory;
 
+use DeForm\DeForm;
 use DeForm\Node\NodeInterface;
 use DeForm\Parser\ParserInterface;
 use DeForm\Factory\ElementFactory;
 use DeForm\ValidationHelper as Validator;
 use DeForm\Request\RequestInterface as Request;
 
-class Factory
+class FormFactory
 {
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace spec\DeForm;
+namespace spec\DeForm\Factory;
 
 use DeForm\DeForm;
 use Prophecy\Argument;
@@ -12,7 +12,7 @@ use DeForm\Element\ElementInterface;
 use DeForm\ValidationHelper as Validator;
 use DeForm\Request\RequestInterface as Request;
 
-class FactorySpec extends ObjectBehavior
+class FormFactorySpec extends ObjectBehavior
 {
 
     protected $html = '<form></form>';
