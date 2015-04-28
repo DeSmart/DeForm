@@ -16,8 +16,12 @@ class Factory
 
     protected $parser;
 
-    public function __construct(Request $request, Validator $validator, ElementFactory $elementFactory, ParserInterface $parser)
-    {
+    public function __construct(
+        Request $request,
+        Validator $validator,
+        ElementFactory $elementFactory,
+        ParserInterface $parser
+    ) {
         $this->elementFactory = $elementFactory;
         $this->request = $request;
         $this->validator = $validator;
