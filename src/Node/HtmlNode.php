@@ -176,7 +176,6 @@ class HtmlNode implements NodeInterface
         $children = [];
 
         foreach ($childNodes as $child) {
-
             if ($value == $child->getAttribute($attribute)) {
                 $children[] = $child;
             }

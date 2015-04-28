@@ -20,7 +20,7 @@ class SelectElement extends AbstractElement
     public function setValue($value)
     {
         if (false === $this->node->hasAttribute('multi') && true === is_array($value)) {
-            throw new \InvalidArgumentException('Invalid type of $value. Should not be an array for single select node.');
+            throw new \InvalidArgumentException('Can\'t set array value');
         }
 
         if (false === is_array($value)) {
