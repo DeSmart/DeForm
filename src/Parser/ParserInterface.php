@@ -4,9 +4,16 @@ interface ParserInterface
 {
 
     /**
+     * Set the html being parsed
+     *
+     * @param string $html
+     */
+    public function setHtml($html);
+
+    /**
      * Returns main DOM node of the whole form
      *
-     * @return \DeForm\Node\HtmlNode
+     * @return \DeForm\Node\NodeInterface
      */
     public function getFormNode();
 
