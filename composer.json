@@ -32,7 +32,5 @@
         "psr-4": {
             "DeForm\\": "src/"
         }
-    },
-    "require": {
     }
 }
