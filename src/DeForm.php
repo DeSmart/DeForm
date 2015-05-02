@@ -1,11 +1,11 @@
 <?php namespace DeForm;
 
 use DeForm\Node\NodeInterface;
-use DeForm\Request\RequestInterface;
 use DeForm\Element\ElementInterface;
-use DeForm\Document\DocumentInterface;
 use DeForm\Validation\ValidatorInterface;
+use DeForm\Request\RequestInterface as Request;
 use DeForm\Validation\ValidatorFactoryInterface;
+use DeForm\Document\DocumentInterface as Document;
 
 class DeForm
 {
@@ -42,8 +42,12 @@ class DeForm
      */
     protected $validationHelper;
 
-    public function __construct(NodeInterface $formNode, DocumentInterface $document, RequestInterface $request, ValidationHelper $validationHelper)
-    {
+    public function __construct(
+        NodeInterface $formNode,
+        Document $document,
+        Request $request,
+        ValidationHelper $validationHelper
+    ) {
         $this->formNode = $formNode;
         $this->request = $request;
         $this->validationHelper = $validationHelper;
