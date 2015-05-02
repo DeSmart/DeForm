@@ -9,13 +9,12 @@ use DeForm\Node\NodeInterface;
 use DeForm\Factory\ElementFactory;
 use DeForm\Parser\ParserInterface;
 use DeForm\Element\ElementInterface;
+use DeForm\Document\DocumentInterface;
 use DeForm\ValidationHelper as Validator;
 use DeForm\Request\RequestInterface as Request;
 
 class FormFactorySpec extends ObjectBehavior
 {
-
-    protected $html = '<form></form>';
 
     function let(
         Request $request,
@@ -25,11 +24,12 @@ class FormFactorySpec extends ObjectBehavior
         NodeInterface $formNode,
         NodeInterface $textInput,
         NodeInterface $hiddenInput,
-        ElementInterface $textElement
+        ElementInterface $textElement,
+        DocumentInterface $document
     ) {
         $this->beConstructedWith($request, $validator, $elementFactory, $parser);
 
-        $parser->setHtml($this->html)->shouldBeCalled();
+        $parser->setDocument($document)->shouldBeCalled();
         $parser->getFormNode()->willReturn($formNode);
         $parser->getElementsNodes()->willReturn($nodes = [
             $textInput,
@@ -49,22 +49,22 @@ class FormFactorySpec extends ObjectBehavior
         ]);
     }
 
-    function it_makes_deform_object(ElementInterface $textElement)
+    function it_makes_deform_object(ElementInterface $textElement, DocumentInterface $document)
     {
-        $form = $this->make($this->html);
+        $form = $this->make($document);
         $form->shouldHaveType('DeForm\DeForm');
         $form->getElement('foo')->shouldReturn($textElement);
     }
 
-    function it_binds_request(Request $request)
+    function it_binds_request(Request $request, DocumentInterface $document)
     {
-        $form = $this->make($this->html);
+        $form = $this->make($document);
         $request->get(DeForm::DEFORM_ID)->willReturn('testform');
 
         $form->isSubmitted()->shouldReturn(true);
     }
 
-    function it_binds_validator(Request $request, Validator $validator, ElementInterface $textElement)
+    function it_binds_validator(Request $request, Validator $validator, ElementInterface $textElement, DocumentInterface $document)
     {
         $request->get(DeForm::DEFORM_ID)->willReturn('testform');
         $request->get('foo')->willReturn('test');
@@ -76,7 +76,7 @@ class FormFactorySpec extends ObjectBehavior
         $validator->validate(['foo' => 'required'], Argument::any())->shouldBeCalled();
         $validator->updateValidationStatus(Argument::any())->shouldBeCalled();
 
-        $this->make($this->html)
+        $this->make($document)
             ->isValid();
     }
 }
