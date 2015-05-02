@@ -8,15 +8,16 @@ use PhpSpec\ObjectBehavior;
 use DeForm\DeForm;
 use DeForm\Element\ElementInterface as Element;
 use DeForm\Request\RequestInterface as Request;
+use DeForm\Document\DocumentInterface as Document;
 use DeForm\Node\NodeInterface as Node;
 
 class DeFormSpec extends ObjectBehavior
 {
-    function let(Node $formNode, Request $request, ValidationHelper $validationHelper)
+    function let(Node $formNode, Document $document, Request $request, ValidationHelper $validationHelper)
     {
         $formNode->getAttribute('name')->willReturn('foo');
 
-        $this->beConstructedWith($formNode, $request, $validationHelper);
+        $this->beConstructedWith($formNode, $document, $request, $validationHelper);
     }
 
     function it_should_check_if_the_form_was_submitted(Request $request)
@@ -198,6 +199,13 @@ class DeFormSpec extends ObjectBehavior
         $validationHelper->updateValidationStatus($elements)->shouldBeCalled();
 
         $this->shouldNotBeValid();
+    }
+
+    function it_renders_document(Document $document)
+    {
+        $document->toHtml()->willReturn('foo');
+
+        $this->render()->shouldReturn('foo');
     }
 
 }

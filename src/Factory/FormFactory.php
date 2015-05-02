@@ -60,7 +60,7 @@ class FormFactory
         $hidden_input->setAttribute('name', DeForm::DEFORM_ID);
         $form_node->appendChild($hidden_input);
 
-        $form = new DeForm($form_node, $this->request, $this->validator);
+        $form = new DeForm($form_node, $document, $this->request, $this->validator);
         $elements = $this->elementFactory->createFromNodes($this->parser->getElementsNodes());
 
         array_walk($elements, [$form, 'addElement']);

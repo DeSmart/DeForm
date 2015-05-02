@@ -3,8 +3,9 @@
 use DeForm\Node\NodeInterface;
 use DeForm\Request\RequestInterface;
 use DeForm\Element\ElementInterface;
-use DeForm\Validation\ValidatorFactoryInterface;
+use DeForm\Document\DocumentInterface;
 use DeForm\Validation\ValidatorInterface;
+use DeForm\Validation\ValidatorFactoryInterface;
 
 class DeForm
 {
@@ -15,6 +16,11 @@ class DeForm
      * @var \DeForm\Node\NodeInterface
      */
     protected $formNode;
+
+    /**
+     * @var \DeForm\Document\DocumentInterface
+     */
+    protected $document;
 
     /**
      * @var \DeForm\Request\RequestInterface
@@ -30,17 +36,18 @@ class DeForm
      * @var bool|null
      */
     protected $valid = null;
-    
+
     /**
      * @var ValidationHelper
      */
     protected $validationHelper;
 
-    public function __construct(NodeInterface $formNode, RequestInterface $request, ValidationHelper $validationHelper)
+    public function __construct(NodeInterface $formNode, DocumentInterface $document, RequestInterface $request, ValidationHelper $validationHelper)
     {
         $this->formNode = $formNode;
         $this->request = $request;
         $this->validationHelper = $validationHelper;
+        $this->document = $document;
     }
 
     /**
@@ -197,5 +204,10 @@ class DeForm
         }
 
         return $data;
+    }
+
+    public function render()
+    {
+        return $this->document->toHtml();
     }
 }
