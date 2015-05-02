@@ -1,14 +1,16 @@
 <?php namespace DeForm\Parser;
 
+use DeForm\Document\DocumentInterface;
+
 interface ParserInterface
 {
 
     /**
-     * Set the html being parsed
+     * Set parsed document
      *
-     * @param string $html
+     * @param \DeForm\Document\DocumentInterface $document
      */
-    public function setHtml($html);
+    public function setDocument(DocumentInterface $document);
 
     /**
      * Returns main DOM node of the whole form

@@ -5,6 +5,7 @@ namespace spec\DeForm\Parser;
 use Prophecy\Argument;
 use PhpSpec\ObjectBehavior;
 use DeForm\Document\HtmlDocument;
+use DeForm\Document\DocumentInterface;
 
 class HtmlParserSpec extends ObjectBehavior
 {
@@ -14,22 +15,27 @@ class HtmlParserSpec extends ObjectBehavior
         $this->shouldHaveType('DeForm\Parser\ParserInterface');
     }
 
+    function it_sets_only_html_document(DocumentInterface $document)
+    {
+        $this->shouldThrow('\InvalidArgumentException')->duringSetDocument($document);
+    }
+
     function it_gets_form_node()
     {
-        $this->setHtml('<form method="post"><input type="text" name="foo"/></form>');
+        $document = new HtmlDocument;
+        $document->load('<form method="post"><input type="text" name="foo"/></form>');
+
+        $this->setDocument($document);
 
         $this->getFormNode()->shouldReturnAnInstanceOf('DeForm\Node\HtmlNode');
         $this->getFormNode()->getAttribute('method')->shouldReturn('post');
     }
 
-//    function it_finds_form_element(HtmlDocument $document)
-//    {
-//        // Todo: implement
-//    }
-
     function it_gets_element_nodes()
     {
-        $this->setHtml('<form method="post"><input type="text" name="foo"/><input type="checkbox" name="bar"/></form>');
+        $document = new HtmlDocument;
+        $document->load('<form method="post"><input type="text" name="foo"/><input type="checkbox" name="bar"/></form>');
+        $this->setDocument($document);
 
         $elements = $this->getElementsNodes();
 
@@ -39,5 +45,4 @@ class HtmlParserSpec extends ObjectBehavior
         $elements[1]->shouldBeAnInstanceOf('DeForm\Node\HtmlNode');
         $elements[1]->getElementType()->shouldReturn('input_checkbox');
     }
-
 }

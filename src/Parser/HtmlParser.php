@@ -1,21 +1,12 @@
 <?php namespace DeForm\Parser;
 
-use DeForm\Document\HtmlDocument;
 use DeForm\Node\HtmlNode;
+use DeForm\Document\HtmlDocument;
 use DeForm\Parser\ParserInterface;
+use DeForm\Document\DocumentInterface;
 
 class HtmlParser implements ParserInterface
 {
-
-    /**
-     * @var string
-     */
-    protected $html;
-
-    /**
-     * @var \DOMDocument
-     */
-    protected $document;
 
     /**
      * @var \DeForm\Node\HtmlNode
@@ -26,6 +17,11 @@ class HtmlParser implements ParserInterface
      * @var \DeForm\Node\HtmlNode[]
      */
     protected $elementNodes = null;
+
+    /**
+     * @var \DeForm\Document\HtmlDocument
+     */
+    protected $document;
 
     protected $map = array(
         '//input[@type="text" or @type="password" or @type="email" or @type="date" or @type="hidden"]',
@@ -38,17 +34,14 @@ class HtmlParser implements ParserInterface
         '//select',
     );
 
-    /**
-     * @param string $html
-     * @return $this
-     */
-    public function setHtml($html)
+    public function setDocument(DocumentInterface $document)
     {
-        $this->html = $html;
 
-        $this->prepareDocument();
+        if (false === $document instanceof HtmlDocument) {
+            throw new \InvalidArgumentException('Only HtmlDocument allowed');
+        }
 
-        return $this;
+        $this->document = $document;
     }
 
     /**
@@ -72,18 +65,17 @@ class HtmlParser implements ParserInterface
      */
     protected function fetchFormNode()
     {
-        $xpath = new \DOMXpath($this->getDocument());
-        $list = $xpath->query("//form");
+        $list = $this->document->xpath('//form');
 
-        if (0 == $list->length) {
+        if (0 == count($list)) {
             throw new \InvalidArgumentException("Form element not found in passed HTML");
         }
 
-        if (1 < $list->length) {
+        if (1 < count($list)) {
             throw new \InvalidArgumentException("More than one form found in passed HTML");
         }
 
-        return new HtmlNode($list->item(0), $this->getDocument());
+        return new HtmlNode($list[0], $this->document->getDocument());
     }
 
     /**
@@ -100,25 +92,6 @@ class HtmlParser implements ParserInterface
         return $this->elementNodes;
     }
 
-    protected function prepareDocument()
-    {
-        if (true === empty($this->html)) {
-            return;
-        }
-
-        $html = mb_convert_encoding($this->html, 'HTML-ENTITIES', 'UTF-8');
-        $this->document = new \DOMDocument();
-        $this->document->loadHTML($html);
-    }
-
-    /**
-     * @return \DOMDocument
-     */
-    protected function getDocument()
-    {
-        return $this->document;
-    }
-
     /**
      * Searches for form elements in HTML code
      *
@@ -126,18 +99,17 @@ class HtmlParser implements ParserInterface
      */
     protected function fetchElementNodes()
     {
-        $xpath = new \DOMXpath($this->getDocument());
         $elements = [];
 
         foreach ($this->map as $query) {
-            $list = $xpath->query($query);
+            $list = $this->document->xpath($query);
 
-            if (0 == $list->length) {
+            if (0 == count($list)) {
                 continue;
             }
 
             foreach ($list as $node) {
-                $elements[] = new HtmlNode($node, $this->getDocument());
+                $elements[] = new HtmlNode($node, $this->document->getDocument());
             }
         }
 

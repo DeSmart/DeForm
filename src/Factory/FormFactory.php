@@ -4,6 +4,7 @@ use DeForm\DeForm;
 use DeForm\Node\NodeInterface;
 use DeForm\Parser\ParserInterface;
 use DeForm\Factory\ElementFactory;
+use DeForm\Document\DocumentInterface;
 use DeForm\ValidationHelper as Validator;
 use DeForm\Request\RequestInterface as Request;
 
@@ -43,14 +44,14 @@ class FormFactory
     }
 
     /**
-     * Creates new DeForm object based on given HTML
+     * Creates new DeForm object from document
      *
-     * @param string $html
+     * @param \DeForm\Document\DocumentInterface $document
      * @return \DeForm\DeForm
      */
-    public function make($html)
+    public function make(DocumentInterface $document)
     {
-        $this->parser->setHtml($html);
+        $this->parser->setDocument($document);
 
         $form_node = $this->parser->getFormNode();
         $hidden_input = $form_node->createElement('input');
@@ -59,7 +60,7 @@ class FormFactory
         $hidden_input->setAttribute('name', DeForm::DEFORM_ID);
         $form_node->appendChild($hidden_input);
 
-        $form = new DeForm($form_node, $this->request, $this->validator);
+        $form = new DeForm($form_node, $document, $this->request, $this->validator);
         $elements = $this->elementFactory->createFromNodes($this->parser->getElementsNodes());
 
         array_walk($elements, [$form, 'addElement']);

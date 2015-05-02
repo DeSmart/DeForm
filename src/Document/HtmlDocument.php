@@ -16,6 +16,8 @@ class HtmlDocument implements DocumentInterface
      */
     public function load($html)
     {
+        $html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
+
         $this->document = new \DOMDocument;
         $this->document->loadHTML($html);
     }
