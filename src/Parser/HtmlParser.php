@@ -65,18 +65,17 @@ class HtmlParser implements ParserInterface
      */
     protected function fetchFormNode()
     {
-        $xpath = new \DOMXpath($this->document->getDocument());
-        $list = $xpath->query("//form");
+        $list = $this->document->xpath('//form');
 
-        if (0 == $list->length) {
+        if (0 == count($list)) {
             throw new \InvalidArgumentException("Form element not found in passed HTML");
         }
 
-        if (1 < $list->length) {
+        if (1 < count($list)) {
             throw new \InvalidArgumentException("More than one form found in passed HTML");
         }
 
-        return new HtmlNode($list->item(0), $this->document->getDocument());
+        return new HtmlNode($list[0], $this->document->getDocument());
     }
 
     /**
@@ -100,13 +99,12 @@ class HtmlParser implements ParserInterface
      */
     protected function fetchElementNodes()
     {
-        $xpath = new \DOMXpath($this->document->getDocument());
         $elements = [];
 
         foreach ($this->map as $query) {
-            $list = $xpath->query($query);
+            $list = $this->document->xpath($query);
 
-            if (0 == $list->length) {
+            if (0 == count($list)) {
                 continue;
             }
 
