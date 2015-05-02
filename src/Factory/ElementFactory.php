@@ -58,6 +58,11 @@ class ElementFactory
     {
         foreach ($nodes as $item) {
             $parsed_element = $this->parseNode($item);
+
+            if (null === $parsed_element) {
+                continue;
+            }
+
             $element_name = $parsed_element->getName();
 
             if ($parsed_element instanceof GroupInterface) {
@@ -88,11 +93,15 @@ class ElementFactory
      * If necessary method transforms single element to group element.
      *
      * @param NodeInterface $node
-     * @return GroupInterface|ElementInterface
+     * @return GroupInterface|ElementInterface|null
      */
     protected function parseNode(NodeInterface $node)
     {
         $element = $this->createElement($node);
+
+        if (null === $element) {
+            return null;
+        }
 
         if (false === $this->isGroupElement($element)) {
             return $element;
@@ -118,11 +127,16 @@ class ElementFactory
 
     /**
      * @param NodeInterface $node
-     * @return \DeForm\Element\ElementInterface
+     * @return \DeForm\Element\ElementInterface|null
      */
     protected function createElement(NodeInterface $node)
     {
         $element_type = $node->getElementType();
+
+        if (false === isset($this->mapTypes[$element_type])) {
+            return null;
+        }
+
         $class_name = '\\DeForm\\Element\\' . $this->mapTypes[$element_type];
 
         if ('input_file' === $element_type) {

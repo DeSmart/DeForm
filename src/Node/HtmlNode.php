@@ -193,8 +193,8 @@ class HtmlNode implements NodeInterface
      */
     public function createElement($name, $textValue = null)
     {
-        $node = $this->element->parentNode->createElement($name, $textValue);
+        $node = $this->element->ownerDocument->createElement($name, $textValue);
 
-        return new static($node, $this->element->parentNode);
+        return new static($node, $this->element->ownerDocument);
     }
 }
