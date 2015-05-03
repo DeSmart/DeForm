@@ -34,13 +34,8 @@ class HtmlParser implements ParserInterface
         '//select',
     );
 
-    public function setDocument(DocumentInterface $document)
+    public function __construct(HtmlDocument $document)
     {
-
-        if (false === $document instanceof HtmlDocument) {
-            throw new \InvalidArgumentException('Only HtmlDocument allowed');
-        }
-
         $this->document = $document;
     }
 
