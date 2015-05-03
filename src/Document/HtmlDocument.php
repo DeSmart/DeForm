@@ -9,12 +9,9 @@ class HtmlDocument implements DocumentInterface
     protected $document;
 
     /**
-     * Load HTML into document.
-     *
      * @param string $html
-     * @return void
      */
-    public function load($html)
+    public function __construct($html)
     {
         $html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
 

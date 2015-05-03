@@ -11,7 +11,7 @@ class HtmlDocumentSpec extends ObjectBehavior
     function let()
     {
         $this->html = '<div><form method="post"><input type="password" name="pwd"></form></div>';
-        $this->load($this->html);
+        $this->beConstructedWith($this->html);
     }
 
     function it_should_load_a_string_and_convert_it_to_domdocument()
