@@ -1,11 +1,9 @@
 <?php namespace DeForm\Factory;
 
 use DeForm\DeForm;
-use DeForm\Node\NodeInterface;
-use DeForm\Parser\ParserInterface;
 use DeForm\Factory\ElementFactory;
-use DeForm\Document\DocumentInterface;
 use DeForm\ValidationHelper as Validator;
+use DeForm\Factory\ParserFactoryInterface;
 use DeForm\Request\RequestInterface as Request;
 
 class FormFactory
@@ -27,33 +25,34 @@ class FormFactory
     protected $validator;
 
     /**
-     * @var \DeForm\Parser\ParserInterface
+     * @var \DeForm\Factory\ParserFactoryInterface
      */
-    protected $parser;
+    protected $parserFactory;
 
     public function __construct(
         Request $request,
         Validator $validator,
         ElementFactory $elementFactory,
-        ParserInterface $parser
+        ParserFactoryInterface $parserFactory
     ) {
         $this->elementFactory = $elementFactory;
         $this->request = $request;
         $this->validator = $validator;
-        $this->parser = $parser;
+        $this->parserFactory = $parserFactory;
     }
 
     /**
-     * Creates new DeForm object from document
+     * Creates new DeForm object
      *
-     * @param \DeForm\Document\DocumentInterface $document
+     * @param string $html
      * @return \DeForm\DeForm
      */
-    public function make(DocumentInterface $document)
+    public function make($html)
     {
-        $this->parser->setDocument($document);
+        $document = $this->parserFactory->createDocument($html);
+        $parser = $this->parserFactory->createParser($document);
 
-        $form_node = $this->parser->getFormNode();
+        $form_node = $parser->getFormNode();
         $hidden_input = $form_node->createElement('input');
         $hidden_input->setAttribute('type', 'hidden');
         $hidden_input->setAttribute('value', $form_node->getAttribute('name'));
@@ -61,7 +60,7 @@ class FormFactory
         $form_node->appendChild($hidden_input);
 
         $form = new DeForm($form_node, $document, $this->request, $this->validator);
-        $elements = $this->elementFactory->createFromNodes($this->parser->getElementsNodes());
+        $elements = $this->elementFactory->createFromNodes($parser->getElementsNodes());
 
         array_walk($elements, [$form, 'addElement']);
 
