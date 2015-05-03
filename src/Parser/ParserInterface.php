@@ -6,13 +6,6 @@ interface ParserInterface
 {
 
     /**
-     * Set parsed document
-     *
-     * @param \DeForm\Document\DocumentInterface $document
-     */
-    public function setDocument(DocumentInterface $document);
-
-    /**
      * Returns main DOM node of the whole form
      *
      * @return \DeForm\Node\NodeInterface
