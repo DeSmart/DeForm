@@ -6,7 +6,6 @@ use DeForm\Element\ElementInterface;
 use DeForm\Element\GroupInterface;
 use DeForm\Element\RadioElement;
 use DeForm\Element\RadioGroupElement;
-use DeForm\Element\TextareaValue;
 use DeForm\Node\NodeInterface;
 use DeForm\Request\RequestInterface;
 

@@ -2,8 +2,6 @@
 
 use DeForm\Node\HtmlNode;
 use DeForm\Document\HtmlDocument;
-use DeForm\Parser\ParserInterface;
-use DeForm\Document\DocumentInterface;
 
 class HtmlParser implements ParserInterface
 {

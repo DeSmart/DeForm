@@ -1,7 +1,5 @@
 <?php namespace DeForm\Parser;
 
-use DeForm\Document\DocumentInterface;
-
 interface ParserInterface
 {
 

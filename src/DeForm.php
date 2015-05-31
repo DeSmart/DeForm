@@ -2,9 +2,7 @@
 
 use DeForm\Node\NodeInterface;
 use DeForm\Element\ElementInterface;
-use DeForm\Validation\ValidatorInterface;
 use DeForm\Request\RequestInterface as Request;
-use DeForm\Validation\ValidatorFactoryInterface;
 use DeForm\Document\DocumentInterface as Document;
 
 class DeForm
