@@ -34,7 +34,6 @@ class ElementFactory
      * @var array
      */
     protected $mapTypes = [
-        // TODO: more inputs
         'input_radio' => 'RadioElement',
         'input_checkbox' => 'CheckboxElement',
         'input_text' => 'TextElement',
