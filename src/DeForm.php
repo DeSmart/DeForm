@@ -208,6 +208,19 @@ class DeForm
         return $data;
     }
 
+    /**
+     * Fills the form given data.
+     *
+     * @param array $data
+     * @return void
+     */
+    public function fill(array $data)
+    {
+        foreach ($data as $name => $value) {
+            $this->getElement($name)->setValue($value);
+        }
+    }
+
     public function render()
     {
         return $this->document->toHtml();

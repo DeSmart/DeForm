@@ -208,4 +208,29 @@ class DeFormSpec extends ObjectBehavior
         $this->render()->shouldReturn('foo');
     }
 
+    function it_should_fill_the_form(Request $request, Element $el1, Element $el2)
+    {
+        $request->get(DeForm::DEFORM_ID)->willReturn('foo');
+        $request->get('field_1')->willReturn('bar');
+        $request->get('field_2')->willReturn(42);
+
+        $el1->getName()->willReturn($field_1 = 'field_1');
+        $el1->isReadonly()->willReturn(false);
+        $el1->setValue('bar')->shouldBeCalled();
+
+        $el2->getName()->willReturn($field_2 = 'field_2');
+        $el2->isReadonly()->willReturn(false);
+        $el2->setValue(42)->shouldBeCalled();
+
+        $this->addElement($el1);
+        $this->addElement($el2);
+
+        $el1->setValue($new_value_field_1 = 'first')->shouldBeCalled();
+        $el2->setValue($new_value_field_2 = 'second')->shouldBeCalled();
+
+        $this->fill([
+            $field_1 => $new_value_field_1,
+            $field_2 => $new_value_field_2,
+        ]);
+    }
 }
