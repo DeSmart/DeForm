@@ -8,9 +8,13 @@ class HtmlDocumentSpec extends ObjectBehavior
 
     private $html;
 
+    private $expectedHtml;
+
     function let()
     {
-        $this->html = '<div><form method="post"><input type="password" name="pwd"></form></div>';
+        $this->html = '<div><form method="post"><input type="password" name="pwd" value="test"></form></div>';
+        $this->expectedHtml = '<div><form method="post"><input type="password" name="pwd" ></form></div>';
+
         $this->beConstructedWith($this->html);
     }
 
@@ -21,7 +25,7 @@ class HtmlDocumentSpec extends ObjectBehavior
 
     function it_should_load_a_string_and_return_the_same_string()
     {
-        $this->toHtml()->shouldReturn($this->html);
+        $this->toHtml()->shouldReturn($this->expectedHtml);
     }
 
     function it_finds_by_xpath()
