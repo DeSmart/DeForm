@@ -20,11 +20,13 @@ class CheckboxElement extends AbstractElement
      */
     public function setValue($value)
     {
-        if (false === is_bool($value)) {
+        $boolean_value = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+
+        if (null === $boolean_value) {
             throw new \InvalidArgumentException(sprintf('Param $value should be boolean, given %s', gettype($value)));
         }
 
-        if (true === $value) {
+        if (true === $boolean_value) {
             $this->setChecked();
         } else {
             $this->setUnchecked();
