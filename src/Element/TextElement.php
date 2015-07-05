@@ -23,10 +23,6 @@ class TextElement extends AbstractElement
             throw new \InvalidArgumentException('Invalid type of $value. Should be string or numeric.');
         }
 
-        if ('input_password' === $this->node->getElementType()) {
-            return $this;
-        }
-
         $this->node->setAttribute('value', $value);
         return $this;
     }

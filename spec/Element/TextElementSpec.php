@@ -28,22 +28,25 @@ class TextElementSpec extends ObjectBehavior
 
     function it_should_change_value_of_element_based_on_an_argument_of_type_string(NodeInterface $node)
     {
-        $node->getElementType()->willReturn('input_text');
-        $node->setAttribute('value', $arg = 'abc')->shouldBeCalled();
+        $arg = 'abc';
+
+        $node->setAttribute('value', $arg)->shouldBeCalled();
         $this->setValue($arg);
     }
 
     function it_should_change_value_of_element_based_on_an_argument_of_type_integer(NodeInterface $node)
     {
-        $node->getElementType()->willReturn('input_text');
-        $node->setAttribute('value', $arg = 123)->shouldBeCalled();
+        $arg = 123;
+
+        $node->setAttribute('value', $arg)->shouldBeCalled();
         $this->setValue($arg);
     }
 
     function it_should_change_value_of_element_based_on_an_argument_of_type_float(NodeInterface $node)
     {
-        $node->getElementType()->willReturn('input_text');
-        $node->setAttribute('value', $arg = 0.5)->shouldBeCalled();
+        $arg = 0.5;
+
+        $node->setAttribute('value', $arg)->shouldBeCalled();
         $this->setValue($arg);
     }
 
@@ -62,14 +65,6 @@ class TextElementSpec extends ObjectBehavior
         $this->shouldThrow('\InvalidArgumentException')->during('setValue', [
             $arg
         ]);
-    }
-
-    function it_should_not_set_value_for_password_type_element(NodeInterface $node)
-    {
-        $node->getElementType()->willReturn('input_password');
-
-        $node->setAttribute('value', $arg = 0.5)->shouldNotBeCalled();
-        $this->setValue($arg);
     }
 
     function it_should_be_readonly_element_based_on_disabled_attribute(NodeInterface $node)
