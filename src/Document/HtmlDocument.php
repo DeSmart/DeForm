@@ -33,14 +33,7 @@ class HtmlDocument implements DocumentInterface
             ->childNodes;
 
         foreach ($nodes_list as $item) {
-            $node = $this->document->saveHTML($item);
-
-            // Find all input[type="password"] and remove value attribute
-            $node = preg_replace_callback('/<input(.*)type=\"password\"(.*)/i', function (array $matches) {
-                return preg_replace('/value=\"(.*?)\"/', '', $matches[0]);
-            }, $node);
-
-            $html .= $node;
+            $html .= $this->document->saveHTML($item);
         }
 
         return $html;
