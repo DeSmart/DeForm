@@ -36,7 +36,7 @@ class ElementFactory
         'input_radio' => 'RadioElement',
         'input_checkbox' => 'CheckboxElement',
         'input_text' => 'TextElement',
-        'input_password' => 'TextPasswordElement',
+        'input_password' => 'PasswordElement',
         'input_hidden' => 'TextElement',
         'input_file' => 'FileElement',
         'textarea' => 'TextareaElement',

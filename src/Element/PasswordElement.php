@@ -1,6 +1,6 @@
 <?php namespace DeForm\Element;
 
-class TextPasswordElement extends TextElement
+class PasswordElement extends TextElement
 {
     /**
      * Value of element.

@@ -6,7 +6,7 @@ use DeForm\Node\NodeInterface;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
-class TextPasswordElementSpec extends ObjectBehavior
+class PasswordElementSpec extends ObjectBehavior
 {
     function let(NodeInterface $node)
     {
@@ -15,8 +15,16 @@ class TextPasswordElementSpec extends ObjectBehavior
 
     function it_is_initializable()
     {
-        $this->shouldHaveType('DeForm\Element\TextPasswordElement');
+        $this->shouldHaveType('DeForm\Element\PasswordElement');
         $this->shouldImplement('DeForm\Element\ElementInterface');
+    }
+
+    function it_should_change_value(NodeInterface $node)
+    {
+        $node->setAttribute('value', Argument::any())->shouldNotBeCalled();
+        $this->setValue($value = "foo");
+
+        $this->getValue()->shouldReturn($value);
     }
 
     function it_should_throws_exception_when_method_set_value_is_calling_with_argument_of_type_array()
