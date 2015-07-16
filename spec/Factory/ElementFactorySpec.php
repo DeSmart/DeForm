@@ -38,7 +38,7 @@ class ElementFactorySpec extends ObjectBehavior
 
         $this->createFromNodes(func_get_args())->shouldReturnNodes([
             'input1' => 'DeForm\\Element\\TextElement',
-            'input2' => 'DeForm\\Element\\TextElement',
+            'input2' => 'DeForm\\Element\\PasswordElement',
             'input3' => 'DeForm\\Element\\FileElement',
             'input4' => 'DeForm\\Element\\TextElement',
             'input5' => 'DeForm\\Element\\TextareaElement',

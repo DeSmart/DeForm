@@ -61,9 +61,9 @@ class CheckboxElementSpec extends ObjectBehavior
         $this->setValue(true)->shouldBe($this);
     }
 
-    function it_should_throws_exception_when_set_value_method_is_calling_with_not_boolean_argument(NodeInterface $node)
+    function it_should_throws_exception_when_set_value_method_is_calling_with_not_boolean_argument()
     {
-        $this->shouldThrow('\InvalidArgumentException')->during('setValue', [1]);
+        $this->shouldThrow('\InvalidArgumentException')->during('setValue', ['abc']);
     }
 
     function it_should_mark_element_as_unchecked_based_on_false_argument(NodeInterface $node)

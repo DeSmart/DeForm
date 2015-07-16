@@ -19,6 +19,8 @@ class RadioElement extends AbstractElement
      */
     public function setValue($value)
     {
+        $value = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+
         if (true === $value) {
             $this->setChecked();
         } else {
